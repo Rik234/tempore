@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n-title="page.title">Tempore — Курьерская доставка</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="/js/nav.js"></script>
+  <style>
+    /* ========== HERO ========== */
+    .hero { position: relative; background: linear-gradient(135deg, #3E2723 0%, #5D4037 100%); color: #FAF4E8; padding: 120px 20px 140px; text-align: center; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent 0deg, rgba(212,165,116,0.08) 40deg, transparent 80deg, transparent 180deg, rgba(212,165,116,0.06) 220deg, transparent 260deg); animation: rotateSlow 40s linear infinite; pointer-events: none; }
+    .hero::after { content: ''; position: absolute; top: 50%; left: 50%; width: 800px; height: 800px; transform: translate(-50%, -50%); background: radial-gradient(circle, rgba(212,165,116,0.15) 0%, transparent 60%); border-radius: 50%; animation: pulseGlow 6s ease-in-out infinite; pointer-events: none; }
+    @keyframes rotateSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes pulseGlow { 0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); } 50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); } }
+    .hero-content { position: relative; z-index: 2; max-width: 900px; margin: 0 auto; }
+    .hero h1 { color: #FAF4E8; font-size: 72px; margin: 0 0 20px; letter-spacing: 8px; font-weight: 700; animation: fadeIn 1s ease-out; }
+    .hero .tagline { font-size: 20px; margin: 0 0 45px; opacity: 0.85; color: #E8DCC4; font-weight: 300; letter-spacing: 1px; animation: fadeIn 1.2s ease-out 0.3s backwards; }
+    .hero-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; animation: fadeIn 1s ease-out 0.6s backwards; }
+    .hero-btn { display: inline-block; padding: 16px 38px; border-radius: 6px; text-decoration: none; font-size: 15px; font-weight: 500; letter-spacing: 0.5px; transition: all 0.25s; }
+    .hero-btn.primary { background: #A0704A; color: #FAF4E8; border: 1px solid #A0704A; }
+    .hero-btn.primary:hover { background: #7A5030; border-color: #7A5030; }
+    .hero-btn.secondary { background: transparent; color: #FAF4E8; border: 1px solid rgba(250,244,232,0.4); }
+    .hero-btn.secondary:hover { background: rgba(250,244,232,0.08); border-color: #FAF4E8; }
+
+    /* ========== СТАТИСТИКА ========== */
+    .stats { background: #FAF4E8; border: 1px solid rgba(160,112,74,0.15); padding: 45px 20px; margin-top: -60px; position: relative; z-index: 3; border-radius: 8px; max-width: 1000px; margin-left: auto; margin-right: auto; box-shadow: 0 8px 30px rgba(62,39,35,0.08); }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 30px; text-align: center; }
+    .stat-item { position: relative; }
+    .stat-item::after { content: ''; position: absolute; right: -15px; top: 50%; transform: translateY(-50%); height: 50%; width: 1px; background: rgba(160,112,74,0.15); }
+    .stat-item:last-child::after { display: none; }
+    .stat-number { font-size: 42px; font-weight: 700; color: #3E2723; margin-bottom: 6px; letter-spacing: -1px; }
+    .stat-label { font-size: 12px; color: #8D7B6D; text-transform: uppercase; letter-spacing: 2px; }
+
+    /* ========== СЕКЦИИ ========== */
+    .section { max-width: 1100px; margin: 0 auto; padding: 90px 20px; }
+    .section-title { text-align: center; font-size: 36px; color: #3E2723; margin: 0 0 15px; font-weight: 600; letter-spacing: -0.5px; }
+    .section-subtitle { text-align: center; color: #8D7B6D; font-size: 16px; margin: 0 0 55px; font-weight: 300; }
+    .reveal { opacity: 0; transform: translateY(20px); transition: all 0.7s ease-out; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ========== ПРЕИМУЩЕСТВА ========== */
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+    .feature { background: #FAF4E8; padding: 35px 28px; border-radius: 8px; border: 1px solid rgba(160,112,74,0.15); transition: all 0.3s; }
+    .feature:hover { border-color: #A0704A; box-shadow: 0 8px 25px rgba(160,112,74,0.1); transform: translateY(-2px); }
+    .feature-icon { font-size: 32px; margin-bottom: 18px; display: block; opacity: 0.9; }
+    .feature h3 { color: #3E2723; margin: 0 0 10px; font-size: 17px; font-weight: 600; }
+    .feature p { color: #6D5B4D; margin: 0; font-size: 14px; line-height: 1.7; }
+
+    /* ========== КАРТА ЗОН ========== */
+    .zones-section { background: #F5EBD8; padding: 80px 20px; }
+    .zones-container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+    @media (max-width: 900px) { .zones-container { grid-template-columns: 1fr; } }
+    .zones-map { background: #FAF4E8; border-radius: 12px; padding: 30px; border: 1px solid rgba(160,112,74,0.15); aspect-ratio: 1; overflow: hidden; }
+    .zones-svg { width: 100%; height: 100%; }
+    .zone-circle { transition: all 0.3s; cursor: pointer; }
+    .zone-circle:hover { filter: brightness(1.1); }
+    .zone-label { font-family: 'Segoe UI', sans-serif; font-weight: 600; pointer-events: none; }
+    .zone-dot { animation: zonePulse 2s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+    @keyframes zonePulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.3); } }
+    .zones-info h3 { color: #3E2723; font-size: 24px; margin: 0 0 15px; font-weight: 600; letter-spacing: -0.3px; }
+    .zones-info > p { color: #6D5B4D; font-size: 15px; margin: 0 0 25px; line-height: 1.7; }
+    .zone-list { display: flex; flex-direction: column; gap: 12px; }
+    .zone-item { display: flex; align-items: center; gap: 15px; padding: 15px 20px; background: #FAF4E8; border-radius: 8px; border: 1px solid rgba(160,112,74,0.12); transition: all 0.25s; cursor: pointer; }
+    .zone-item:hover { border-color: #A0704A; transform: translateX(5px); }
+    .zone-color { width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.4); }
+    .zone-info { flex: 1; }
+    .zone-info strong { display: block; color: #3E2723; font-size: 14px; margin-bottom: 2px; font-weight: 600; }
+    .zone-info span { color: #8D7B6D; font-size: 13px; }
+    .zone-price { color: #A0704A; font-weight: 700; font-size: 14px; letter-spacing: 0.3px; }
+
+    /* ========== ПОИСК КУРЬЕРА ========== */
+    .find-courier-section { background: #3E2723; color: #FAF4E8; padding: 80px 20px; }
+    .find-courier-section .section-title { color: #FAF4E8; }
+    .find-courier-section .section-subtitle { color: #C9B8A8; }
+    .find-courier-box { max-width: 640px; margin: 0 auto; background: rgba(250,244,232,0.04); border: 1px solid rgba(212,165,116,0.2); border-radius: 12px; padding: 40px; }
+    .find-input-wrap { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+    .find-input { flex: 1; min-width: 200px; padding: 15px 18px; background: rgba(0,0,0,0.25); border: 1px solid rgba(212,165,116,0.25); border-radius: 6px; color: #FAF4E8; font-size: 14px; font-family: inherit; transition: all 0.3s; }
+    .find-input::placeholder { color: #8D7A6A; }
+    .find-input:focus { outline: none; border-color: #D4A574; background: rgba(0,0,0,0.35); box-shadow: 0 0 0 3px rgba(212,165,116,0.15); }
+    .find-btn { padding: 15px 32px; background: #A0704A; color: #FAF4E8; border: 1px solid #A0704A; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.25s; font-family: inherit; letter-spacing: 0.3px; white-space: nowrap; }
+    .find-btn:hover:not(:disabled) { background: #B8825A; border-color: #B8825A; }
+    .find-btn:disabled { background: #4A342E; border-color: #4A342E; cursor: not-allowed; color: #6D5B4D; }
+    .find-result { display: none; text-align: center; padding: 25px 0 0; }
+    .find-result.show { display: block; animation: fadeIn 0.5s ease-out; }
+    .radar { position: relative; width: 140px; height: 140px; margin: 0 auto 25px; }
+    .radar-circle { position: absolute; inset: 0; border: 1px solid rgba(212,165,116,0.3); border-radius: 50%; }
+    .radar-circle:nth-child(2) { inset: 20%; }
+    .radar-circle:nth-child(3) { inset: 40%; }
+    .radar-sweep { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 0deg, transparent 0deg, rgba(212,165,116,0.4) 30deg, transparent 60deg); animation: radarSweep 2s linear infinite; }
+    @keyframes radarSweep { to { transform: rotate(360deg); } }
+    .radar-center { position: absolute; top: 50%; left: 50%; width: 12px; height: 12px; background: #D4A574; border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 15px #D4A574; }
+    .radar-dot { position: absolute; width: 8px; height: 8px; background: #D4A574; border-radius: 50%; box-shadow: 0 0 10px #D4A574; animation: dotAppear 1s ease-out forwards; }
+    @keyframes dotAppear { from { opacity: 0; transform: scale(0); } to { opacity: 1; transform: scale(1); } }
+    .find-info { text-align: center; }
+    .find-info .count { font-size: 42px; font-weight: 700; color: #D4A574; line-height: 1; margin-bottom: 8px; }
+    .find-info .label { color: #C9B8A8; font-size: 14px; margin-bottom: 20px; }
+    .find-info .detail { display: inline-flex; gap: 25px; padding: 15px 25px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 25px; flex-wrap: wrap; justify-content: center; }
+    .find-info .detail-item { text-align: center; }
+    .find-info .detail-item strong { display: block; color: #FAF4E8; font-size: 17px; font-weight: 600; margin-bottom: 3px; }
+    .find-info .detail-item span { color: #8D7A6A; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+    .find-info .order-link { display: inline-block; padding: 13px 32px; background: #D4A574; color: #3E2723; text-decoration: none; border-radius: 6px; font-size: 14px; font-weight: 600; transition: all 0.25s; }
+    .find-info .order-link:hover { background: #E8C29A; transform: translateY(-2px); }
+
+    /* ========== ТРЕКЕР ========== */
+    .tracker-section { background: #F5EBD8; padding: 80px 20px; }
+    .tracker-box { max-width: 700px; margin: 0 auto; background: #FAF4E8; border-radius: 12px; padding: 40px; border: 1px solid rgba(160,112,74,0.15); box-shadow: 0 8px 30px rgba(62,39,35,0.06); }
+    .tracker-input-wrap { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+    .tracker-input { flex: 1; min-width: 200px; padding: 14px 18px; background: #F5EBD8; border: 1px solid #D9C8A8; border-radius: 6px; color: #3E2723; font-size: 14px; font-family: inherit; transition: all 0.3s; }
+    .tracker-input:focus { outline: none; border-color: #A0704A; background: #FFFFFF; box-shadow: 0 0 0 3px rgba(160,112,74,0.1); }
+    .tracker-btn { padding: 14px 30px; background: #A0704A; color: #FAF4E8; border: 1px solid #A0704A; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.25s; font-family: inherit; letter-spacing: 0.3px; white-space: nowrap; }
+    .tracker-btn:hover:not(:disabled) { background: #7A5030; border-color: #7A5030; }
+    .tracker-btn:disabled { background: #C9B8A0; border-color: #C9B8A0; cursor: not-allowed; }
+    .tracker-result { display: none; padding-top: 10px; }
+    .tracker-result.show { display: block; animation: fadeIn 0.5s ease-out; }
+    .tracker-steps { display: flex; justify-content: space-between; position: relative; margin: 30px 0; }
+    .tracker-steps::before { content: ''; position: absolute; top: 20px; left: 10%; right: 10%; height: 2px; background: rgba(160,112,74,0.15); z-index: 0; }
+    .tracker-step { position: relative; z-index: 1; text-align: center; flex: 1; }
+    .tracker-step-dot { width: 40px; height: 40px; border-radius: 50%; background: #FAF4E8; border: 2px solid #D9C8A8; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; color: #8D7B6D; transition: all 0.4s; margin-bottom: 10px; }
+    .tracker-step.active .tracker-step-dot { background: #A0704A; border-color: #A0704A; color: #FAF4E8; box-shadow: 0 0 0 5px rgba(160,112,74,0.15); }
+    .tracker-step.done .tracker-step-dot { background: #7DA52D; border-color: #7DA52D; color: #FFFFFF; }
+    .tracker-step-label { font-size: 12px; color: #8D7B6D; text-transform: uppercase; letter-spacing: 1px; font-weight: 500; }
+    .tracker-step.active .tracker-step-label { color: #A0704A; font-weight: 600; }
+    .tracker-step.done .tracker-step-label { color: #4A6B1F; }
+    .tracker-info { background: #F5EBD8; border-radius: 8px; padding: 20px; margin-top: 20px; border-left: 3px solid #A0704A; }
+    .tracker-info .row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; color: #5D4037; flex-wrap: wrap; gap: 10px; }
+    .tracker-info .row strong { color: #3E2723; font-weight: 600; }
+    .tracker-error { background: rgba(179,58,58,0.1); color: #8E2E2E; padding: 14px 18px; border-radius: 6px; border-left: 3px solid #B33A3A; font-size: 13px; text-align: center; }
+
+    /* ========== ЛЕНТА ПАРТНЁРОВ ========== */
+    .partners-section { background: #FAF4E8; padding: 45px 0; overflow: hidden; border-top: 1px solid rgba(160,112,74,0.12); border-bottom: 1px solid rgba(160,112,74,0.12); }
+    .partners-title { text-align: center; color: #8D7B6D; font-size: 11px; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 25px; font-weight: 500; }
+    .marquee-wrap { display: flex; overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent); }
+    .marquee { display: flex; animation: marquee 40s linear infinite; width: max-content; gap: 60px; padding-right: 60px; }
+    .marquee-item { font-size: 20px; font-weight: 500; color: #6D5B4D; opacity: 0.7; white-space: nowrap; letter-spacing: 2px; flex-shrink: 0; text-transform: uppercase; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ========== ДОСТИЖЕНИЯ ========== */
+    .achievements-section { background: #F5EBD8; padding: 80px 20px; }
+    .achievements { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0; max-width: 1100px; margin: 0 auto; border-top: 1px solid rgba(160,112,74,0.2); border-bottom: 1px solid rgba(160,112,74,0.2); }
+    .achievement { padding: 35px 20px; text-align: center; border-right: 1px solid rgba(160,112,74,0.2); transition: background 0.3s; }
+    .achievement:last-child { border-right: none; }
+    .achievement:hover { background: rgba(212,165,116,0.06); }
+    .achievement .num { font-size: 40px; font-weight: 700; color: #A0704A; line-height: 1; margin-bottom: 10px; letter-spacing: -1px; }
+    .achievement .label { font-size: 12px; color: #6D5B4D; text-transform: uppercase; letter-spacing: 1.5px; }
+
+    /* ========== ГАЛЕРЕЯ ========== */
+    .gallery-section { background: #F5EBD8; padding: 80px 20px; }
+    .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1100px; margin: 0 auto; }
+    .gallery-item { position: relative; border-radius: 8px; overflow: hidden; height: 260px; box-shadow: 0 4px 20px rgba(62,39,35,0.12); transition: all 0.4s; cursor: pointer; background: linear-gradient(135deg, #A0704A, #3E2723); }
+    .gallery-item:hover { transform: translateY(-4px); box-shadow: 0 15px 40px rgba(160,112,74,0.3); }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; display: block; }
+    .gallery-item:hover img { transform: scale(1.05); }
+    .gallery-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(62,39,35,0.94), rgba(62,39,35,0.6) 50%, transparent); color: #FAF4E8; padding: 25px 20px 20px; }
+    .gallery-overlay h3 { color: #FAF4E8; margin: 0 0 5px; font-size: 18px; font-weight: 600; }
+    .gallery-overlay p { margin: 0; font-size: 13px; opacity: 0.85; }
+
+    /* ========== УСЛУГИ ========== */
+    .services-section { background: #3E2723; color: #FAF4E8; padding: 80px 20px; }
+    .services-section .section-title { color: #FAF4E8; }
+    .services-section .section-subtitle { color: #C9B8A8; }
+    .services { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1px; max-width: 1100px; margin: 0 auto; background: rgba(212,165,116,0.15); border: 1px solid rgba(212,165,116,0.15); border-radius: 8px; overflow: hidden; }
+    .service { background: #3E2723; padding: 35px 28px; transition: background 0.3s; text-decoration: none; color: inherit; display: block; }
+    .service:hover { background: #4A342E; }
+    .service-icon { font-size: 32px; margin-bottom: 15px; display: block; opacity: 0.9; }
+    .service h3 { color: #FAF4E8; margin: 0 0 10px; font-size: 18px; font-weight: 600; }
+    .service p { color: #C9B8A8; margin: 0 0 20px; font-size: 13px; line-height: 1.6; }
+    .service-price { color: #D4A574; font-weight: 600; font-size: 18px; letter-spacing: 0.5px; }
+
+    /* ========== ШАГИ ========== */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; }
+    .step { text-align: center; padding: 20px; }
+    .step-number { display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; background: transparent; color: #A0704A; border: 1px solid #A0704A; border-radius: 50%; font-size: 20px; font-weight: 600; margin-bottom: 20px; }
+    .step h3 { color: #3E2723; margin: 0 0 10px; font-size: 17px; font-weight: 600; }
+    .step p { color: #6D5B4D; margin: 0; font-size: 14px; }
+
+    /* ========== ОТЗЫВЫ ========== */
+    .reviews-section { background: #F5EBD8; padding: 80px 20px; }
+    .reviews { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1100px; margin: 0 auto; }
+    .review { background: #FAF4E8; padding: 30px 28px; border-radius: 8px; border: 1px solid rgba(160,112,74,0.15); transition: all 0.3s; }
+    .review:hover { border-color: #A0704A; box-shadow: 0 8px 25px rgba(160,112,74,0.1); transform: translateY(-2px); }
+    .review-stars { color: #A0704A; font-size: 14px; letter-spacing: 3px; margin-bottom: 15px; }
+    .review-text { color: #5D4037; font-size: 14px; line-height: 1.7; margin: 0 0 20px; }
+    .review-author { display: flex; align-items: center; gap: 12px; }
+    .review-avatar { width: 40px; height: 40px; border-radius: 50%; background: #E8DCC4; color: #3E2723; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 15px; border: 1px solid rgba(160,112,74,0.3); }
+    .review-name { font-weight: 600; color: #3E2723; font-size: 14px; }
+    .review-city { font-size: 12px; color: #8D7B6D; }
+
+    /* ========== CTA ========== */
+    .cta-section { background: #A0704A; color: #FAF4E8; text-align: center; padding: 80px 20px; }
+    .cta-section h2 { color: #FAF4E8; font-size: 34px; margin: 0 0 12px; font-weight: 600; }
+    .cta-section p { font-size: 16px; opacity: 0.9; margin: 0 0 30px; font-weight: 300; }
+    .cta-btn { display: inline-block; padding: 15px 40px; background: #FAF4E8; color: #3E2723; border-radius: 6px; text-decoration: none; font-size: 15px; font-weight: 600; transition: all 0.25s; letter-spacing: 0.5px; }
+    .cta-btn:hover { background: #FFFFFF; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+
+    /* ========== ФУТЕР ========== */
+    .footer { background: #2A1E18; color: #A89880; padding: 60px 20px 25px; }
+    .footer-content { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 35px; margin-bottom: 35px; }
+    .footer h4 { color: #FAF4E8; margin: 0 0 18px; font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+    .footer p { font-size: 13px; line-height: 1.7; }
+    .footer ul { list-style: none; padding: 0; margin: 0; }
+    .footer ul li { margin-bottom: 10px; }
+    .footer ul a { color: #A89880; text-decoration: none; font-size: 13px; transition: color 0.2s; display: inline-block; cursor: pointer; }
+    .footer ul a:hover { color: #D4A574; }
+    .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid rgba(212,165,116,0.12); font-size: 12px; color: #6D5B4D; letter-spacing: 0.5px; }
+
+    /* ========== МОДАЛКИ ========== */
+    #photoModal { display: none; position: fixed; inset: 0; background: rgba(42,30,24,0.96); z-index: 10000; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.3s; cursor: pointer; }
+    #photoModal.active { display: flex; }
+    #photoModal img { max-width: 90%; max-height: 90%; border-radius: 8px; box-shadow: 0 25px 70px rgba(0,0,0,0.7); }
+    .footer-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(30,20,16,0.75); backdrop-filter: blur(4px); z-index: 10000; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.2s ease-out; }
+    .footer-modal-overlay.active { display: flex; }
+    .footer-modal { background: #FAF4E8; border-radius: 12px; padding: 40px 35px 30px; max-width: 480px; width: 100%; box-shadow: 0 25px 70px rgba(0,0,0,0.4); border: 1px solid rgba(160,112,74,0.15); animation: modalSlideIn 0.3s cubic-bezier(0.2, 0.9, 0.3, 1); position: relative; }
+    @keyframes modalSlideIn { from { opacity: 0; transform: translateY(20px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    .footer-modal-close { position: absolute; top: 12px; right: 12px; width: 32px; height: 32px; background: transparent; border: none; color: #8D7B6D; font-size: 18px; cursor: pointer; border-radius: 6px; transition: all 0.2s; font-family: inherit; }
+    .footer-modal-close:hover { background: rgba(160,112,74,0.1); color: #3E2723; }
+    .footer-modal h3 { color: #3E2723; margin: 0 0 18px; font-size: 22px; font-weight: 600; padding-bottom: 15px; border-bottom: 1px solid rgba(160,112,74,0.15); }
+    .footer-modal-content { color: #5D4037; font-size: 14px; line-height: 1.8; }
+    .footer-modal-content p { margin: 0 0 12px; }
+    .footer-modal-content strong { color: #3E2723; font-weight: 600; }
+    .footer-modal-content a { color: #A0704A; text-decoration: none; font-weight: 500; }
+    .footer-modal-content .contact-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(160,112,74,0.08); }
+    .footer-modal-content .contact-row:last-child { border-bottom: none; }
+    .footer-modal-content .contact-icon { font-size: 20px; flex-shrink: 0; width: 30px; text-align: center; }
+    .footer-modal-content .contact-text strong { display: block; margin-bottom: 2px; }
+    .footer-modal-content .contact-text span { color: #8D7B6D; font-size: 13px; }
+
+    /* ========== ЧАТ ========== */
+    .chat-toggle { position: fixed; bottom: 90px; right: 30px; width: 56px; height: 56px; border-radius: 50%; background: #A0704A; color: #FAF4E8; border: none; cursor: pointer; font-size: 24px; box-shadow: 0 8px 25px rgba(160,112,74,0.4); transition: all 0.3s; z-index: 9998; display: flex; align-items: center; justify-content: center; font-family: inherit; }
+    .chat-toggle:hover { transform: scale(1.1); box-shadow: 0 12px 35px rgba(160,112,74,0.55); }
+    .chat-toggle .badge { position: absolute; top: -4px; right: -4px; background: #B33A3A; color: #fff; font-size: 11px; font-weight: 700; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #FAF4E8; animation: pulse 2s ease-in-out infinite; }
+    .chat-window { position: fixed; bottom: 160px; right: 30px; width: 360px; max-width: calc(100vw - 40px); height: 500px; max-height: calc(100vh - 200px); background: #FAF4E8; border-radius: 12px; box-shadow: 0 25px 70px rgba(0,0,0,0.3); border: 1px solid rgba(160,112,74,0.15); z-index: 9999; display: none; flex-direction: column; overflow: hidden; animation: chatOpen 0.3s cubic-bezier(0.2, 0.9, 0.3, 1); }
+    .chat-window.open { display: flex; }
+    @keyframes chatOpen { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    .chat-header { background: #3E2723; color: #FAF4E8; padding: 16px 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(212,165,116,0.15); }
+    .chat-header .avatar { width: 36px; height: 36px; border-radius: 50%; background: #A0704A; color: #FAF4E8; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 600; }
+    .chat-header .info { flex: 1; }
+    .chat-header .info strong { display: block; font-size: 14px; font-weight: 600; }
+    .chat-header .info span { font-size: 11px; color: #A89880; display: flex; align-items: center; gap: 5px; }
+    .chat-header .info span::before { content: ''; display: inline-block; width: 6px; height: 6px; background: #7DA52D; border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+    .chat-close { background: transparent; border: none; color: #A89880; font-size: 20px; cursor: pointer; width: 30px; height: 30px; border-radius: 6px; transition: all 0.2s; font-family: inherit; }
+    .chat-close:hover { background: rgba(212,165,116,0.15); color: #FAF4E8; }
+    .chat-messages { flex: 1; padding: 20px; overflow-y: auto; background: #F5EBD8; display: flex; flex-direction: column; gap: 12px; }
+    .chat-messages::-webkit-scrollbar { width: 6px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: rgba(160,112,74,0.3); border-radius: 3px; }
+    .chat-msg { max-width: 80%; padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.5; animation: msgAppear 0.3s ease-out; word-wrap: break-word; white-space: pre-line; }
+    @keyframes msgAppear { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .chat-msg.bot { background: #FAF4E8; color: #3E2723; align-self: flex-start; border: 1px solid rgba(160,112,74,0.15); border-bottom-left-radius: 4px; }
+    .chat-msg.user { background: #A0704A; color: #FAF4E8; align-self: flex-end; border-bottom-right-radius: 4px; }
+    .chat-quick { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 20px 12px; background: #F5EBD8; }
+    .chat-quick button { padding: 7px 12px; background: #FAF4E8; color: #A0704A; border: 1px solid rgba(160,112,74,0.3); border-radius: 16px; font-size: 11px; cursor: pointer; transition: all 0.2s; font-family: inherit; font-weight: 500; white-space: nowrap; }
+    .chat-quick button:hover { background: #A0704A; color: #FAF4E8; border-color: #A0704A; }
+    .chat-input-wrap { display: flex; padding: 12px 15px; background: #FAF4E8; border-top: 1px solid rgba(160,112,74,0.15); gap: 8px; }
+    .chat-input { flex: 1; padding: 10px 14px; background: #F5EBD8; border: 1px solid #D9C8A8; border-radius: 20px; font-size: 13px; font-family: inherit; color: #3E2723; transition: all 0.2s; }
+    .chat-input:focus { outline: none; border-color: #A0704A; background: #FFFFFF; }
+    .chat-send { width: 40px; height: 40px; border-radius: 50%; background: #A0704A; color: #FAF4E8; border: none; cursor: pointer; font-size: 16px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; font-family: inherit; flex-shrink: 0; }
+    .chat-send:hover { background: #7A5030; }
+    .chat-typing { display: flex; gap: 4px; padding: 12px 16px; background: #FAF4E8; border-radius: 12px; align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid rgba(160,112,74,0.15); max-width: 60px; }
+    .chat-typing span { width: 6px; height: 6px; background: #A0704A; border-radius: 50%; animation: typing 1.2s ease-in-out infinite; }
+    .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+    .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typing { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-5px); opacity: 1; } }
+
+    @media (max-width: 480px) {
+      .chat-window { right: 10px; left: 10px; bottom: 150px; width: auto; }
+      .chat-toggle { right: 15px; bottom: 75px; width: 50px; height: 50px; font-size: 20px; }
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 42px; letter-spacing: 4px; }
+      .section-title { font-size: 26px; }
+      .stats { margin-top: 0; border-radius: 0; border-left: none; border-right: none; }
+      .stat-number { font-size: 30px; }
+      .stat-item::after { display: none; }
+      .hero { padding: 70px 20px 90px; }
+      .cta-section h2 { font-size: 24px; }
+      .achievement { border-right: none; border-bottom: 1px solid rgba(160,112,74,0.2); }
+      .achievement:last-child { border-bottom: none; }
+    }
+
+    /* ============================================================
+       ТЁМНАЯ ТЕМА — ГЛУБОКАЯ И ЧИТАЕМАЯ
+       ============================================================ */
+    body[data-theme="dark"] {
+      background: #0F0B08 !important;
+      color: #E8DCC4 !important;
+    }
+    body[data-theme="dark"] .stats,
+    body[data-theme="dark"] .feature,
+    body[data-theme="dark"] .review,
+    body[data-theme="dark"] .info-card,
+    body[data-theme="dark"] .order-card,
+    body[data-theme="dark"] .stat-card,
+    body[data-theme="dark"] .tracker-box,
+    body[data-theme="dark"] .zones-map,
+    body[data-theme="dark"] .zone-item {
+      background: #1A1210 !important;
+      color: #E8DCC4 !important;
+      border-color: rgba(212,165,116,0.2) !important;
+    }
+    body[data-theme="dark"] .section-title,
+    body[data-theme="dark"] .stat-number,
+    body[data-theme="dark"] .feature h3,
+    body[data-theme="dark"] .step h3,
+    body[data-theme="dark"] .review-name,
+    body[data-theme="dark"] .zones-info h3,
+    body[data-theme="dark"] .zone-info strong {
+      color: #F0E4D2 !important;
+    }
+    body[data-theme="dark"] .section-subtitle,
+    body[data-theme="dark"] .stat-label,
+    body[data-theme="dark"] .feature p,
+    body[data-theme="dark"] .step p,
+    body[data-theme="dark"] .review-text,
+    body[data-theme="dark"] .review-city,
+    body[data-theme="dark"] .zones-info p,
+    body[data-theme="dark"] .zone-info span {
+      color: #A89880 !important;
+    }
+    body[data-theme="dark"] .zones-section,
+    body[data-theme="dark"] .tracker-section,
+    body[data-theme="dark"] .achievements-section,
+    body[data-theme="dark"] .gallery-section,
+    body[data-theme="dark"] .reviews-section {
+      background: #14100E !important;
+    }
+    body[data-theme="dark"] .achievement { border-right-color: rgba(212,165,116,0.15) !important; }
+    body[data-theme="dark"] .achievement .num { color: #D4A574 !important; }
+    body[data-theme="dark"] .achievement .label { color: #A89880 !important; }
+    body[data-theme="dark"] .achievements { border-top-color: rgba(212,165,116,0.15) !important; border-bottom-color: rgba(212,165,116,0.15) !important; }
+    body[data-theme="dark"] .partners-section { background: #1A1210 !important; border-color: rgba(212,165,116,0.1) !important; }
+    body[data-theme="dark"] .partners-title { color: #A89880 !important; }
+    body[data-theme="dark"] .marquee-item { color: #B8A590 !important; }
+
+    /* Трекер */
+    body[data-theme="dark"] .tracker-input { background: #1A1210 !important; color: #E8DCC4 !important; border-color: #3A2E24 !important; }
+    body[data-theme="dark"] .tracker-input::placeholder { color: #6D5B4D !important; }
+    body[data-theme="dark"] .tracker-input:focus { background: #0F0B08 !important; border-color: #D4A574 !important; }
+    body[data-theme="dark"] .tracker-info { background: #1A1210 !important; }
+    body[data-theme="dark"] .tracker-info .row { color: #B8A590 !important; }
+    body[data-theme="dark"] .tracker-info .row strong { color: #F0E4D2 !important; }
+    body[data-theme="dark"] .tracker-step-dot { background: #1A1210 !important; border-color: #3A2E24 !important; color: #A89880 !important; }
+    body[data-theme="dark"] .tracker-step.active .tracker-step-dot { background: #A0704A !important; border-color: #A0704A !important; color: #FAF4E8 !important; }
+    body[data-theme="dark"] .tracker-step.done .tracker-step-dot { background: #7DA52D !important; border-color: #7DA52D !important; }
+    body[data-theme="dark"] .tracker-step-label { color: #A89880 !important; }
+    body[data-theme="dark"] .tracker-error { background: rgba(179,58,58,0.2) !important; color: #F5DCDC !important; }
+
+    /* Поиск курьера */
+    body[data-theme="dark"] .find-courier-section { background: #0F0B08 !important; }
+    body[data-theme="dark"] .find-courier-box { background: rgba(250,244,232,0.03) !important; }
+
+    /* Услуги */
+    body[data-theme="dark"] .services-section { background: #0F0B08 !important; }
+    body[data-theme="dark"] .services { background: rgba(212,165,116,0.08) !important; border-color: rgba(212,165,116,0.08) !important; }
+    body[data-theme="dark"] .service { background: #0F0B08 !important; }
+    body[data-theme="dark"] .service:hover { background: #1A1210 !important; }
+
+    /* Футер */
+    body[data-theme="dark"] .footer { background: #0A0604 !important; }
+
+    /* Модалки */
+    body[data-theme="dark"] .footer-modal { background: #1A1210 !important; border-color: rgba(212,165,116,0.2) !important; }
+    body[data-theme="dark"] .footer-modal h3 { color: #F0E4D2 !important; border-bottom-color: rgba(212,165,116,0.15) !important; }
+    body[data-theme="dark"] .footer-modal-content { color: #C9B8A8 !important; }
+    body[data-theme="dark"] .footer-modal-content strong { color: #F0E4D2 !important; }
+    body[data-theme="dark"] .footer-modal-content a { color: #D4A574 !important; }
+    body[data-theme="dark"] .footer-modal-close { color: #A89880 !important; }
+    body[data-theme="dark"] .footer-modal-close:hover { background: rgba(212,165,116,0.15) !important; color: #F0E4D2 !important; }
+
+    /* Чат */
+    body[data-theme="dark"] .chat-window { background: #1A1210 !important; border-color: rgba(212,165,116,0.2) !important; }
+    body[data-theme="dark"] .chat-messages { background: #0F0B08 !important; }
+    body[data-theme="dark"] .chat-msg.bot { background: #1A1210 !important; color: #E8DCC4 !important; border-color: rgba(212,165,116,0.15) !important; }
+    body[data-theme="dark"] .chat-msg.user { background: #A0704A !important; color: #FAF4E8 !important; }
+    body[data-theme="dark"] .chat-quick { background: #0F0B08 !important; }
+    body[data-theme="dark"] .chat-quick button { background: #1A1210 !important; color: #D4A574 !important; border-color: rgba(212,165,116,0.3) !important; }
+    body[data-theme="dark"] .chat-quick button:hover { background: #A0704A !important; color: #FAF4E8 !important; }
+    body[data-theme="dark"] .chat-input-wrap { background: #1A1210 !important; }
+    body[data-theme="dark"] .chat-input { background: #0F0B08 !important; color: #E8DCC4 !important; border-color: #3A2E24 !important; }
+    body[data-theme="dark"] .chat-typing { background: #1A1210 !important; border-color: rgba(212,165,116,0.15) !important; }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>TEMPORE</h1>
+      <p class="tagline" data-i18n="hero.tagline">Пунктуальность — высшая форма уважения</p>
+      <div class="hero-buttons">
+        <a href="/order.html" class="hero-btn primary" data-i18n="hero.order">Заказать доставку</a>
+        <a href="/courier-register.html" class="hero-btn secondary" data-i18n="hero.courier">Стать курьером</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- СТАТИСТИКА -->
+  <div class="stats">
+    <div class="stats-grid">
+      <div class="stat-item"><div class="stat-number" data-target="15000" data-suffix="+">0</div><div class="stat-label" data-i18n="stats.deliveries">Доставок в год</div></div>
+      <div class="stat-item"><div class="stat-number" data-target="98" data-suffix="%">0</div><div class="stat-label" data-i18n="stats.clients">Довольных клиентов</div></div>
+      <div class="stat-item"><div class="stat-number" data-target="45" data-suffix=" мин">0</div><div class="stat-label" data-i18n="stats.time">Среднее время</div></div>
+      <div class="stat-item"><div class="stat-number" data-target="247" data-suffix="/7">0</div><div class="stat-label" data-i18n="stats.always">Работаем всегда</div></div>
+    </div>
+  </div>
+
+  <!-- ПОИСК КУРЬЕРА -->
+  <section class="find-courier-section">
+    <div class="reveal">
+      <h2 class="section-title">Найдите курьера рядом</h2>
+      <p class="section-subtitle">Введите адрес — покажем свободных курьеров поблизости</p>
+    </div>
+    <div class="find-courier-box reveal">
+      <div class="find-input-wrap">
+        <input type="text" class="find-input" id="findAddress" placeholder="Введите ваш адрес...">
+        <button class="find-btn" id="findBtn" onclick="findCourier()">Найти курьера</button>
+      </div>
+      <div class="find-result" id="findResult">
+        <div class="radar">
+          <div class="radar-circle"></div>
+          <div class="radar-circle"></div>
+          <div class="radar-circle"></div>
+          <div class="radar-sweep"></div>
+          <div class="radar-center"></div>
+        </div>
+        <div class="find-info">
+          <div class="count" id="courierCount">—</div>
+          <div class="label">курьеров рядом с вами</div>
+          <div class="detail">
+            <div class="detail-item"><strong id="waitTime">—</strong><span>Время ожидания</span></div>
+            <div class="detail-item"><strong id="nearDist">—</strong><span>Ближайший</span></div>
+            <div class="detail-item"><strong>4.9★</strong><span>Рейтинг</span></div>
+          </div>
+          <a href="/order.html" class="order-link">Оформить заказ →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ТРЕКЕР -->
+  <section class="tracker-section">
+    <div class="reveal">
+      <h2 class="section-title">Отследить заказ</h2>
+      <p class="section-subtitle">Введите номер заказа — узнайте статус доставки</p>
+    </div>
+    <div class="tracker-box reveal">
+      <div class="tracker-input-wrap">
+        <input type="number" class="tracker-input" id="trackerOrderId" placeholder="Номер заказа (например, 1)" min="1">
+        <button class="tracker-btn" id="trackerBtn" onclick="trackOrder()">Проверить статус</button>
+      </div>
+      <div class="tracker-result" id="trackerResult"></div>
+    </div>
+  </section>
+
+  <!-- КАРТА ЗОН -->
+  <section class="zones-section">
+    <div class="reveal">
+      <h2 class="section-title">Зоны обслуживания</h2>
+      <p class="section-subtitle">Мы работаем в городе и области</p>
+    </div>
+    <div class="zones-container">
+      <div class="zones-map reveal">
+        <svg class="zones-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="200" cy="200" r="190" fill="#E8DCC4" opacity="0.4" class="zone-circle" onclick="highlightZone('outside')"/>
+          <circle cx="200" cy="200" r="130" fill="#D9C8A8" opacity="0.5" class="zone-circle" onclick="highlightZone('outskirt')"/>
+          <circle cx="200" cy="200" r="75" fill="#C9B090" opacity="0.6" class="zone-circle" onclick="highlightZone('center')"/>
+          <text x="200" y="55" text-anchor="middle" class="zone-label" font-size="11" fill="#6D5B4D">ЗА ГОРОДОМ</text>
+          <text x="200" y="110" text-anchor="middle" class="zone-label" font-size="11" fill="#6D5B4D">ОКРАИНЫ</text>
+          <text x="200" y="185" text-anchor="middle" class="zone-label" font-size="11" fill="#3E2723">ЦЕНТР</text>
+          <circle cx="180" cy="190" r="5" fill="#A0704A" class="zone-dot"/>
+          <circle cx="220" cy="210" r="5" fill="#A0704A" class="zone-dot" style="animation-delay:0.3s"/>
+          <circle cx="200" cy="175" r="5" fill="#A0704A" class="zone-dot" style="animation-delay:0.6s"/>
+          <circle cx="170" cy="225" r="5" fill="#A0704A" class="zone-dot" style="animation-delay:0.9s"/>
+          <circle cx="230" cy="185" r="5" fill="#A0704A" class="zone-dot" style="animation-delay:1.2s"/>
+        </svg>
+      </div>
+      <div class="zones-info reveal">
+        <h3>Где мы доставляем</h3>
+        <p>Наши курьеры работают во всех районах города и области. Стоимость зависит от зоны доставки.</p>
+        <div class="zone-list">
+          <div class="zone-item" onclick="highlightZone('center')">
+            <div class="zone-color" style="background:#C9B090"></div>
+            <div class="zone-info"><strong>Центр города</strong><span>Доставка 30–45 минут</span></div>
+            <div class="zone-price">+0 ₽</div>
+          </div>
+          <div class="zone-item" onclick="highlightZone('outskirt')">
+            <div class="zone-color" style="background:#D9C8A8"></div>
+            <div class="zone-info"><strong>Окраины и спальные районы</strong><span>Доставка 45–90 минут</span></div>
+            <div class="zone-price">+200 ₽</div>
+          </div>
+          <div class="zone-item" onclick="highlightZone('outside')">
+            <div class="zone-color" style="background:#E8DCC4"></div>
+            <div class="zone-info"><strong>За городом / область</strong><span>Доставка от 2 часов</span></div>
+            <div class="zone-price">+400 ₽</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ПРЕИМУЩЕСТВА -->
+  <section class="section">
+    <div class="reveal">
+      <h2 class="section-title" data-i18n="features.title">Почему выбирают нас</h2>
+      <p class="section-subtitle" data-i18n="features.subtitle">Мы делаем доставку простой, быстрой и надёжной</p>
+    </div>
+    <div class="features reveal">
+      <div class="feature"><span class="feature-icon">⚡</span><h3 data-i18n="features.fast">Быстро</h3><p data-i18n="features.fast_desc">Доставка от 30 минут по городу.</p></div>
+      <div class="feature"><span class="feature-icon">🛡</span><h3 data-i18n="features.safe">Надёжно</h3><p data-i18n="features.safe_desc">Все курьеры проверены.</p></div>
+      <div class="feature"><span class="feature-icon">💰</span><h3 data-i18n="features.cheap">Выгодно</h3><p data-i18n="features.cheap_desc">Честные цены без скрытых платежей.</p></div>
+      <div class="feature"><span class="feature-icon">📍</span><h3 data-i18n="features.track">Отслеживание</h3><p data-i18n="features.track_desc">Статус в реальном времени.</p></div>
+    </div>
+  </section>
+
+  <!-- ЛЕНТА ПАРТНЁРОВ -->
+  <section class="partners-section">
+    <div class="partners-title" data-i18n="partners.title">Нам доверяют</div>
+    <div class="marquee-wrap">
+      <div class="marquee">
+        <div class="marquee-item">Pizza House</div><div class="marquee-item">Coffee Lab</div>
+        <div class="marquee-item">Flower Shop</div><div class="marquee-item">Book Store</div>
+        <div class="marquee-item">Sushi Bar</div><div class="marquee-item">Gift Box</div>
+        <div class="marquee-item">Donut King</div><div class="marquee-item">Burger House</div>
+        <div class="marquee-item">Pizza House</div><div class="marquee-item">Coffee Lab</div>
+        <div class="marquee-item">Flower Shop</div><div class="marquee-item">Book Store</div>
+        <div class="marquee-item">Sushi Bar</div><div class="marquee-item">Gift Box</div>
+        <div class="marquee-item">Donut King</div><div class="marquee-item">Burger House</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ДОСТИЖЕНИЯ -->
+  <section class="achievements-section">
+    <div class="reveal">
+      <h2 class="section-title" data-i18n="achievements.title">Наши достижения</h2>
+      <p class="section-subtitle" data-i18n="achievements.subtitle">Цифры, которыми мы гордимся</p>
+    </div>
+    <div class="achievements reveal">
+      <div class="achievement"><div class="num">5</div><div class="label" data-i18n="ach.1">лет на рынке</div></div>
+      <div class="achievement"><div class="num">4.9★</div><div class="label" data-i18n="ach.2">средняя оценка</div></div>
+      <div class="achievement"><div class="num">100K+</div><div class="label" data-i18n="ach.3">доставок</div></div>
+      <div class="achievement"><div class="num">500+</div><div class="label" data-i18n="ach.4">партнёров</div></div>
+    </div>
+  </section>
+
+  <!-- ГАЛЕРЕЯ -->
+  <section class="gallery-section">
+    <div class="reveal">
+      <h2 class="section-title" data-i18n="gallery.title">Примеры наших доставок</h2>
+      <p class="section-subtitle" data-i18n="gallery.subtitle">Каждый день мы доставляем тысячи разных грузов</p>
+    </div>
+    <div class="gallery reveal">
+      <div class="gallery-item" onclick="openPhoto('/img/documents.jpg')">
+        <img src="/img/documents.jpg" alt="Documents">
+        <div class="gallery-overlay"><h3 data-i18n="gallery.docs">Документы</h3><p data-i18n="gallery.docs_desc">Важные бумаги — быстро и безопасно</p></div>
+      </div>
+      <div class="gallery-item" onclick="openPhoto('/img/parcels.jpg')">
+        <img src="/img/parcels.jpg" alt="Parcels">
+        <div class="gallery-overlay"><h3 data-i18n="gallery.parcels">Посылки</h3><p data-i18n="gallery.parcels_desc">Коробки и грузы до 10 кг</p></div>
+      </div>
+      <div class="gallery-item" onclick="openPhoto('/img/products.jpg')">
+        <img src="/img/products.jpg" alt="Groceries">
+        <div class="gallery-overlay"><h3 data-i18n="gallery.products">Продукты</h3><p data-i18n="gallery.products_desc">Свежие продукты из магазина</p></div>
+      </div>
+      <div class="gallery-item" onclick="openPhoto('/img/gifts.jpg')">
+        <img src="/img/gifts.jpg" alt="Gifts">
+        <div class="gallery-overlay"><h3 data-i18n="gallery.gifts">Подарки</h3><p data-i18n="gallery.gifts_desc">Цветы и сюрпризы точно в срок</p></div>
+      </div>
+      <div class="gallery-item" onclick="openPhoto('/img/business.jpg')">
+        <img src="/img/business.jpg" alt="Business">
+        <div class="gallery-overlay"><h3 data-i18n="gallery.business">Бизнесу</h3><p data-i18n="gallery.business_desc">Корпоративная доставка</p></div>
+      </div>
+      <div class="gallery-item" onclick="openPhoto('/img/courier.jpg')">
+        <img src="/img/courier.jpg" alt="Couriers">
+        <div class="gallery-overlay"><h3 data-i18n="gallery.couriers">Наши курьеры</h3><p data-i18n="gallery.couriers_desc">Вежливые и пунктуальные</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- УСЛУГИ -->
+  <section class="services-section">
+    <div class="reveal">
+      <h2 class="section-title" data-i18n="services.title">Наши услуги</h2>
+      <p class="section-subtitle" data-i18n="services.subtitle">Выберите подходящий формат доставки</p>
+    </div>
+    <div class="services reveal">
+      <a href="/order.html" class="service"><span class="service-icon">📄</span><h3 data-i18n="services.docs">Документы</h3><p data-i18n="services.docs_desc">Быстрая доставка важных бумаг и договоров.</p><div class="service-price" data-i18n="price.from250">от 250 ₽</div></a>
+      <a href="/order.html" class="service"><span class="service-icon">📦</span><h3 data-i18n="services.parcels">Посылки</h3><p data-i18n="services.parcels_desc">Доставка небольших грузов до 10 кг.</p><div class="service-price" data-i18n="price.from350">от 350 ₽</div></a>
+      <a href="/order.html" class="service"><span class="service-icon">🛒</span><h3 data-i18n="services.products">Продукты</h3><p data-i18n="services.products_desc">Курьер купит и привезёт продукты.</p><div class="service-price" data-i18n="price.from300">от 300 ₽</div></a>
+      <a href="/order.html" class="service"><span class="service-icon">🎁</span><h3 data-i18n="services.gifts">Подарки</h3><p data-i18n="services.gifts_desc">Доставка подарков и цветов.</p><div class="service-price" data-i18n="price.from400">от 400 ₽</div></a>
+      <a href="/order.html" class="service"><span class="service-icon">🏢</span><h3 data-i18n="services.business">Бизнесу</h3><p data-i18n="services.business_desc">Корпоративные тарифы.</p><div class="service-price" data-i18n="price.contract">по договору</div></a>
+      <a href="/order.html" class="service"><span class="service-icon">⚡</span><h3 data-i18n="services.urgent">Срочно</h3><p data-i18n="services.urgent_desc">Экспресс-доставка за 60 минут.</p><div class="service-price" data-i18n="price.from600">от 600 ₽</div></a>
+    </div>
+  </section>
+
+  <!-- КАК ЭТО РАБОТАЕТ -->
+  <section class="section">
+    <div class="reveal">
+      <h2 class="section-title" data-i18n="steps.title">Как это работает</h2>
+      <p class="section-subtitle" data-i18n="steps.subtitle">Четыре простых шага до вашей посылки</p>
+    </div>
+    <div class="steps reveal">
+      <div class="step"><div class="step-number">1</div><h3 data-i18n="step.1">Регистрация</h3><p data-i18n="step.1_desc">Создайте аккаунт за 1 минуту</p></div>
+      <div class="step"><div class="step-number">2</div><h3 data-i18n="step.2">Оформление</h3><p data-i18n="step.2_desc">Укажите адреса и опишите груз</p></div>
+      <div class="step"><div class="step-number">3</div><h3 data-i18n="step.3">Оплата</h3><p data-i18n="step.3_desc">Выберите удобный способ оплаты</p></div>
+      <div class="step"><div class="step-number">4</div><h3 data-i18n="step.4">Доставка</h3><p data-i18n="step.4_desc">Курьер привезёт точно в срок</p></div>
+    </div>
+  </section>
+
+  <!-- ОТЗЫВЫ -->
+  <section class="reviews-section">
+    <div class="reveal">
+      <h2 class="section-title" data-i18n="reviews.title">Что говорят клиенты</h2>
+      <p class="section-subtitle" data-i18n="reviews.subtitle">Нам доверяют тысячи людей</p>
+    </div>
+    <div class="reviews reveal">
+      <div class="review">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text" data-i18n="rev.1">Заказывал доставку документов. Курьер приехал через 40 минут. Всё чётко!</p>
+        <div class="review-author"><div class="review-avatar">А</div><div><div class="review-name">Алексей М.</div><div class="review-city" data-i18n="city.moscow">Москва</div></div></div>
+      </div>
+      <div class="review">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text" data-i18n="rev.2">Очень удобный сервис. Заказала продукты — привезли через час. Спасибо!</p>
+        <div class="review-author"><div class="review-avatar">М</div><div><div class="review-name">Мария К.</div><div class="review-city" data-i18n="city.spb">Санкт-Петербург</div></div></div>
+      </div>
+      <div class="review">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text" data-i18n="rev.3">Пользуюсь для бизнеса. Всегда в срок, есть отчётность. Отличный сервис!</p>
+        <div class="review-author"><div class="review-avatar">Д</div><div><div class="review-name">Дмитрий П.</div><div class="review-city" data-i18n="city.kazan">Казань</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2 data-i18n="cta.title">Готовы оформить заказ?</h2>
+    <p data-i18n="cta.subtitle">Это займёт меньше минуты</p>
+    <a href="/order.html" class="cta-btn" data-i18n="cta.btn">Заказать доставку</a>
+  </section>
+
+  <!-- ФУТЕР -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div><h4>TEMPORE</h4><p data-i18n="footer.about">Курьерская доставка нового поколения.</p></div>
+      <div>
+        <h4 data-i18n="footer.services">Услуги</h4>
+        <ul>
+          <li><a href="/order.html" data-i18n="footer.docs">Документы</a></li>
+          <li><a href="/order.html" data-i18n="footer.parcels">Посылки</a></li>
+          <li><a href="/order.html" data-i18n="footer.products">Продукты</a></li>
+          <li><a href="/order.html" data-i18n="footer.gifts">Подарки</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="footer.company">Компания</h4>
+        <ul>
+          <li><a onclick="openFooterModal('about')" data-i18n="footer.about_us">О нас</a></li>
+          <li><a href="/courier-register.html" data-i18n="footer.become">Стать курьером</a></li>
+          <li><a onclick="openFooterModal('contacts')" data-i18n="footer.contacts">Контакты</a></li>
+          <li><a onclick="openFooterModal('partners')" data-i18n="footer.partners">Партнёрам</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="footer.clients">Клиентам</h4>
+        <ul>
+          <li><a href="/order.html" data-i18n="footer.order">Заказать доставку</a></li>
+          <li><a href="/orders.html" data-i18n="footer.my_orders">Мои заказы</a></li>
+          <li><a href="/register.html" data-i18n="footer.reg">Регистрация</a></li>
+          <li><a href="/login.html" data-i18n="footer.login">Войти</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom" data-i18n="footer.rights">© 2026 Tempore — Все права защищены.</div>
+  </footer>
+
+  <!-- МОДАЛКА ФОТО -->
+  <div id="photoModal" onclick="closePhoto()"><img id="photoModalImg" src="" alt=""></div>
+
+  <!-- МОДАЛКА ФУТЕРА -->
+  <div class="footer-modal-overlay" id="footerModal" onclick="if(event.target===this) closeFooterModal()">
+    <div class="footer-modal">
+      <button class="footer-modal-close" onclick="closeFooterModal()">✕</button>
+      <h3 id="footerModalTitle">Заголовок</h3>
+      <div class="footer-modal-content" id="footerModalContent">Текст</div>
+    </div>
+  </div>
+
+  <!-- ЧАТ -->
+  <button class="chat-toggle" id="chatToggle" onclick="toggleChat()">💬<span class="badge" id="chatBadge">1</span></button>
+  <div class="chat-window" id="chatWindow">
+    <div class="chat-header">
+      <div class="avatar">💬</div>
+      <div class="info"><strong>Поддержка Tempore</strong><span>Онлайн</span></div>
+      <button class="chat-close" onclick="toggleChat()">✕</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-msg bot">Здравствуйте! 👋 Чем могу помочь?</div>
+    </div>
+    <div class="chat-quick" id="chatQuick">
+      <button onclick="quickReply('Как оформить заказ?')">Как оформить заказ?</button>
+      <button onclick="quickReply('Сколько стоит доставка?')">Сколько стоит?</button>
+      <button onclick="quickReply('Сколько ждать курьера?')">Сколько ждать?</button>
+      <button onclick="quickReply('Способы оплаты')">Способы оплаты</button>
+    </div>
+    <div class="chat-input-wrap">
+      <input type="text" class="chat-input" id="chatInput" placeholder="Напишите сообщение..." onkeypress="if(event.key==='Enter') sendChat()">
+      <button class="chat-send" onclick="sendChat()">➤</button>
+    </div>
+  </div>
+
+  <script>
+    // СЧЁТЧИКИ
+    let countersAnimated = false;
+    function animateCounters() {
+      if (countersAnimated) return;
+      const stats = document.querySelector('.stats');
+      if (stats && stats.getBoundingClientRect().top < window.innerHeight - 100) {
+        countersAnimated = true;
+        document.querySelectorAll('.stat-number').forEach(el => {
+          const target = parseInt(el.dataset.target);
+          const suffix = el.dataset.suffix || '';
+          const duration = 1500;
+          const start = performance.now();
+          function update(now) {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = Math.floor(eased * target);
+            el.textContent = (target === 247 ? '24/7' : current.toLocaleString('ru-RU') + suffix);
+            if (progress < 1) requestAnimationFrame(update);
+          }
+          requestAnimationFrame(update);
+        });
+      }
+    }
+    window.addEventListener('scroll', animateCounters);
+    window.addEventListener('load', animateCounters);
+
+    // REVEAL
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ФОТО
+    function openPhoto(src) {
+      document.getElementById('photoModalImg').src = src;
+      document.getElementById('photoModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closePhoto() {
+      document.getElementById('photoModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // КАРТА ЗОН
+    function highlightZone(zone) {
+      if (typeof showToast === 'function') {
+        const names = { center: 'Центр — базовый тариф', outskirt: 'Окраина — +200 ₽', outside: 'За городом — +400 ₽' };
+        showToast(names[zone]);
+      }
+    }
+
+    // ПОИСК КУРЬЕРА
+    function findCourier() {
+      const address = document.getElementById('findAddress').value.trim();
+      if (!address) { alert('Введите адрес'); return; }
+
+      const btn = document.getElementById('findBtn');
+      const result = document.getElementById('findResult');
+      const radar = result.querySelector('.radar');
+
+      btn.disabled = true;
+      btn.textContent = 'Поиск...';
+      result.classList.remove('show');
+      result.style.display = 'block';
+      radar.style.display = 'block';
+
+      document.querySelectorAll('.radar-dot').forEach(d => d.remove());
+
+      setTimeout(() => {
+        const count = Math.floor(Math.random() * 5) + 3;
+        const wait = Math.floor(Math.random() * 20) + 15;
+        const dist = (Math.random() * 1.5 + 0.3).toFixed(1);
+
+        document.getElementById('courierCount').textContent = count;
+        document.getElementById('waitTime').textContent = wait + ' мин';
+        document.getElementById('nearDist').textContent = dist + ' км';
+
+        for (let i = 0; i < count; i++) {
+          const dot = document.createElement('div');
+          dot.className = 'radar-dot';
+          const angle = Math.random() * 360;
+          const radius = Math.random() * 50 + 15;
+          const x = 50 + Math.cos(angle) * radius * 0.5;
+          const y = 50 + Math.sin(angle) * radius * 0.5;
+          dot.style.left = x + '%';
+          dot.style.top = y + '%';
+          dot.style.animationDelay = (i * 0.15) + 's';
+          radar.appendChild(dot);
+        }
+
+        result.classList.add('show');
+        btn.disabled = false;
+        btn.textContent = 'Найти заново';
+      }, 1800);
+    }
+
+    // ТРЕКЕР
+    async function trackOrder() {
+      const orderId = document.getElementById('trackerOrderId').value.trim();
+      if (!orderId) { alert('Введите номер заказа'); return; }
+
+      const btn = document.getElementById('trackerBtn');
+      const result = document.getElementById('trackerResult');
+
+      btn.disabled = true;
+      btn.textContent = 'Поиск...';
+      result.innerHTML = '<div style="text-align:center;padding:20px;color:#8D7B6D;">Загрузка...</div>';
+      result.classList.add('show');
+
+      try {
+        const r = await fetch('/api/orders/track/' + orderId);
+
+        if (!r.ok) {
+          let errorMsg = 'Ошибка сервера (' + r.status + ')';
+          try { const errData = await r.json(); errorMsg = errData.message || errorMsg; } catch(e) {}
+          result.innerHTML = '<div class="tracker-error">' + errorMsg + '</div>';
+          btn.disabled = false;
+          btn.textContent = 'Проверить статус';
+          return;
+        }
+
+        const data = await r.json();
+
+        if (!data.success) {
+          result.innerHTML = '<div class="tracker-error">' + data.message + '</div>';
+          btn.disabled = false;
+          btn.textContent = 'Проверить статус';
+          return;
+        }
+
+        const o = data.order;
+        const steps = ['новый', 'принят', 'в пути', 'доставлен'];
+        const stepLabels = { 'новый': 'Принят', 'принят': 'Подтверждён', 'в пути': 'В пути', 'доставлен': 'Доставлен' };
+        let currentIdx = steps.indexOf(o.status);
+        if (currentIdx < 0) currentIdx = 0;
+
+        let stepsHtml = '<div class="tracker-steps">';
+        steps.forEach((s, i) => {
+          const cls = i < currentIdx ? 'done' : (i === currentIdx ? 'active' : '');
+          const icon = i < currentIdx ? '✓' : (i + 1);
+          stepsHtml += '<div class="tracker-step ' + cls + '">' +
+            '<div class="tracker-step-dot">' + icon + '</div>' +
+            '<div class="tracker-step-label">' + stepLabels[s] + '</div>' +
+          '</div>';
+        });
+        stepsHtml += '</div>';
+
+        const date = new Date(o.order_date).toLocaleString('ru-RU');
+
+        result.innerHTML = stepsHtml +
+          '<div class="tracker-info">' +
+            '<div class="row"><span>Заказ</span><strong>#' + o.order_id + '</strong></div>' +
+            '<div class="row"><span>Откуда</span><strong>' + o.from_address + '</strong></div>' +
+            '<div class="row"><span>Куда</span><strong>' + o.to_address + '</strong></div>' +
+            '<div class="row"><span>Стоимость</span><strong>' + o.delivery_price + ' ₽</strong></div>' +
+            '<div class="row"><span>Статус</span><strong>' + o.status + '</strong></div>' +
+            (o.courier_name ? '<div class="row"><span>Курьер</span><strong>' + o.courier_name + '</strong></div>' : '') +
+            '<div class="row"><span>Создан</span><strong>' + date + '</strong></div>' +
+          '</div>';
+
+        btn.disabled = false;
+        btn.textContent = 'Обновить статус';
+      } catch (err) {
+        result.innerHTML = '<div class="tracker-error">Не удалось подключиться к серверу. Проверьте, что сервер запущен.</div>';
+        btn.disabled = false;
+        btn.textContent = 'Проверить статус';
+      }
+    }
+
+    // МОДАЛКА ФУТЕРА
+    const footerModalContent = {
+      ru: {
+        about: { title: 'О компании Tempore', content: '<p><strong>Tempore</strong> — курьерская служба нового поколения. Мы работаем с 2021 года и за это время выполнили более 100 000 доставок.</p><p>Наша миссия — сделать доставку быстрой, надёжной и приятной.</p>' },
+        contacts: { title: 'Контакты', content: '<div class="contact-row"><span class="contact-icon">📞</span><div class="contact-text"><strong>Телефон</strong><span>+7 (900) 000-00-00</span></div></div><div class="contact-row"><span class="contact-icon">✉️</span><div class="contact-text"><strong>Email</strong><span>info@tempore.ru</span></div></div><div class="contact-row"><span class="contact-icon">📍</span><div class="contact-text"><strong>Адрес</strong><span>г. Москва, ул. Курьерская, 15</span></div></div><div class="contact-row"><span class="contact-icon">🕐</span><div class="contact-text"><strong>Режим работы</strong><span>Круглосуточно</span></div></div>' },
+        partners: { title: 'Партнёрам', content: '<p>Мы открыты к сотрудничеству с интернет-магазинами, ресторанами, аптеками.</p><p>Свяжитесь: <a href="mailto:b2b@tempore.ru">b2b@tempore.ru</a></p>' }
+      },
+      en: {
+        about: { title: 'About Tempore', content: '<p><strong>Tempore</strong> is a next-generation courier service.</p>' },
+        contacts: { title: 'Contacts', content: '<div class="contact-row"><span class="contact-icon">📞</span><div class="contact-text"><strong>Phone</strong><span>+7 (900) 000-00-00</span></div></div>' },
+        partners: { title: 'Partners', content: '<p>We are open to cooperation.</p>' }
+      }
+    };
+
+    function openFooterModal(key) {
+      const lang = localStorage.getItem('lang') || 'ru';
+      const data = footerModalContent[lang][key];
+      if (!data) return;
+      document.getElementById('footerModalTitle').textContent = data.title;
+      document.getElementById('footerModalContent').innerHTML = data.content;
+      document.getElementById('footerModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeFooterModal() {
+      document.getElementById('footerModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // ЧАТ
+    let chatOpen = false;
+    const botReplies = {
+      'как оформить заказ': 'Оформить заказ очень просто:\n1. Войдите в аккаунт\n2. Нажмите «Заказать доставку»\n3. Укажите адреса\n4. Цена рассчитается автоматически',
+      'сколько стоит': 'Стоимость зависит от:\n• Типа груза\n• Зоны доставки\n• Срочности\n\nСкидка 5% при онлайн-оплате!',
+      'сколько ждать': 'Обычно курьер приезжает за 30-60 минут.',
+      'способы оплаты': 'Мы принимаем:\n• 💳 Банковская карта\n• 🌐 Онлайн-оплата\n• 💵 Наличные',
+      'привет': 'Здравствуйте! 👋 Чем могу помочь?',
+      'спасибо': 'Пожалуйста! 😊'
+    };
+
+    function toggleChat() {
+      chatOpen = !chatOpen;
+      document.getElementById('chatWindow').classList.toggle('open', chatOpen);
+      document.getElementById('chatBadge').style.display = 'none';
+      if (chatOpen) setTimeout(() => document.getElementById('chatInput').focus(), 300);
+    }
+
+    function quickReply(text) {
+      document.getElementById('chatInput').value = text;
+      sendChat();
+    }
+
+    function sendChat() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const messages = document.getElementById('chatMessages');
+      const userMsg = document.createElement('div');
+      userMsg.className = 'chat-msg user';
+      userMsg.textContent = text;
+      messages.appendChild(userMsg);
+      input.value = '';
+      messages.scrollTop = messages.scrollHeight;
+
+      const typing = document.createElement('div');
+      typing.className = 'chat-typing';
+      typing.innerHTML = '<span></span><span></span><span></span>';
+      messages.appendChild(typing);
+      messages.scrollTop = messages.scrollHeight;
+
+      setTimeout(() => {
+        typing.remove();
+        const botMsg = document.createElement('div');
+        botMsg.className = 'chat-msg bot';
+        botMsg.textContent = getBotReply(text);
+        messages.appendChild(botMsg);
+        messages.scrollTop = messages.scrollHeight;
+      }, 1200);
+    }
+
+    function getBotReply(text) {
+      const lower = text.toLowerCase();
+      for (const [key, reply] of Object.entries(botReplies)) {
+        if (lower.includes(key)) return reply;
+      }
+      return 'Извините, не совсем понял. Выберите быстрый вопрос ниже 👇';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { closeFooterModal(); closePhoto(); }
+    });
+  </script>
+
+</body>
+</html>

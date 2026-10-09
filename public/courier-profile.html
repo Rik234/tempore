@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n-title="courier.profile">Кабинет курьера — Tempore</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="/js/nav.js"></script>
+  <style>
+    .courier-hero {
+      background: linear-gradient(135deg, #3E2723 0%, #5D4037 100%);
+      color: #FAF4E8;
+      padding: 55px 20px 85px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .courier-hero::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(212,165,116,0.12) 0%, transparent 60%);
+      animation: rotate 45s linear infinite;
+    }
+    @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    .courier-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid rgba(250,244,232,0.3);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(250,244,232,0.15);
+      font-size: 46px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      position: relative;
+      z-index: 1;
+      animation: avatarPop 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    @keyframes avatarPop {
+      0% { opacity: 0; transform: scale(0); }
+      60% { transform: scale(1.08); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    .courier-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .courier-hero h1 {
+      color: #FAF4E8;
+      margin: 0 0 5px;
+      font-size: 26px;
+      position: relative;
+      z-index: 1;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+    .courier-hero p { margin: 0; opacity: 0.85; font-size: 14px; position: relative; z-index: 1; font-weight: 300; }
+
+    .hero-badges {
+      margin-top: 15px;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(250,244,232,0.12);
+      padding: 7px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(250,244,232,0.15);
+      transition: all 0.25s;
+    }
+    .hero-badge:hover { background: rgba(250,244,232,0.2); transform: translateY(-2px); }
+    .hero-badge.rating {
+      background: rgba(212,165,116,0.3);
+      font-weight: 700;
+      font-size: 14px;
+      color: #FFE8C8;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-left: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .status-badge.свободен  { background: rgba(125,165,45,0.15); color: #4A6B1F; }
+    .status-badge.занят     { background: rgba(229,164,74,0.15); color: #7A5216; }
+    .status-badge.неактивен { background: rgba(179,58,58,0.12); color: #8E2E2E; }
+
+    .courier-container {
+      max-width: 900px;
+      margin: -45px auto 40px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .stats-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      background: #FAF4E8;
+      padding: 22px 18px;
+      border-radius: 10px;
+      box-shadow: 0 8px 30px rgba(62,39,35,0.08);
+      text-align: center;
+      border: 1px solid rgba(160,112,74,0.12);
+      transition: all 0.3s;
+      animation: cardEnter 0.5s ease-out backwards;
+    }
+    .stat-card:nth-child(1) { animation-delay: 0.05s; }
+    .stat-card:nth-child(2) { animation-delay: 0.1s; }
+    .stat-card:nth-child(3) { animation-delay: 0.15s; }
+    .stat-card:nth-child(4) { animation-delay: 0.2s; }
+    @keyframes cardEnter {
+      from { opacity: 0; transform: translateY(15px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(160,112,74,0.15);
+      border-color: #A0704A;
+    }
+    .stat-card .num {
+      font-size: 28px;
+      font-weight: 700;
+      color: #A0704A;
+      margin-bottom: 5px;
+      letter-spacing: -0.5px;
+    }
+    .stat-card .lbl {
+      font-size: 11px;
+      color: #8D7B6D;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .info-card {
+      background: #FAF4E8;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 8px 30px rgba(62,39,35,0.06);
+      margin-bottom: 20px;
+      border: 1px solid rgba(160,112,74,0.1);
+    }
+    .info-card h2 {
+      color: #3E2723;
+      margin: 0 0 20px;
+      font-size: 18px;
+      border-bottom: 1px solid rgba(160,112,74,0.12);
+      padding-bottom: 12px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+    }
+
+    .info-row {
+      display: flex;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(160,112,74,0.08);
+      transition: all 0.2s;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-row:hover { background: rgba(212,165,116,0.05); padding-left: 8px; border-radius: 4px; }
+    .info-label { flex: 0 0 180px; color: #8D7B6D; font-size: 13px; }
+    .info-value { color: #3E2723; font-weight: 500; font-size: 14px; }
+
+    /* Рейтинг */
+    .rating-header {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      padding: 25px;
+      background: #F5EBD8;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      border: 1px solid rgba(212,165,116,0.25);
+    }
+    .rating-big { text-align: center; flex-shrink: 0; min-width: 120px; }
+    .rating-big .score {
+      font-size: 56px;
+      font-weight: 700;
+      color: #A0704A;
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+    .rating-big .count { font-size: 12px; color: #8D7B6D; margin-top: 6px; }
+    .rating-info .stars { color: #A0704A; font-size: 24px; letter-spacing: 3px; margin-bottom: 6px; }
+    .rating-info .desc { color: #8D7B6D; font-size: 13px; }
+
+    .review-item {
+      background: #F5EBD8;
+      padding: 18px 20px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      border-left: 3px solid #D4A574;
+      transition: all 0.3s;
+      animation: cardEnter 0.4s ease-out backwards;
+    }
+    .review-item:hover {
+      transform: translateX(4px);
+      box-shadow: 0 6px 20px rgba(160,112,74,0.1);
+    }
+    .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px; }
+    .review-author { font-weight: 600; color: #3E2723; font-size: 13px; }
+    .review-stars { color: #A0704A; font-size: 14px; letter-spacing: 1px; }
+    .review-comment {
+      color: #5D4037;
+      font-size: 13px;
+      line-height: 1.7;
+      margin: 8px 0;
+      font-style: italic;
+      padding-left: 12px;
+      border-left: 2px solid rgba(212,165,116,0.4);
+    }
+    .review-date { color: #8D7B6D; font-size: 11px; margin-top: 6px; }
+    .review-route { font-size: 11px; color: #8D7B6D; margin-top: 6px; }
+
+    /* Заказы */
+    .order-card {
+      background: #F5EBD8;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 14px;
+      border-left: 3px solid #A0704A;
+      transition: all 0.3s;
+      animation: cardEnter 0.4s ease-out backwards;
+    }
+    .order-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(160,112,74,0.12);
+    }
+    .order-card.in-transit { border-left-color: #E5A44A; }
+    .order-card.delivered  { border-left-color: #7DA52D; opacity: 0.85; }
+
+    .order-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
+    .order-id { font-weight: 700; color: #3E2723; font-size: 16px; letter-spacing: -0.3px; }
+    .order-id span { color: #A0704A; font-weight: 500; margin-right: 4px; }
+    .status { padding: 5px 14px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .status.принят    { background: rgba(74,107,156,0.12); color: #2A4570; }
+    .status.в-пути    { background: rgba(229,164,74,0.15); color: #7A5216; }
+    .status.доставлен { background: rgba(125,165,45,0.15); color: #4A6B1F; }
+
+    .order-route { color: #5D4037; margin: 8px 0; font-size: 13px; line-height: 1.7; }
+    .order-route b { color: #3E2723; font-weight: 500; }
+    .order-price { color: #A0704A; font-weight: 700; font-size: 16px; margin: 10px 0; }
+    .order-payment { color: #6D5B4D; font-size: 12px; margin: 5px 0; }
+    .payment-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; margin-left: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .payment-badge.ожидает  { background: rgba(229,164,74,0.15); color: #7A5216; }
+    .payment-badge.оплачено { background: rgba(125,165,45,0.15); color: #4A6B1F; }
+    .payment-badge.возврат  { background: rgba(74,107,156,0.12); color: #2A4570; }
+
+    .client-info {
+      background: #FAF4E8;
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin-top: 12px;
+      font-size: 12px;
+      color: #5D4037;
+      border-left: 2px solid #A0704A;
+      line-height: 1.7;
+    }
+    .client-info b { color: #3E2723; }
+
+    .order-actions {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(160,112,74,0.12);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .btn-status {
+      padding: 10px 22px;
+      border-radius: 6px;
+      border: 1px solid;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+      letter-spacing: 0.3px;
+    }
+    .btn-status.depart {
+      background: #4A6B9C;
+      color: #FAF4E8;
+      border-color: #4A6B9C;
+    }
+    .btn-status.depart:hover {
+      background: #2A4570;
+      border-color: #2A4570;
+      transform: translateY(-2px);
+    }
+    .btn-status.done {
+      background: #7DA52D;
+      color: #FAF4E8;
+      border-color: #7DA52D;
+    }
+    .btn-status.done:hover {
+      background: #5A7A1E;
+      border-color: #5A7A1E;
+      transform: translateY(-2px);
+    }
+
+    .empty-orders {
+      text-align: center;
+      padding: 40px 20px;
+      color: #8D7B6D;
+      font-size: 13px;
+    }
+    .empty-orders .icon {
+      font-size: 45px;
+      display: block;
+      margin-bottom: 12px;
+      opacity: 0.4;
+    }
+
+    .courier-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    .btn-action {
+      padding: 14px 30px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+      letter-spacing: 0.3px;
+    }
+    .btn-action.danger {
+      background: transparent;
+      color: #8E2E2E;
+      border-color: rgba(179,58,58,0.3);
+    }
+    .btn-action.danger:hover {
+      background: #B33A3A;
+      color: #FAF4E8;
+      border-color: #B33A3A;
+    }
+
+    .loading { text-align: center; padding: 60px 20px; color: #8D7B6D; font-size: 14px; }
+    .loading::before {
+      content: '';
+      display: block;
+      width: 32px; height: 32px;
+      border: 2px solid rgba(160,112,74,0.15);
+      border-top-color: #A0704A;
+      border-radius: 50%;
+      margin: 0 auto 15px;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 600px) {
+      .rating-header { flex-direction: column; gap: 15px; padding: 20px; text-align: center; }
+      .info-label { flex: 0 0 100%; margin-bottom: 4px; }
+      .info-row { flex-direction: column; }
+      .courier-hero { padding: 40px 20px 70px; }
+      .courier-avatar { width: 90px; height: 90px; font-size: 36px; }
+      .courier-hero h1 { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="courier-hero">
+    <div class="courier-avatar" id="avatar">?</div>
+    <h1 id="heroName">Загрузка...</h1>
+    <p id="heroEmail"></p>
+    <div class="hero-badges">
+      <span class="hero-badge" id="heroTransport">—</span>
+      <span class="hero-badge rating" id="heroRating">—</span>
+    </div>
+  </div>
+
+  <div class="courier-container">
+    <div id="content"><div class="loading">Загрузка данных...</div></div>
+    <div class="courier-actions" id="actions" style="display:none;">
+      <button class="btn-action danger" onclick="logout()" data-i18n="profile.logout">Выйти</button>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+
+    if (!token || role !== 'courier') {
+      alert('Доступ только для курьеров.');
+      localStorage.clear();
+      window.location.href = '/login.html';
+    }
+
+    async function loadCourier() {
+      const content = document.getElementById('content');
+      try {
+        const r = await fetch('/api/auth/courier-me', { headers: { 'Authorization': 'Bearer ' + token } });
+        const result = await r.json();
+
+        if (!result.success) {
+          content.innerHTML = '<div class="loading">Ошибка: ' + result.message + '</div>';
+          return;
+        }
+
+        const c = result.courier, s = result.stats, rt = result.rating || { avg: '0.0', count: 0 };
+
+        const avatarEl = document.getElementById('avatar');
+        if (c.photo) avatarEl.innerHTML = '<img src="/uploads/couriers/' + c.photo + '" alt="Фото">';
+        else avatarEl.textContent = (c.full_name || '?').charAt(0).toUpperCase();
+
+        document.getElementById('heroName').textContent = c.full_name;
+        document.getElementById('heroEmail').textContent = c.email;
+        document.getElementById('heroTransport').textContent = '🚗 ' + c.transport;
+        document.getElementById('heroRating').textContent = rt.count > 0
+          ? '⭐ ' + rt.avg + ' (' + rt.count + ')'
+          : '⭐ Нет оценок';
+
+        const regDate = new Date(c.created_at).toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' });
+        const days = Math.floor((Date.now() - new Date(c.created_at).getTime()) / 86400000);
+        const statusLabel = { 'свободен': 'Свободен', 'занят': 'Занят', 'неактивен': 'Неактивен' }[c.work_status] || c.work_status;
+
+        content.innerHTML = `
+          <div class="stats-cards">
+            <div class="stat-card"><div class="num">${s.total_orders || 0}</div><div class="lbl" data-i18n="courier.total">Всего заказов</div></div>
+            <div class="stat-card"><div class="num">${s.active_orders || 0}</div><div class="lbl" data-i18n="courier.active_orders">Активных</div></div>
+            <div class="stat-card"><div class="num">${s.completed_orders || 0}</div><div class="lbl" data-i18n="courier.completed">Завершено</div></div>
+            <div class="stat-card"><div class="num">${s.total_earned || 0} ₽</div><div class="lbl" data-i18n="courier.earned">Заработано</div></div>
+          </div>
+
+          <div class="info-card">
+            <h2 data-i18n="courier.reviews">Отзывы и рейтинг</h2>
+            <div id="reviewsBlock"><div class="loading">Загрузка отзывов...</div></div>
+          </div>
+
+          <div class="info-card">
+            <h2 data-i18n="courier.profile">Профиль курьера</h2>
+            <div class="info-row"><div class="info-label" data-i18n="profile.fullname">ФИО</div><div class="info-value">${c.full_name}</div></div>
+            <div class="info-row"><div class="info-label" data-i18n="profile.email">Email</div><div class="info-value">${c.email}</div></div>
+            <div class="info-row"><div class="info-label" data-i18n="profile.phone">Телефон</div><div class="info-value">${c.phone}</div></div>
+            <div class="info-row"><div class="info-label">Транспорт</div><div class="info-value">${c.transport}</div></div>
+            <div class="info-row"><div class="info-label" data-i18n="courier.status">Статус работы</div><div class="info-value">${statusLabel} <span class="status-badge ${c.work_status}">${c.work_status}</span></div></div>
+            <div class="info-row"><div class="info-label" data-i18n="courier.registered">Дата регистрации</div><div class="info-value">${regDate}</div></div>
+            <div class="info-row"><div class="info-label" data-i18n="courier.experience">Стаж работы</div><div class="info-value">${days} ${days === 1 ? 'день' : (days < 5 ? 'дня' : 'дней')}</div></div>
+          </div>
+
+          <div class="info-card">
+            <h2 data-i18n="courier.my_orders">Мои заказы</h2>
+            <div id="ordersList"><div class="loading">Загрузка заказов...</div></div>
+          </div>
+        `;
+
+        if (typeof applyTranslations === 'function') applyTranslations();
+        document.getElementById('actions').style.display = 'flex';
+        loadReviews(c.courier_id);
+        loadOrders();
+      } catch (err) {
+        content.innerHTML = '<div class="loading">Ошибка соединения</div>';
+      }
+    }
+
+    async function loadReviews(courierId) {
+      const block = document.getElementById('reviewsBlock');
+      try {
+        const r = await fetch('/api/reviews/courier/' + courierId);
+        const result = await r.json();
+
+        if (!result.success || result.total_reviews === 0) {
+          block.innerHTML = '<div class="empty-orders"><span class="icon">💬</span><p data-i18n="courier.no_reviews">Пока нет отзывов</p></div>';
+          if (typeof applyTranslations === 'function') applyTranslations();
+          return;
+        }
+
+        const avg = parseFloat(result.avg_rating);
+        const stars = '★'.repeat(Math.round(avg)) + '☆'.repeat(5 - Math.round(avg));
+
+        let html = `
+          <div class="rating-header">
+            <div class="rating-big">
+              <div class="score">${result.avg_rating}</div>
+              <div class="count">${result.total_reviews} ${result.total_reviews === 1 ? 'отзыв' : (result.total_reviews < 5 ? 'отзыва' : 'отзывов')}</div>
+            </div>
+            <div class="rating-info">
+              <div class="stars">${stars}</div>
+              <div class="desc" data-i18n="courier.rating_avg">Средняя оценка от клиентов</div>
+            </div>
+          </div>
+        `;
+
+        html += result.reviews.map((rv, i) => {
+          const d = new Date(rv.created_at).toLocaleDateString('ru-RU');
+          const rs = '★'.repeat(rv.rating) + '☆'.repeat(5 - rv.rating);
+          return `
+            <div class="review-item" style="animation-delay:${i * 0.08}s">
+              <div class="review-header">
+                <span class="review-author">${rv.client_name}</span>
+                <span class="review-stars">${rs}</span>
+              </div>
+              ${rv.comment ? '<div class="review-comment">«' + rv.comment.trim() + '»</div>' : ''}
+              <div class="review-route">${rv.from_address} → ${rv.to_address}</div>
+              <div class="review-date">${d}</div>
+            </div>
+          `;
+        }).join('');
+
+        block.innerHTML = html;
+        if (typeof applyTranslations === 'function') applyTranslations();
+      } catch (e) {
+        block.innerHTML = '<div class="empty-orders"><p>Ошибка загрузки</p></div>';
+      }
+    }
+
+    async function loadOrders() {
+      const list = document.getElementById('ordersList');
+      try {
+        const r = await fetch('/api/orders/courier', { headers: { 'Authorization': 'Bearer ' + token } });
+        const result = await r.json();
+
+        if (!result.success || result.orders.length === 0) {
+          list.innerHTML = '<div class="empty-orders"><span class="icon">📭</span><p data-i18n="courier.no_orders">Нет назначенных заказов</p></div>';
+          if (typeof applyTranslations === 'function') applyTranslations();
+          return;
+        }
+
+        list.innerHTML = result.orders.map((o, i) => {
+          const sc = o.status.replace(' ', '-');
+          let act = '', cls = '';
+
+          if (o.status === 'принят') act = '<button class="btn-status depart" onclick="changeStatus(' + o.order_id + ', \'в пути\')" data-i18n="courier.take_order">Выехал на заказ</button>';
+          else if (o.status === 'в пути') { cls = 'in-transit'; act = '<button class="btn-status done" onclick="changeStatus(' + o.order_id + ', \'доставлен\')" data-i18n="courier.delivered">Доставлено</button>'; }
+          else if (o.status === 'доставлен') cls = 'delivered';
+
+          return `
+            <div class="order-card ${cls}" style="animation-delay:${i * 0.08}s">
+              <div class="order-header">
+                <span class="order-id"><span>Заказ</span>#${o.order_id}</span>
+                <span class="status ${sc}">${o.status}</span>
+              </div>
+              <div class="order-route">📍 Откуда: <b>${o.from_address}</b><br>🎯 Куда: <b>${o.to_address}</b></div>
+              ${o.description ? '<div class="order-route">📦 ' + o.description + '</div>' : ''}
+              <div class="order-price">${o.delivery_price} ₽</div>
+              <div class="order-payment">💳 ${o.payment_method || '—'} <span class="payment-badge ${o.payment_status}">${o.payment_status || ''}</span></div>
+              <div class="client-info"><b>Клиент:</b> ${o.client_name}<br><b>Телефон:</b> ${o.client_phone}${o.client_city ? ' | <b>Город:</b> ' + o.client_city : ''}</div>
+              ${act ? '<div class="order-actions">' + act + '</div>' : ''}
+            </div>
+          `;
+        }).join('');
+        if (typeof applyTranslations === 'function') applyTranslations();
+      } catch (e) {
+        list.innerHTML = '<div class="empty-orders"><p>Ошибка загрузки</p></div>';
+      }
+    }
+
+    async function changeStatus(orderId, newStatus) {
+      const txt = newStatus === 'доставлен' ? 'Заказ #' + orderId + ' доставлен?' : 'Выехали на заказ #' + orderId + '?';
+      if (!confirm(txt)) return;
+      try {
+        const r = await fetch('/api/courier/orders/' + orderId + '/status', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify({ status: newStatus })
+        });
+        const result = await r.json();
+        if (result.success) {
+          if (typeof launchConfetti === 'function') launchConfetti();
+          window.location.reload();
+        }
+        else alert(result.message);
+      } catch (e) { alert('Ошибка'); }
+    }
+
+    loadCourier();
+  </script>
+
+</body>
+</html>

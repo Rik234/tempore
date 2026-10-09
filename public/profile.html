@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n-title="profile.title">Личный кабинет — Tempore</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="/js/nav.js"></script>
+  <style>
+    .profile-hero {
+      background: linear-gradient(135deg, #3E2723 0%, #5D4037 100%);
+      color: #FAF4E8;
+      padding: 55px 20px 85px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .profile-hero::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(212,165,116,0.12) 0%, transparent 60%);
+      animation: rotate 45s linear infinite;
+    }
+    @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: rgba(250,244,232,0.15);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      border: 3px solid rgba(250,244,232,0.25);
+      position: relative;
+      z-index: 1;
+      animation: avatarPop 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
+      letter-spacing: -1px;
+    }
+    @keyframes avatarPop {
+      0% { opacity: 0; transform: scale(0); }
+      60% { transform: scale(1.08); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    .profile-hero h1 {
+      color: #FAF4E8;
+      margin: 0 0 5px;
+      font-size: 26px;
+      position: relative;
+      z-index: 1;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+    .profile-hero p {
+      margin: 0;
+      opacity: 0.85;
+      font-size: 14px;
+      position: relative;
+      z-index: 1;
+      font-weight: 300;
+    }
+
+    .profile-container {
+      max-width: 900px;
+      margin: -45px auto 40px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .stats-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      background: #FAF4E8;
+      padding: 22px 20px;
+      border-radius: 10px;
+      box-shadow: 0 8px 30px rgba(62,39,35,0.08);
+      text-align: center;
+      border: 1px solid rgba(160,112,74,0.12);
+      transition: all 0.3s;
+      animation: cardEnter 0.5s ease-out backwards;
+    }
+    .stat-card:nth-child(1) { animation-delay: 0.05s; }
+    .stat-card:nth-child(2) { animation-delay: 0.1s; }
+    .stat-card:nth-child(3) { animation-delay: 0.15s; }
+    @keyframes cardEnter {
+      from { opacity: 0; transform: translateY(15px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(160,112,74,0.15);
+      border-color: #A0704A;
+    }
+    .stat-card .num {
+      font-size: 30px;
+      font-weight: 700;
+      color: #A0704A;
+      margin-bottom: 5px;
+      letter-spacing: -0.5px;
+    }
+    .stat-card .lbl {
+      font-size: 11px;
+      color: #8D7B6D;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .info-card {
+      background: #FAF4E8;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 8px 30px rgba(62,39,35,0.06);
+      margin-bottom: 20px;
+      border: 1px solid rgba(160,112,74,0.1);
+      animation: cardEnter 0.5s ease-out 0.2s backwards;
+    }
+    .info-card h2 {
+      color: #3E2723;
+      margin: 0 0 20px;
+      font-size: 18px;
+      border-bottom: 1px solid rgba(160,112,74,0.12);
+      padding-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+    }
+
+    .btn-edit {
+      background: #A0704A;
+      color: #FAF4E8;
+      border: 1px solid #A0704A;
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s;
+      font-family: inherit;
+      letter-spacing: 0.3px;
+    }
+    .btn-edit:hover {
+      background: #7A5030;
+      border-color: #7A5030;
+    }
+
+    .info-row {
+      display: flex;
+      padding: 13px 0;
+      border-bottom: 1px solid rgba(160,112,74,0.08);
+      transition: all 0.2s;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-row:hover {
+      background: rgba(212,165,116,0.05);
+      padding-left: 8px;
+      border-radius: 4px;
+    }
+    .info-label {
+      flex: 0 0 180px;
+      color: #8D7B6D;
+      font-size: 13px;
+    }
+    .info-value {
+      color: #3E2723;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .edit-form { display: none; }
+    .edit-form.active { display: block; animation: fadeIn 0.3s; }
+    .view-data.hidden { display: none; }
+
+    .edit-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 22px;
+      flex-wrap: wrap;
+    }
+    .btn-save {
+      background: #7DA52D;
+      color: #FAF4E8;
+      border: 1px solid #7DA52D;
+      padding: 11px 24px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.25s;
+      font-family: inherit;
+      letter-spacing: 0.3px;
+    }
+    .btn-save:hover:not(:disabled) {
+      background: #5A7A1E;
+      border-color: #5A7A1E;
+    }
+    .btn-save:disabled { background: #C9B8A0; border-color: #C9B8A0; cursor: not-allowed; }
+
+    .btn-cancel {
+      background: transparent;
+      color: #6D5B4D;
+      border: 1px solid rgba(160,112,74,0.3);
+      padding: 11px 24px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.25s;
+      font-family: inherit;
+    }
+    .btn-cancel:hover { background: #F5EBD8; }
+
+    .profile-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    .btn-action {
+      padding: 14px 30px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+      letter-spacing: 0.3px;
+    }
+    .btn-action.primary {
+      background: #A0704A;
+      color: #FAF4E8;
+      border-color: #A0704A;
+    }
+    .btn-action.primary:hover {
+      background: #7A5030;
+      border-color: #7A5030;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(160,112,74,0.3);
+    }
+    .btn-action.danger {
+      background: transparent;
+      color: #8E2E2E;
+      border-color: rgba(179,58,58,0.3);
+    }
+    .btn-action.danger:hover {
+      background: #B33A3A;
+      color: #FAF4E8;
+      border-color: #B33A3A;
+    }
+
+    .loading { text-align: center; padding: 60px 20px; color: #8D7B6D; font-size: 14px; }
+    .loading::before {
+      content: '';
+      display: block;
+      width: 32px; height: 32px;
+      border: 2px solid rgba(160,112,74,0.15);
+      border-top-color: #A0704A;
+      border-radius: 50%;
+      margin: 0 auto 15px;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    @media (max-width: 600px) {
+      .info-label { flex: 0 0 100%; margin-bottom: 4px; }
+      .info-row { flex-direction: column; }
+      .profile-hero { padding: 40px 20px 70px; }
+      .profile-avatar { width: 80px; height: 80px; font-size: 34px; }
+      .profile-hero h1 { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="profile-hero">
+    <div class="profile-avatar" id="avatar">?</div>
+    <h1 id="heroName">Загрузка...</h1>
+    <p id="heroEmail"></p>
+  </div>
+
+  <div class="profile-container">
+    <div id="content"><div class="loading">Загрузка данных...</div></div>
+    <div class="profile-actions" id="actions" style="display:none;">
+      <a href="/order.html" class="btn-action primary" data-i18n="profile.new_order">Новый заказ</a>
+      <a href="/orders.html" class="btn-action primary" data-i18n="profile.my_orders">Мои заказы</a>
+      <button class="btn-action danger" onclick="logout()" data-i18n="profile.logout">Выйти</button>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+
+    if (!token || role !== 'client') {
+      alert('Доступ только для клиентов.');
+      localStorage.clear();
+      window.location.href = '/login.html';
+    }
+
+    async function loadProfile() {
+      const content = document.getElementById('content');
+      try {
+        const r = await fetch('/api/auth/me', { headers: { 'Authorization': 'Bearer ' + token } });
+        const result = await r.json();
+
+        if (!result.success) {
+          content.innerHTML = '<div class="loading">Ошибка: ' + result.message + '</div>';
+          return;
+        }
+
+        const c = result.client, s = result.stats;
+
+        document.getElementById('avatar').textContent = (c.full_name || '?').charAt(0).toUpperCase();
+        document.getElementById('heroName').textContent = c.full_name;
+        document.getElementById('heroEmail').textContent = c.email;
+
+        const regDate = new Date(c.created_at).toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' });
+
+        content.innerHTML = `
+          <div class="stats-cards">
+            <div class="stat-card"><div class="num">${s.total_orders || 0}</div><div class="lbl" data-i18n="profile.total_orders">Всего заказов</div></div>
+            <div class="stat-card"><div class="num">${s.active_orders || 0}</div><div class="lbl" data-i18n="profile.active">Активных</div></div>
+            <div class="stat-card"><div class="num">${s.total_spent || 0} ₽</div><div class="lbl" data-i18n="profile.spent">Потрачено</div></div>
+          </div>
+
+          <div class="info-card">
+            <h2>
+              <span data-i18n="profile.personal">Личные данные</span>
+              <button class="btn-edit" onclick="showEdit()" data-i18n="profile.edit">Редактировать</button>
+            </h2>
+            <div class="view-data" id="viewData">
+              <div class="info-row"><div class="info-label" data-i18n="profile.fullname">ФИО</div><div class="info-value">${c.full_name}</div></div>
+              <div class="info-row"><div class="info-label" data-i18n="profile.email">Email</div><div class="info-value">${c.email}</div></div>
+              <div class="info-row"><div class="info-label" data-i18n="profile.phone">Телефон</div><div class="info-value">${c.phone}</div></div>
+              <div class="info-row"><div class="info-label" data-i18n="profile.city">Город</div><div class="info-value">${c.city || '—'}</div></div>
+              <div class="info-row"><div class="info-label" data-i18n="profile.address">Адрес</div><div class="info-value">${c.address || '—'}</div></div>
+              <div class="info-row"><div class="info-label" data-i18n="profile.reg_date">Дата регистрации</div><div class="info-value">${regDate}</div></div>
+            </div>
+
+            <form class="edit-form" id="editForm" onsubmit="saveProfile(event)">
+              <div class="form-group"><label>ФИО *</label><input type="text" id="edit_full_name" value="${c.full_name}" required></div>
+              <div class="form-group"><label>Email (нельзя изменить)</label><input type="email" value="${c.email}" disabled style="background:#EADFC5;"></div>
+              <div class="form-group"><label>Телефон *</label><input type="tel" id="edit_phone" value="${c.phone}" required></div>
+              <div class="form-group"><label>Город</label><input type="text" id="edit_city" value="${c.city || ''}"></div>
+              <div class="form-group"><label>Адрес</label><input type="text" id="edit_address" value="${c.address || ''}"></div>
+              <div class="edit-actions">
+                <button type="submit" class="btn-save" id="saveBtn" data-i18n="profile.save">Сохранить</button>
+                <button type="button" class="btn-cancel" onclick="hideEdit()" data-i18n="profile.cancel">Отмена</button>
+              </div>
+            </form>
+            <div class="message" id="editMessage" style="margin-top:15px;"></div>
+          </div>
+        `;
+
+        // Применяем переводы для новых элементов
+        if (typeof applyTranslations === 'function') applyTranslations();
+        document.getElementById('actions').style.display = 'flex';
+      } catch (err) {
+        content.innerHTML = '<div class="loading">Ошибка соединения с сервером</div>';
+      }
+    }
+
+    function showEdit() {
+      document.getElementById('viewData').classList.add('hidden');
+      document.getElementById('editForm').classList.add('active');
+    }
+    function hideEdit() {
+      document.getElementById('viewData').classList.remove('hidden');
+      document.getElementById('editForm').classList.remove('active');
+    }
+
+    async function saveProfile(e) {
+      e.preventDefault();
+      const btn = document.getElementById('saveBtn');
+      const msg = document.getElementById('editMessage');
+
+      const data = {
+        full_name: document.getElementById('edit_full_name').value,
+        phone:     document.getElementById('edit_phone').value,
+        city:      document.getElementById('edit_city').value,
+        address:   document.getElementById('edit_address').value
+      };
+
+      btn.disabled = true;
+      btn.textContent = '...';
+
+      try {
+        const r = await fetch('/api/auth/me', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify(data)
+        });
+        const result = await r.json();
+
+        if (result.success) {
+          msg.className = 'message success';
+          msg.textContent = result.message;
+          const stored = JSON.parse(localStorage.getItem('client') || '{}');
+          stored.full_name = result.client.full_name;
+          localStorage.setItem('client', JSON.stringify(stored));
+          if (typeof launchConfetti === 'function') launchConfetti();
+          setTimeout(() => window.location.reload(), 1000);
+        } else {
+          msg.className = 'message error';
+          msg.textContent = result.message;
+          btn.disabled = false;
+          btn.textContent = 'Сохранить';
+        }
+      } catch (err) {
+        msg.className = 'message error';
+        msg.textContent = 'Ошибка соединения';
+        btn.disabled = false;
+        btn.textContent = 'Сохранить';
+      }
+    }
+
+    loadProfile();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n-title="form.reg.title">Регистрация — Tempore</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="/js/nav.js"></script>
+  <style>
+    .auth-page {
+      min-height: calc(100vh - 64px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .auth-page::before {
+      content: '';
+      position: absolute;
+      top: -30%; right: -15%;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(212,165,116,0.12), transparent 60%);
+      border-radius: 50%;
+      animation: floatOrb 12s ease-in-out infinite;
+    }
+    .auth-page::after {
+      content: '';
+      position: absolute;
+      bottom: -30%; left: -15%;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(160,112,74,0.1), transparent 60%);
+      border-radius: 50%;
+      animation: floatOrb 15s ease-in-out infinite reverse;
+    }
+    @keyframes floatOrb {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-40px) scale(1.08); }
+    }
+
+    .auth-card {
+      position: relative;
+      z-index: 2;
+      max-width: 460px;
+      width: 100%;
+      background: #FAF4E8;
+      padding: 50px 42px 40px;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(62,39,35,0.12);
+      border: 1px solid rgba(160,112,74,0.12);
+      animation: cardEnter 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
+    }
+    @keyframes cardEnter {
+      from { opacity: 0; transform: translateY(30px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .auth-logo {
+      text-align: center;
+      font-size: 26px;
+      font-weight: 700;
+      color: #3E2723;
+      letter-spacing: 5px;
+      margin-bottom: 25px;
+      transition: color 0.3s;
+    }
+    .auth-logo:hover { color: #A0704A; }
+
+    .auth-title {
+      text-align: center;
+      color: #3E2723;
+      font-size: 24px;
+      font-weight: 600;
+      margin: 0 0 8px;
+      letter-spacing: -0.3px;
+    }
+    .auth-subtitle {
+      text-align: center;
+      color: #8D7B6D;
+      font-size: 14px;
+      margin-bottom: 30px;
+      font-weight: 300;
+    }
+
+    /* Прогресс заполнения формы */
+    .form-progress {
+      height: 3px;
+      background: rgba(160,112,74,0.1);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 25px;
+    }
+    .form-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #A0704A, #D4A574);
+      transition: width 0.4s ease-out;
+      border-radius: 2px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .input-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: #A0704A;
+      pointer-events: none;
+      transition: all 0.3s;
+      opacity: 0.7;
+    }
+    .input-wrapper input {
+      padding-left: 46px !important;
+      height: 50px;
+      background: #F5EBD8 !important;
+      border: 1px solid #D9C8A8 !important;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+    .input-wrapper.focused .input-icon {
+      color: #3E2723;
+      opacity: 1;
+      transform: translateY(-50%) scale(1.15);
+    }
+    .input-wrapper.focused input {
+      border-color: #A0704A !important;
+      background: #FFFFFF !important;
+      box-shadow: 0 0 0 3px rgba(160,112,74,0.1);
+    }
+
+    /* Индикатор пароля */
+    .pass-strength {
+      height: 3px;
+      background: rgba(160,112,74,0.1);
+      border-radius: 2px;
+      overflow: hidden;
+      margin: -10px 0 16px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .pass-strength.visible { opacity: 1; }
+    .pass-strength-fill {
+      height: 100%;
+      width: 0;
+      transition: all 0.35s;
+      border-radius: 2px;
+    }
+    .pass-strength-fill.weak   { width: 33%; background: #B33A3A; }
+    .pass-strength-fill.medium { width: 66%; background: #E5A44A; }
+    .pass-strength-fill.strong { width: 100%; background: #7DA52D; }
+
+    .btn-submit {
+      width: 100%;
+      padding: 15px;
+      background: #A0704A;
+      color: #FAF4E8;
+      border: 1px solid #A0704A;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: all 0.25s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      height: 52px;
+      font-family: inherit;
+      letter-spacing: 0.5px;
+    }
+    .btn-submit:hover:not(:disabled) {
+      background: #7A5030;
+      border-color: #7A5030;
+      box-shadow: 0 8px 25px rgba(160,112,74,0.3);
+    }
+    .btn-submit:disabled { background: #C9B8A0; border-color: #C9B8A0; cursor: not-allowed; }
+    .btn-submit .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      display: none;
+    }
+    .btn-submit:disabled .spinner { display: block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      margin: 25px 0 18px;
+      color: #8D7B6D;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(160,112,74,0.15);
+    }
+    .auth-divider span { padding: 0 15px; }
+
+    .quick-links {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .quick-link {
+      padding: 12px;
+      border: 1px solid rgba(160,112,74,0.2);
+      border-radius: 6px;
+      text-align: center;
+      text-decoration: none;
+      color: #A0704A;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.25s;
+      background: transparent;
+    }
+    .quick-link:hover {
+      background: #A0704A;
+      color: #FAF4E8;
+      border-color: #A0704A;
+    }
+
+    @media (max-width: 480px) {
+      .auth-card { padding: 35px 25px 30px; }
+      .auth-logo { font-size: 22px; letter-spacing: 4px; }
+      .auth-title { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-logo">TEMPORE</div>
+      <h1 class="auth-title" data-i18n="form.reg.title">Регистрация</h1>
+      <p class="auth-subtitle" data-i18n="form.reg.subtitle">Создайте аккаунт за 1 минуту</p>
+
+      <div class="form-progress">
+        <div class="form-progress-fill" id="progressFill"></div>
+      </div>
+
+      <form id="registerForm">
+        <div class="input-wrapper">
+          <span class="input-icon">👤</span>
+          <input type="text" id="full_name" placeholder="ФИО *" required data-i18n-placeholder="form.fullname" data-track>
+        </div>
+        <div class="input-wrapper">
+          <span class="input-icon">📞</span>
+          <input type="tel" id="phone" placeholder="Телефон *" required data-i18n-placeholder="form.phone" data-track>
+        </div>
+        <div class="input-wrapper">
+          <span class="input-icon">✉</span>
+          <input type="email" id="email" placeholder="Email *" required data-i18n-placeholder="form.email" data-track>
+        </div>
+        <div class="input-wrapper">
+          <span class="input-icon">🔒</span>
+          <input type="password" id="password" placeholder="Пароль *" required minlength="4" data-i18n-placeholder="form.password" data-track>
+        </div>
+        <div class="pass-strength" id="passStrength">
+          <div class="pass-strength-fill" id="passStrengthFill"></div>
+        </div>
+        <div class="input-wrapper">
+          <span class="input-icon">🏙</span>
+          <input type="text" id="city" placeholder="Город" data-i18n-placeholder="form.city" data-track>
+        </div>
+        <div class="input-wrapper">
+          <span class="input-icon">🏠</span>
+          <input type="text" id="address" placeholder="Адрес" data-i18n-placeholder="form.address" data-track>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+          <span class="spinner"></span>
+          <span id="btnText" data-i18n="form.reg_btn">Зарегистрироваться</span>
+        </button>
+      </form>
+
+      <div class="message" id="message"></div>
+
+      <div class="auth-divider"><span data-i18n="form.or">ИЛИ</span></div>
+
+      <div class="quick-links">
+        <a href="/login.html" class="quick-link" data-i18n="nav.login">Войти</a>
+        <a href="/courier-register.html" class="quick-link" data-i18n="form.as_courier">Курьером</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.input-wrapper input').forEach(inp => {
+      inp.addEventListener('focus', () => inp.parentElement.classList.add('focused'));
+      inp.addEventListener('blur', () => inp.parentElement.classList.remove('focused'));
+    });
+
+    // Прогресс заполнения формы
+    const trackedInputs = document.querySelectorAll('[data-track]');
+    function updateProgress() {
+      let filled = 0;
+      trackedInputs.forEach(inp => { if (inp.value.trim() !== '') filled++; });
+      const percent = (filled / trackedInputs.length) * 100;
+      document.getElementById('progressFill').style.width = percent + '%';
+    }
+    trackedInputs.forEach(inp => inp.addEventListener('input', updateProgress));
+
+    // Индикатор силы пароля
+    document.getElementById('password').addEventListener('input', (e) => {
+      const val = e.target.value;
+      const wrap = document.getElementById('passStrength');
+      const fill = document.getElementById('passStrengthFill');
+
+      if (val.length === 0) { wrap.classList.remove('visible'); return; }
+      wrap.classList.add('visible');
+
+      let strength = 'weak';
+      if (val.length >= 8 && /[A-Z]/.test(val) && /[0-9]/.test(val)) strength = 'strong';
+      else if (val.length >= 6) strength = 'medium';
+
+      fill.className = 'pass-strength-fill ' + strength;
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      const btnText = document.getElementById('btnText');
+      const message = document.getElementById('message');
+      const form = document.getElementById('registerForm');
+
+      const data = {
+        full_name: document.getElementById('full_name').value.trim(),
+        phone:     document.getElementById('phone').value.trim(),
+        email:     document.getElementById('email').value.trim(),
+        password:  document.getElementById('password').value,
+        city:      document.getElementById('city').value.trim(),
+        address:   document.getElementById('address').value.trim()
+      };
+
+      btn.disabled = true;
+      btnText.textContent = '...';
+      message.className = 'message';
+
+      try {
+        const response = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await response.json();
+
+        if (result.success) {
+          message.className = 'message success';
+          message.textContent = '✓ ' + result.message + ' Перенаправление...';
+          if (typeof launchConfetti === 'function') launchConfetti();
+          setTimeout(() => window.location.href = '/login.html', 1800);
+        } else {
+          message.className = 'message error';
+          message.textContent = result.message;
+          form.classList.add('shake');
+          setTimeout(() => form.classList.remove('shake'), 500);
+          btn.disabled = false;
+          btnText.textContent = window.t ? t('form.reg_btn') : 'Зарегистрироваться';
+        }
+      } catch (err) {
+        message.className = 'message error';
+        message.textContent = 'Ошибка соединения';
+        btn.disabled = false;
+        btnText.textContent = window.t ? t('form.reg_btn') : 'Зарегистрироваться';
+      }
+    });
+  </script>
+
+</body>
+</html>

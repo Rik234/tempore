@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n-title="orders.title">Мои заказы — Tempore</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="/js/nav.js"></script>
+  <style>
+    .orders-page {
+      min-height: calc(100vh - 64px);
+      padding: 50px 20px;
+    }
+
+    .orders-wrap {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    .orders-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 15px;
+      animation: fadeIn 0.5s;
+    }
+    .orders-head h1 {
+      color: #3E2723;
+      font-size: 26px;
+      margin: 0;
+      text-align: left;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+    .btn-new-order {
+      padding: 11px 22px;
+      background: #A0704A;
+      color: #FAF4E8;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.25s;
+      display: inline-block;
+      border: 1px solid #A0704A;
+      letter-spacing: 0.3px;
+    }
+    .btn-new-order:hover {
+      background: #7A5030;
+      border-color: #7A5030;
+      box-shadow: 0 8px 20px rgba(160,112,74,0.3);
+    }
+
+    /* Карточки заказов */
+    .order-card {
+      background: #FAF4E8;
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 15px;
+      border: 1px solid rgba(160,112,74,0.12);
+      border-left: 3px solid #A0704A;
+      transition: all 0.3s;
+      animation: cardSlideIn 0.5s ease-out backwards;
+      position: relative;
+    }
+    @keyframes cardSlideIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .order-card:hover {
+      box-shadow: 0 8px 25px rgba(160,112,74,0.12);
+      transform: translateY(-2px);
+    }
+    .order-card.status-принят    { border-left-color: #4A6B9C; }
+    .order-card.status-в-пути    { border-left-color: #E5A44A; }
+    .order-card.status-доставлен { border-left-color: #7DA52D; }
+    .order-card.status-отменён   { border-left-color: #B33A3A; opacity: 0.7; }
+    .order-card.status-новый     { border-left-color: #A0704A; }
+
+    .order-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .order-number {
+      font-size: 17px;
+      font-weight: 700;
+      color: #3E2723;
+      letter-spacing: -0.3px;
+    }
+    .order-number span {
+      color: #A0704A;
+      margin-right: 4px;
+      font-weight: 500;
+    }
+
+    .status-badge {
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-badge::before {
+      content: '';
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%      { opacity: 0.4; }
+    }
+    .status-badge.новый     { background: rgba(160,112,74,0.12); color: #7A5030; }
+    .status-badge.принят    { background: rgba(74,107,156,0.12); color: #2A4570; }
+    .status-badge.в-пути    { background: rgba(229,164,74,0.15); color: #7A5216; }
+    .status-badge.доставлен { background: rgba(125,165,45,0.15); color: #4A6B1F; }
+    .status-badge.отменён   { background: rgba(179,58,58,0.12); color: #8E2E2E; }
+
+    .order-route {
+      color: #5D4037;
+      margin: 10px 0;
+      font-size: 14px;
+      line-height: 1.9;
+    }
+    .order-route b { color: #3E2723; font-weight: 500; }
+    .order-route .arrow {
+      color: #A0704A;
+      margin: 0 8px;
+      opacity: 0.6;
+    }
+
+    .order-meta {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(160,112,74,0.1);
+      align-items: center;
+    }
+    .order-price {
+      color: #A0704A;
+      font-weight: 700;
+      font-size: 19px;
+      letter-spacing: -0.3px;
+    }
+    .order-payment {
+      color: #6D5B4D;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .payment-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .payment-badge.ожидает  { background: rgba(229,164,74,0.15); color: #7A5216; }
+    .payment-badge.оплачено { background: rgba(125,165,45,0.15); color: #4A6B1F; }
+    .payment-badge.возврат  { background: rgba(74,107,156,0.12); color: #2A4570; }
+
+    .order-date {
+      color: #8D7B6D;
+      font-size: 12px;
+      margin-left: auto;
+    }
+
+    /* Курьер */
+    .courier-box {
+      margin-top: 15px;
+      padding: 14px 16px;
+      background: #F5EBD8;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border: 1px solid rgba(160,112,74,0.1);
+    }
+    .courier-photo {
+      width: 46px; height: 46px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #A0704A;
+      flex-shrink: 0;
+    }
+    .courier-info-text { flex: 1; }
+    .courier-info-text strong {
+      display: block;
+      color: #3E2723;
+      font-size: 14px;
+      margin-bottom: 2px;
+      font-weight: 600;
+    }
+    .courier-info-text span {
+      color: #8D7B6D;
+      font-size: 12px;
+    }
+
+    /* Действия */
+    .order-actions {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(160,112,74,0.1);
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    .btn-cancel-order {
+      background: transparent;
+      color: #8E2E2E;
+      border: 1px solid rgba(179,58,58,0.3);
+      padding: 9px 20px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.25s;
+      font-family: inherit;
+      letter-spacing: 0.3px;
+    }
+    .btn-cancel-order:hover {
+      background: #B33A3A;
+      color: #FAF4E8;
+      border-color: #B33A3A;
+    }
+    .btn-review {
+      background: transparent;
+      color: #A0704A;
+      border: 1px solid rgba(160,112,74,0.4);
+      padding: 9px 20px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.25s;
+      font-family: inherit;
+      letter-spacing: 0.3px;
+    }
+    .btn-review:hover {
+      background: #A0704A;
+      color: #FAF4E8;
+      border-color: #A0704A;
+    }
+    .btn-review.done {
+      color: #4A6B1F;
+      border-color: rgba(125,165,45,0.4);
+      cursor: default;
+      background: rgba(125,165,45,0.08);
+    }
+    .btn-review.done:hover {
+      background: rgba(125,165,45,0.08);
+      color: #4A6B1F;
+    }
+
+    /* Пустое состояние */
+    .empty-orders {
+      text-align: center;
+      padding: 80px 20px;
+      color: #8D7B6D;
+      background: #FAF4E8;
+      border-radius: 10px;
+      border: 1px solid rgba(160,112,74,0.12);
+      animation: fadeIn 0.5s;
+    }
+    .empty-orders .icon {
+      font-size: 60px;
+      display: block;
+      margin-bottom: 20px;
+      opacity: 0.4;
+    }
+    .empty-orders h3 { color: #3E2723; margin: 0 0 10px; font-size: 18px; font-weight: 600; }
+    .empty-orders p { margin: 0 0 25px; font-size: 14px; }
+
+    /* Модалка отзыва */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(30,20,16,0.75);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.2s;
+    }
+    .modal-overlay.active { display: flex; }
+
+    .modal {
+      background: #FAF4E8;
+      border-radius: 12px;
+      padding: 40px 35px;
+      max-width: 460px;
+      width: 100%;
+      animation: modalIn 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+      box-shadow: 0 25px 70px rgba(0,0,0,0.4);
+      border: 1px solid rgba(160,112,74,0.15);
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.95) translateY(15px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .modal h3 {
+      color: #3E2723;
+      margin: 0 0 8px;
+      font-size: 22px;
+      text-align: center;
+      font-weight: 600;
+    }
+    .modal .subtitle {
+      color: #8D7B6D;
+      font-size: 13px;
+      margin: 0 0 25px;
+      text-align: center;
+    }
+
+    .stars-input {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 25px;
+      font-size: 42px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .stars-input .star {
+      color: #E0D0B0;
+      transition: all 0.2s;
+      display: inline-block;
+    }
+    .stars-input .star.active { color: #A0704A; }
+    .stars-input .star:hover { transform: scale(1.15); }
+
+    .modal textarea {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #D9C8A8;
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 100px;
+      box-sizing: border-box;
+      background: #F5EBD8;
+      transition: all 0.3s;
+    }
+    .modal textarea:focus {
+      outline: none;
+      border-color: #A0704A;
+      background: #FFFFFF;
+      box-shadow: 0 0 0 3px rgba(160,112,74,0.1);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 22px;
+    }
+    .modal-btn {
+      flex: 1;
+      padding: 13px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+      font-family: inherit;
+      letter-spacing: 0.3px;
+    }
+    .modal-btn.save {
+      background: #A0704A;
+      color: #FAF4E8;
+      border: 1px solid #A0704A;
+    }
+    .modal-btn.save:hover:not(:disabled) {
+      background: #7A5030;
+      border-color: #7A5030;
+    }
+    .modal-btn.save:disabled { background: #C9B8A0; border-color: #C9B8A0; cursor: not-allowed; }
+    .modal-btn.cancel {
+      background: transparent;
+      color: #6D5B4D;
+      border: 1px solid rgba(160,112,74,0.3);
+    }
+    .modal-btn.cancel:hover { background: #F5EBD8; }
+
+    @media (max-width: 600px) {
+      .orders-head { flex-direction: column; align-items: flex-start; }
+      .order-date { margin-left: 0; }
+      .modal { padding: 30px 22px; }
+      .stars-input { font-size: 36px; gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="orders-page">
+    <div class="orders-wrap">
+      <div class="orders-head">
+        <h1 data-i18n="orders.title">Мои заказы</h1>
+        <a href="/order.html" class="btn-new-order" data-i18n="orders.new">+ Новый заказ</a>
+      </div>
+
+      <div id="ordersList"><div class="empty-orders"><span class="icon">⏳</span><p data-i18n="orders.loading">Загрузка...</p></div></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="reviewModal" onclick="if(event.target===this) closeReviewModal()">
+    <div class="modal">
+      <h3 data-i18n="common.leave_review">Оставить отзыв</h3>
+      <p class="subtitle" id="reviewSubtitle">Заказ #—</p>
+
+      <div class="stars-input" id="starsInput">
+        <span class="star" data-rating="1">★</span>
+        <span class="star" data-rating="2">★</span>
+        <span class="star" data-rating="3">★</span>
+        <span class="star" data-rating="4">★</span>
+        <span class="star" data-rating="5">★</span>
+      </div>
+
+      <textarea id="reviewComment" placeholder="Расскажите, как прошла доставка"></textarea>
+      <div class="message" id="reviewMessage" style="margin-top:12px;"></div>
+
+      <div class="modal-actions">
+        <button class="modal-btn cancel" onclick="closeReviewModal()">Отмена</button>
+        <button class="modal-btn save" id="reviewSaveBtn" onclick="submitReview()">Отправить</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+
+    if (!token || role !== 'client') {
+      alert('Доступ только для клиентов.');
+      localStorage.clear();
+      window.location.href = '/login.html';
+    }
+
+    let currentOrderId = null;
+    let currentRating = 0;
+
+    async function loadOrders() {
+      const list = document.getElementById('ordersList');
+      try {
+        const response = await fetch('/api/orders/my', { headers: { 'Authorization': 'Bearer ' + token } });
+        const result = await response.json();
+
+        if (!result.success || result.orders.length === 0) {
+          list.innerHTML = '<div class="empty-orders"><span class="icon">📭</span><h3>У вас пока нет заказов</h3><p>Оформите первый заказ — это займёт минуту</p><a href="/order.html" class="btn-new-order">+ Создать заказ</a></div>';
+          return;
+        }
+
+        const reviewChecks = await Promise.all(result.orders.map(o => checkReviewExists(o.order_id)));
+
+        list.innerHTML = result.orders.map((o, i) => {
+          const date = new Date(o.order_date).toLocaleString('ru-RU', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+          const statusClass = o.status.replace(' ', '-');
+          const hasReview = reviewChecks[i];
+
+          let actionsHtml = '';
+          if (o.status === 'новый' || o.status === 'принят') {
+            actionsHtml += '<button class="btn-cancel-order" onclick="cancelOrder(' + o.order_id + ')">✕ Отменить</button>';
+          }
+          if (o.status === 'доставлен') {
+            actionsHtml += hasReview
+              ? '<button class="btn-review done" disabled>✓ Отзыв оставлен</button>'
+              : '<button class="btn-review" onclick="openReviewModal(' + o.order_id + ')">★ Оставить отзыв</button>';
+          }
+
+          let courierHtml = '';
+          if (o.courier_name) {
+            const photo = o.courier_photo ? '/uploads/couriers/' + o.courier_photo : 'https://via.placeholder.com/46?text=?';
+            courierHtml = '<div class="courier-box"><img class="courier-photo" src="' + photo + '" alt="Курьер"><div class="courier-info-text"><strong>Курьер: ' + o.courier_name + '</strong><span>' + (o.courier_transport || '') + (o.courier_phone ? ' • ' + o.courier_phone : '') + '</span></div></div>';
+          }
+
+          return '<div class="order-card status-' + statusClass + '" style="animation-delay:' + (i * 0.06) + 's">' +
+            '<div class="order-top">' +
+              '<span class="order-number"><span>Заказ</span>#' + o.order_id + '</span>' +
+              '<span class="status-badge ' + statusClass + '">' + o.status + '</span>' +
+            '</div>' +
+            '<div class="order-route">📍 <b>' + o.from_address + '</b><span class="arrow">→</span>🎯 <b>' + o.to_address + '</b></div>' +
+            (o.description ? '<div class="order-route">📦 ' + o.description + '</div>' : '') +
+            '<div class="order-meta">' +
+              '<div class="order-price">' + o.delivery_price + ' ₽</div>' +
+              '<div class="order-payment">' + (o.payment_method || '—') + ' <span class="payment-badge ' + o.payment_status + '">' + (o.payment_status || '') + '</span></div>' +
+              '<div class="order-date">' + date + '</div>' +
+            '</div>' +
+            courierHtml +
+            (actionsHtml ? '<div class="order-actions">' + actionsHtml + '</div>' : '') +
+          '</div>';
+        }).join('');
+      } catch (err) {
+        list.innerHTML = '<div class="empty-orders"><span class="icon">⚠</span><p>Ошибка загрузки</p></div>';
+      }
+    }
+
+    async function checkReviewExists(orderId) {
+      try {
+        const r = await fetch('/api/reviews/order/' + orderId + '/exists', { headers: { 'Authorization': 'Bearer ' + token } });
+        if (!r.ok) return false;
+        const j = await r.json();
+        return j.exists === true;
+      } catch (e) { return false; }
+    }
+
+    async function cancelOrder(orderId) {
+      if (!confirm('Отменить заказ #' + orderId + '?')) return;
+      try {
+        const response = await fetch('/api/orders/' + orderId + '/cancel', {
+          method: 'PUT',
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const result = await response.json();
+        if (result.success) { loadOrders(); }
+        else alert(result.message);
+      } catch (err) { alert('Ошибка соединения'); }
+    }
+
+    function openReviewModal(orderId) {
+      currentOrderId = orderId;
+      currentRating = 0;
+      document.getElementById('reviewSubtitle').textContent = 'Заказ #' + orderId;
+      document.getElementById('reviewComment').value = '';
+      document.getElementById('reviewMessage').className = 'message';
+      document.querySelectorAll('#starsInput .star').forEach(s => s.classList.remove('active'));
+      document.getElementById('reviewModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeReviewModal() {
+      document.getElementById('reviewModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('#starsInput .star').forEach(star => {
+      star.addEventListener('click', () => {
+        currentRating = parseInt(star.dataset.rating);
+        document.querySelectorAll('#starsInput .star').forEach(s => {
+          s.classList.toggle('active', parseInt(s.dataset.rating) <= currentRating);
+        });
+      });
+      star.addEventListener('mouseenter', () => {
+        const r = parseInt(star.dataset.rating);
+        document.querySelectorAll('#starsInput .star').forEach(s => {
+          s.classList.toggle('active', parseInt(s.dataset.rating) <= r);
+        });
+      });
+    });
+    document.getElementById('starsInput').addEventListener('mouseleave', () => {
+      document.querySelectorAll('#starsInput .star').forEach(s => {
+        s.classList.toggle('active', parseInt(s.dataset.rating) <= currentRating);
+      });
+    });
+
+    async function submitReview() {
+      const btn = document.getElementById('reviewSaveBtn');
+      const msg = document.getElementById('reviewMessage');
+      const comment = document.getElementById('reviewComment').value;
+
+      if (currentRating < 1) { msg.className = 'message error'; msg.textContent = 'Поставьте оценку'; return; }
+
+      btn.disabled = true;
+      btn.textContent = '...';
+      msg.className = 'message';
+
+      try {
+        const response = await fetch('/api/reviews/order/' + currentOrderId, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify({ rating: currentRating, comment: comment })
+        });
+        const result = await response.json();
+
+        if (result.success) {
+          msg.className = 'message success';
+          msg.textContent = result.message;
+          if (typeof launchConfetti === 'function') launchConfetti();
+          setTimeout(() => { closeReviewModal(); loadOrders(); }, 1200);
+        } else {
+          msg.className = 'message error';
+          msg.textContent = result.message;
+          btn.disabled = false;
+          btn.textContent = 'Отправить';
+        }
+      } catch (err) {
+        msg.className = 'message error';
+        msg.textContent = 'Ошибка';
+        btn.disabled = false;
+        btn.textContent = 'Отправить';
+      }
+    }
+
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeReviewModal(); });
+    loadOrders();
+  </script>
+
+</body>
+</html>

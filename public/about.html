@@ -8,11 +8,13 @@
   <link rel="stylesheet" href="style.css">
   <script src="/js/nav.js"></script>
   <style>
-    /* HERO */
+    /* ============================================
+       HERO с анимацией + SVG-логотип
+       ============================================ */
     .about-hero {
       background: linear-gradient(135deg, #3E2723 0%, #5D4037 50%, #A0704A 100%);
       color: #FAF4E8;
-      padding: 90px 20px 100px;
+      padding: 100px 20px 110px;
       text-align: center;
       position: relative;
       overflow: hidden;
@@ -22,31 +24,86 @@
       position: absolute;
       top: -50%; left: -50%;
       width: 200%; height: 200%;
-      background: radial-gradient(circle, rgba(212,165,116,0.15) 0%, transparent 60%);
+      background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        rgba(212,165,116,0.12) 40deg,
+        transparent 90deg,
+        transparent 180deg,
+        rgba(212,165,116,0.09) 220deg,
+        transparent 270deg
+      );
       animation: rotate 40s linear infinite;
+      pointer-events: none;
+    }
+    .about-hero::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 700px; height: 700px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(212,165,116,0.18) 0%, transparent 60%);
+      border-radius: 50%;
+      animation: pulseGlow 6s ease-in-out infinite;
+      pointer-events: none;
     }
     @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    .about-hero-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+      50%      { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
+    }
+
+    .about-hero-content { position: relative; z-index: 2; max-width: 800px; margin: 0 auto; }
+
+    /* === КРАСИВЫЙ SVG-ЛОГОТИП === */
+    .about-logo-svg {
+      display: inline-block;
+      width: 110px;
+      height: 110px;
+      margin-bottom: 25px;
+      animation: logoFloat 3s ease-in-out infinite;
+      filter: drop-shadow(0 8px 25px rgba(0,0,0,0.3));
+    }
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50%      { transform: translateY(-8px) rotate(-2deg); }
+    }
+
     .about-hero h1 {
       color: #FAF4E8;
-      font-size: 54px;
+      font-size: 52px;
       margin: 0 0 20px;
       font-weight: 700;
-      letter-spacing: 3px;
+      letter-spacing: 4px;
       animation: fadeIn 1s ease-out;
     }
     .about-hero p {
       font-size: 18px;
       opacity: 0.9;
       color: #E8DCC4;
-      margin: 0;
+      margin: 0 auto;
       font-weight: 300;
       max-width: 600px;
-      margin: 0 auto;
       animation: fadeIn 1.2s ease-out 0.3s backwards;
     }
 
-    /* ОБЩИЕ СЕКЦИИ */
+    /* Частицы */
+    .particles { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+    .particle {
+      position: absolute;
+      background: rgba(212,165,116,0.5);
+      border-radius: 50%;
+      animation: floatUp linear infinite;
+      box-shadow: 0 0 8px rgba(212,165,116,0.7);
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 1; }
+      100% { transform: translateY(-100px) scale(1); opacity: 0; }
+    }
+
+    /* ============ ОБЩИЕ СЕКЦИИ ============ */
     .about-section { max-width: 1100px; margin: 0 auto; padding: 80px 20px; }
     .about-section-title {
       text-align: center;
@@ -62,31 +119,22 @@
       margin: 0 0 45px;
     }
 
-    /* ИСТОРИЯ */
-    .history-block {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      align-items: center;
-    }
+    /* ============ ИСТОРИЯ ============ */
+    .history-block { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
     @media (max-width: 768px) { .history-block { grid-template-columns: 1fr; } }
-    .history-text p {
-      color: #5D4037;
-      font-size: 15px;
-      line-height: 1.8;
-      margin: 0 0 15px;
-    }
+    .history-text p { color: #5D4037; font-size: 15px; line-height: 1.8; margin: 0 0 15px; }
     .history-text strong { color: #3E2723; font-weight: 600; }
+
     .history-image {
       background: linear-gradient(135deg, #A0704A, #3E2723);
-      border-radius: 12px;
-      height: 320px;
+      border-radius: 16px;
+      height: 340px;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       color: #FAF4E8;
-      font-size: 100px;
-      box-shadow: 0 15px 40px rgba(62,39,35,0.2);
+      box-shadow: 0 20px 50px rgba(62,39,35,0.25);
       position: relative;
       overflow: hidden;
     }
@@ -95,14 +143,36 @@
       position: absolute;
       inset: 0;
       background: radial-gradient(circle at 30% 30%, rgba(212,165,116,0.3), transparent 60%);
+      animation: pulseGlow 6s ease-in-out infinite;
+    }
+    .history-image .big-icon {
+      font-size: 90px;
+      position: relative;
+      z-index: 1;
+      animation: logoFloat 4s ease-in-out infinite;
+      filter: drop-shadow(0 8px 20px rgba(0,0,0,0.3));
+    }
+    .history-image .label {
+      position: relative;
+      z-index: 1;
+      margin-top: 15px;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: #FAF4E8;
+    }
+    .history-image .sub {
+      position: relative;
+      z-index: 1;
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: #E8DCC4;
+      margin-top: 5px;
+      text-transform: uppercase;
     }
 
-    /* ЦЕННОСТИ */
-    .values-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
-    }
+    /* ============ ЦЕННОСТИ ============ */
+    .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
     .value-card {
       background: #FAF4E8;
       padding: 35px 28px;
@@ -116,26 +186,11 @@
       border-color: #A0704A;
       box-shadow: 0 15px 40px rgba(160,112,74,0.15);
     }
-    .value-icon {
-      font-size: 42px;
-      margin-bottom: 18px;
-      display: block;
-      opacity: 0.9;
-    }
-    .value-card h3 {
-      color: #3E2723;
-      font-size: 18px;
-      margin: 0 0 10px;
-      font-weight: 600;
-    }
-    .value-card p {
-      color: #6D5B4D;
-      font-size: 14px;
-      line-height: 1.7;
-      margin: 0;
-    }
+    .value-icon { font-size: 42px; margin-bottom: 18px; display: block; }
+    .value-card h3 { color: #3E2723; font-size: 18px; margin: 0 0 10px; font-weight: 600; }
+    .value-card p { color: #6D5B4D; font-size: 14px; line-height: 1.7; margin: 0; }
 
-    /* СТАТИСТИКА */
+    /* ============ СТАТИСТИКА (со счётчиками) ============ */
     .stats-block {
       background: #3E2723;
       color: #FAF4E8;
@@ -146,6 +201,7 @@
       gap: 30px;
       max-width: 1100px;
       margin: 0 auto;
+      box-shadow: 0 15px 40px rgba(62,39,35,0.2);
     }
     .stat-item { text-align: center; }
     .stat-item .num {
@@ -154,20 +210,118 @@
       color: #D4A574;
       margin-bottom: 5px;
       letter-spacing: -1px;
+      display: inline-block;
     }
-    .stat-item .label {
-      font-size: 12px;
-      color: #C9B8A8;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
+    .stat-item .label { font-size: 12px; color: #C9B8A8; text-transform: uppercase; letter-spacing: 1.5px; }
+
+    /* ============ ТАЙМЛАЙН «Как мы работаем» ============ */
+    .timeline-section { background: #F5EBD8; padding: 80px 20px; }
+    .timeline-wrapper { max-width: 900px; margin: 0 auto; position: relative; }
+
+    /* Вертикальная линия по центру */
+    .timeline-wrapper::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 2px;
+      background: linear-gradient(to bottom, rgba(160,112,74,0.1), rgba(160,112,74,0.4), rgba(160,112,74,0.1));
+      transform: translateX(-50%);
+    }
+    @media (max-width: 768px) {
+      .timeline-wrapper::before { left: 30px; }
     }
 
-    /* КОМАНДА */
-    .team-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 25px;
+    .timeline-item {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      margin-bottom: 50px;
+      position: relative;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.7s ease-out;
     }
+    .timeline-item.visible { opacity: 1; transform: translateY(0); }
+    .timeline-item:nth-child(even) { flex-direction: row-reverse; }
+
+    @media (max-width: 768px) {
+      .timeline-item, .timeline-item:nth-child(even) {
+        flex-direction: row;
+        padding-left: 70px;
+        gap: 0;
+      }
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #A0704A, #7A5030);
+      color: #FAF4E8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 700;
+      box-shadow: 0 8px 25px rgba(160,112,74,0.35);
+      z-index: 2;
+      border: 4px solid #F5EBD8;
+      transition: transform 0.3s;
+    }
+    .timeline-item:hover .timeline-dot {
+      transform: translateX(-50%) scale(1.15);
+    }
+    @media (max-width: 768px) {
+      .timeline-dot { left: 30px; transform: translateX(-50%); }
+      .timeline-item:hover .timeline-dot { transform: translateX(-50%) scale(1.15); }
+    }
+
+    .timeline-content {
+      background: #FAF4E8;
+      padding: 25px 28px;
+      border-radius: 12px;
+      width: calc(50% - 50px);
+      border: 1px solid rgba(160,112,74,0.15);
+      box-shadow: 0 6px 25px rgba(62,39,35,0.06);
+      transition: all 0.3s;
+    }
+    .timeline-content:hover {
+      border-color: #A0704A;
+      box-shadow: 0 12px 35px rgba(160,112,74,0.15);
+      transform: translateY(-3px);
+    }
+    .timeline-item:nth-child(odd) .timeline-content { margin-right: auto; }
+    .timeline-item:nth-child(even) .timeline-content { margin-left: auto; }
+
+    @media (max-width: 768px) {
+      .timeline-content { width: 100%; margin-left: 0 !important; margin-right: 0 !important; }
+    }
+
+    .timeline-icon {
+      font-size: 32px;
+      margin-bottom: 10px;
+      display: block;
+    }
+    .timeline-content h3 {
+      color: #3E2723;
+      font-size: 18px;
+      margin: 0 0 8px;
+      font-weight: 600;
+    }
+    .timeline-content p {
+      color: #6D5B4D;
+      font-size: 14px;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    /* ============ КОМАНДА ============ */
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px; }
     .team-card {
       background: #FAF4E8;
       padding: 30px 20px;
@@ -176,13 +330,9 @@
       border: 1px solid rgba(160,112,74,0.12);
       transition: all 0.35s;
     }
-    .team-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 15px 40px rgba(160,112,74,0.15);
-    }
+    .team-card:hover { transform: translateY(-6px); box-shadow: 0 15px 40px rgba(160,112,74,0.15); }
     .team-avatar {
-      width: 100px;
-      height: 100px;
+      width: 100px; height: 100px;
       border-radius: 50%;
       background: linear-gradient(135deg, #A0704A, #D4A574);
       color: #FAF4E8;
@@ -195,33 +345,12 @@
       border: 3px solid #FAF4E8;
       box-shadow: 0 4px 15px rgba(160,112,74,0.2);
     }
-    .team-card h3 {
-      color: #3E2723;
-      margin: 0 0 5px;
-      font-size: 17px;
-      font-weight: 600;
-    }
-    .team-role {
-      color: #A0704A;
-      font-size: 13px;
-      font-weight: 500;
-      margin-bottom: 10px;
-    }
-    .team-desc {
-      color: #6D5B4D;
-      font-size: 13px;
-      line-height: 1.6;
-      margin: 0;
-    }
+    .team-card h3 { color: #3E2723; margin: 0 0 5px; font-size: 17px; font-weight: 600; }
+    .team-role { color: #A0704A; font-size: 13px; font-weight: 500; margin-bottom: 10px; }
+    .team-desc { color: #6D5B4D; font-size: 13px; line-height: 1.6; margin: 0; }
 
-    /* КОНТАКТЫ */
-    .contacts-block {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
+    /* ============ КОНТАКТЫ ============ */
+    .contacts-block { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; max-width: 1100px; margin: 0 auto; }
     .contact-card {
       background: #FAF4E8;
       padding: 30px 25px;
@@ -230,71 +359,78 @@
       text-align: center;
       transition: all 0.3s;
     }
-    .contact-card:hover {
-      border-color: #A0704A;
-      transform: translateY(-3px);
-    }
-    .contact-icon {
-      font-size: 32px;
-      display: block;
-      margin-bottom: 12px;
-      color: #A0704A;
-    }
-    .contact-card h4 {
-      color: #3E2723;
-      margin: 0 0 8px;
-      font-size: 15px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    .contact-card p {
-      color: #5D4037;
-      font-size: 15px;
-      margin: 0;
-    }
-    .contact-card a {
-      color: #A0704A;
-      text-decoration: none;
-      font-weight: 500;
-    }
+    .contact-card:hover { border-color: #A0704A; transform: translateY(-3px); }
+    .contact-icon { font-size: 32px; display: block; margin-bottom: 12px; color: #A0704A; }
+    .contact-card h4 { color: #3E2723; margin: 0 0 8px; font-size: 15px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+    .contact-card p { color: #5D4037; font-size: 15px; margin: 0; }
+    .contact-card a { color: #A0704A; text-decoration: none; font-weight: 500; }
     .contact-card a:hover { text-decoration: underline; }
 
-    /* CTA */
+    /* ============ CTA ============ */
     .about-cta {
       background: linear-gradient(135deg, #8B5A3C 0%, #3E2723 100%);
       color: #FAF4E8;
       text-align: center;
       padding: 70px 20px;
-      border-radius: 0;
     }
-    .about-cta h2 {
-      color: #FAF4E8;
-      font-size: 32px;
-      margin: 0 0 12px;
-      font-weight: 600;
-    }
-    .about-cta p {
-      font-size: 16px;
-      opacity: 0.9;
-      margin: 0 0 25px;
-      font-weight: 300;
-    }
+    .about-cta h2 { color: #FAF4E8; font-size: 32px; margin: 0 0 12px; font-weight: 600; }
+    .about-cta p { font-size: 16px; opacity: 0.9; margin: 0 0 25px; font-weight: 300; }
     .about-cta-btn {
       display: inline-block;
       padding: 15px 38px;
       background: #FAF4E8;
-      color: #3E2723;
+      color: #3E2723 !important;
       border-radius: 8px;
       text-decoration: none;
       font-size: 15px;
-      font-weight: 600;
+      font-weight: 700;
       transition: all 0.25s;
+      border: 1px solid #FAF4E8;
     }
     .about-cta-btn:hover {
       background: #FFFFFF;
       transform: translateY(-2px);
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    /* ============ ТЁМНАЯ ТЕМА ============ */
+    body[data-theme="dark"] .about-section-title { color: #F0E4D2 !important; }
+    body[data-theme="dark"] .about-section-subtitle { color: #A89880 !important; }
+    body[data-theme="dark"] .history-text p { color: #C9B8A8 !important; }
+    body[data-theme="dark"] .history-text strong { color: #F0E4D2 !important; }
+
+    body[data-theme="dark"] .value-card,
+    body[data-theme="dark"] .team-card,
+    body[data-theme="dark"] .contact-card,
+    body[data-theme="dark"] .timeline-content {
+      background: #1F1815 !important;
+      border-color: rgba(212,165,116,0.2) !important;
+    }
+    body[data-theme="dark"] .value-card h3,
+    body[data-theme="dark"] .team-card h3,
+    body[data-theme="dark"] .contact-card h4,
+    body[data-theme="dark"] .timeline-content h3 { color: #F0E4D2 !important; }
+
+    body[data-theme="dark"] .value-card p,
+    body[data-theme="dark"] .team-desc,
+    body[data-theme="dark"] .contact-card p,
+    body[data-theme="dark"] .timeline-content p { color: #A89880 !important; }
+
+    body[data-theme="dark"] .team-role { color: #D4A574 !important; }
+    body[data-theme="dark"] .contact-card a { color: #D4A574 !important; }
+    body[data-theme="dark"] .team-avatar { border-color: #1F1815 !important; }
+    body[data-theme="dark"] .stats-block { background: #0F0A08 !important; }
+    body[data-theme="dark"] .timeline-section { background: #14100E !important; }
+    body[data-theme="dark"] .timeline-wrapper::before {
+      background: linear-gradient(to bottom, rgba(212,165,116,0.1), rgba(212,165,116,0.35), rgba(212,165,116,0.1)) !important;
+    }
+    body[data-theme="dark"] .timeline-dot {
+      border-color: #14100E !important;
+    }
+
+    body[data-theme="dark"] .about-cta-btn {
+      color: #3E2723 !important;
+      background: #FAF4E8 !important;
     }
 
     /* Плавное появление */
@@ -304,9 +440,50 @@
 </head>
 <body>
 
-  <!-- HERO -->
+  <!-- HERO с SVG-логотипом -->
   <section class="about-hero">
+    <div class="particles" id="particles"></div>
     <div class="about-hero-content">
+
+      <!-- SVG ЛОГОТИП -->
+      <svg class="about-logo-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#D4A574"/>
+            <stop offset="100%" stop-color="#A0704A"/>
+          </linearGradient>
+        </defs>
+        <!-- Внешний круг -->
+        <circle cx="60" cy="60" r="56" fill="none" stroke="rgba(250,244,232,0.25)" stroke-width="2"/>
+        <circle cx="60" cy="60" r="48" fill="url(#logoGrad)"/>
+        <!-- Внутренний циферблат -->
+        <circle cx="60" cy="60" r="38" fill="#3E2723" opacity="0.4"/>
+        <!-- Метки часов (12, 3, 6, 9) -->
+        <rect x="59" y="20" width="2" height="6" fill="#FAF4E8" rx="1"/>
+        <rect x="94" y="59" width="6" height="2" fill="#FAF4E8" rx="1"/>
+        <rect x="59" y="94" width="2" height="6" fill="#FAF4E8" rx="1"/>
+        <rect x="20" y="59" width="6" height="2" fill="#FAF4E8" rx="1"/>
+        <!-- Маленькие метки -->
+        <circle cx="60" cy="24" r="1.5" fill="#FAF4E8"/>
+        <circle cx="80" cy="30" r="1.5" fill="#FAF4E8"/>
+        <circle cx="90" cy="40" r="1.5" fill="#FAF4E8"/>
+        <circle cx="96" cy="60" r="1.5" fill="#FAF4E8"/>
+        <circle cx="90" cy="80" r="1.5" fill="#FAF4E8"/>
+        <circle cx="80" cy="90" r="1.5" fill="#FAF4E8"/>
+        <circle cx="60" cy="96" r="1.5" fill="#FAF4E8"/>
+        <circle cx="40" cy="90" r="1.5" fill="#FAF4E8"/>
+        <circle cx="30" cy="80" r="1.5" fill="#FAF4E8"/>
+        <circle cx="24" cy="60" r="1.5" fill="#FAF4E8"/>
+        <circle cx="30" cy="40" r="1.5" fill="#FAF4E8"/>
+        <circle cx="40" cy="30" r="1.5" fill="#FAF4E8"/>
+        <!-- Стрелки -->
+        <line x1="60" y1="60" x2="60" y2="38" stroke="#FAF4E8" stroke-width="3" stroke-linecap="round"/>
+        <line x1="60" y1="60" x2="78" y2="70" stroke="#FAF4E8" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="60" cy="60" r="4" fill="#D4A574"/>
+        <!-- Буква T -->
+        <text x="60" y="76" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="10" font-weight="700" fill="#FAF4E8" letter-spacing="1">T</text>
+      </svg>
+
       <h1 data-i18n="about.hero.title">О КОМПАНИИ TEMPORE</h1>
       <p data-i18n="about.hero.subtitle">Курьерская доставка нового поколения — мы ценим ваше время и доставляем точно в срок</p>
     </div>
@@ -320,11 +497,15 @@
     </div>
     <div class="history-block reveal">
       <div class="history-text">
-        <p data-i18n="about.history.p1"><strong>Tempore</strong> основана в 2021 году командой энтузиастов, которые устали от медленных и ненадёжных служб доставки. Мы решили создать сервис, где <strong>пунктуальность — это не просто слово, а принцип работы</strong>.</p>
-        <p data-i18n="about.history.p2">Начали с одного курьера и 10 заказов в день. Сегодня — <strong>более 100 курьеров</strong>, <strong>15 000+ доставок в год</strong> и <strong>500+ компаний-партнёров</strong> по всей России.</p>
-        <p data-i18n="about.history.p3">Мы гордимся, что <strong>98% наших клиентов</strong> возвращаются к нам снова. И продолжаем расти — открываем новые города, внедряем технологии, обучаем курьеров.</p>
+        <p data-i18n="about.history.p1"></p>
+        <p data-i18n="about.history.p2"></p>
+        <p data-i18n="about.history.p3"></p>
       </div>
-      <div class="history-image">⏱</div>
+      <div class="history-image">
+        <div class="big-icon">⏱</div>
+        <div class="label">TEMPORE</div>
+        <div class="sub">Since 2021</div>
+      </div>
     </div>
   </section>
 
@@ -338,45 +519,92 @@
       <div class="value-card">
         <span class="value-icon">⚡</span>
         <h3 data-i18n="about.values.speed">Скорость</h3>
-        <p data-i18n="about.values.speed_desc">Доставка от 30 минут по городу. Мы не заставляем ждать.</p>
+        <p data-i18n="about.values.speed_desc"></p>
       </div>
       <div class="value-card">
         <span class="value-icon">🛡</span>
         <h3 data-i18n="about.values.trust">Надёжность</h3>
-        <p data-i18n="about.values.trust_desc">Каждый заказ застрахован. Курьеры проходят проверку.</p>
+        <p data-i18n="about.values.trust_desc"></p>
       </div>
       <div class="value-card">
         <span class="value-icon">💰</span>
         <h3 data-i18n="about.values.price">Честные цены</h3>
-        <p data-i18n="about.values.price_desc">Прозрачное ценообразование. Никаких скрытых платежей.</p>
+        <p data-i18n="about.values.price_desc"></p>
       </div>
       <div class="value-card">
         <span class="value-icon">🤝</span>
         <h3 data-i18n="about.values.care">Забота</h3>
-        <p data-i18n="about.values.care_desc">Вежливые курьеры и поддержка 24/7. Мы всегда рядом.</p>
+        <p data-i18n="about.values.care_desc"></p>
       </div>
     </div>
   </section>
 
-  <!-- СТАТИСТИКА -->
+  <!-- СТАТИСТИКА С АНИМИРОВАННЫМИ СЧЁТЧИКАМИ -->
   <div class="stats-block reveal">
     <div class="stat-item">
-      <div class="num">15 000+</div>
+      <div class="num" data-target="15000" data-suffix="+">0</div>
       <div class="label" data-i18n="about.stats.deliveries">Доставок в год</div>
     </div>
     <div class="stat-item">
-      <div class="num">100+</div>
+      <div class="num" data-target="100" data-suffix="+">0</div>
       <div class="label" data-i18n="about.stats.couriers">Курьеров</div>
     </div>
     <div class="stat-item">
-      <div class="num">500+</div>
+      <div class="num" data-target="500" data-suffix="+">0</div>
       <div class="label" data-i18n="about.stats.partners">Партнёров</div>
     </div>
     <div class="stat-item">
-      <div class="num">4.9★</div>
+      <div class="num" data-target="49" data-suffix="★" data-decimal="true">0</div>
       <div class="label" data-i18n="about.stats.rating">Средняя оценка</div>
     </div>
   </div>
+
+  <!-- ТАЙМЛАЙН «Как мы работаем» -->
+  <section class="timeline-section">
+    <div class="reveal">
+      <h2 class="about-section-title" data-i18n="about.how.title">Как мы работаем</h2>
+      <p class="about-section-subtitle" data-i18n="about.how.subtitle">Четыре шага от заявки до двери</p>
+    </div>
+    <div class="timeline-wrapper">
+
+      <div class="timeline-item reveal">
+        <div class="timeline-dot">1</div>
+        <div class="timeline-content">
+          <span class="timeline-icon">📝</span>
+          <h3 data-i18n="about.how.1">Оформление заказа</h3>
+          <p data-i18n="about.how.1_desc">Вы регистрируетесь, указываете адреса и описываете груз. Система автоматически подбирает тип услуги и рассчитывает цену.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-dot">2</div>
+        <div class="timeline-content">
+          <span class="timeline-icon">🎯</span>
+          <h3 data-i18n="about.how.2">Назначение курьера</h3>
+          <p data-i18n="about.how.2_desc">Наш алгоритм находит ближайшего свободного курьера и назначает его на заказ. Вы видите его фото и данные.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-dot">3</div>
+        <div class="timeline-content">
+          <span class="timeline-icon">🚴</span>
+          <h3 data-i18n="about.how.3">Доставка</h3>
+          <p data-i18n="about.how.3_desc">Курьер забирает груз и везёт его по адресу. Статус меняется: принят → в пути → доставлен. Вы видите всё в реальном времени.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-dot">4</div>
+        <div class="timeline-content">
+          <span class="timeline-icon">⭐</span>
+          <h3 data-i18n="about.how.4">Обратная связь</h3>
+          <p data-i18n="about.how.4_desc">После доставки вы можете поставить оценку и написать отзыв. Так мы делаем сервис ещё лучше с каждым заказом.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
 
   <!-- КОМАНДА -->
   <section class="about-section">
@@ -389,25 +617,25 @@
         <div class="team-avatar">А</div>
         <h3>Алексей Морозов</h3>
         <div class="team-role" data-i18n="about.team.ceo">Основатель и CEO</div>
-        <p class="team-desc" data-i18n="about.team.ceo_desc">10 лет в логистике. Верит, что время — самый ценный ресурс.</p>
+        <p class="team-desc" data-i18n="about.team.ceo_desc"></p>
       </div>
       <div class="team-card">
         <div class="team-avatar">М</div>
         <h3>Мария Кузнецова</h3>
         <div class="team-role" data-i18n="about.team.coo">Операционный директор</div>
-        <p class="team-desc" data-i18n="about.team.coo_desc">Отвечает за работу курьеров и качество сервиса.</p>
+        <p class="team-desc" data-i18n="about.team.coo_desc"></p>
       </div>
       <div class="team-card">
         <div class="team-avatar">Д</div>
         <h3>Дмитрий Петров</h3>
         <div class="team-role" data-i18n="about.team.cto">Технический директор</div>
-        <p class="team-desc" data-i18n="about.team.cto_desc">Разрабатывает платформу и мобильные приложения.</p>
+        <p class="team-desc" data-i18n="about.team.cto_desc"></p>
       </div>
       <div class="team-card">
         <div class="team-avatar">О</div>
         <h3>Ольга Иванова</h3>
         <div class="team-role" data-i18n="about.team.care">Директор по клиентам</div>
-        <p class="team-desc" data-i18n="about.team.care_desc">Заботится о том, чтобы каждый клиент был счастлив.</p>
+        <p class="team-desc" data-i18n="about.team.care_desc"></p>
       </div>
     </div>
   </section>
@@ -432,12 +660,12 @@
       <div class="contact-card">
         <span class="contact-icon">📍</span>
         <h4 data-i18n="about.contacts.address">Адрес</h4>
-        <p data-i18n="about.contacts.address_val">г. Москва, ул. Курьерская, 15</p>
+        <p data-i18n="about.contacts.address_val"></p>
       </div>
       <div class="contact-card">
         <span class="contact-icon">🕐</span>
         <h4 data-i18n="about.contacts.hours">Работаем</h4>
-        <p data-i18n="about.contacts.hours_val">Круглосуточно, 7 дней в неделю</p>
+        <p data-i18n="about.contacts.hours_val"></p>
       </div>
     </div>
   </section>
@@ -450,13 +678,69 @@
   </section>
 
   <script>
-    // Плавное появление секций
+    // === Плавное появление (reveal) ===
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) entry.target.classList.add('visible');
       });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // === Анимированные счётчики ===
+    let countersAnimated = false;
+    function animateCounters() {
+      if (countersAnimated) return;
+      const statsBlock = document.querySelector('.stats-block');
+      if (!statsBlock) return;
+      const rect = statsBlock.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 100) {
+        countersAnimated = true;
+        document.querySelectorAll('.stat-item .num').forEach(el => {
+          const target = parseInt(el.dataset.target);
+          const suffix = el.dataset.suffix || '';
+          const isDecimal = el.dataset.decimal === 'true';
+          const duration = 1800;
+          const start = performance.now();
+          function update(now) {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = Math.floor(eased * target);
+            if (isDecimal) {
+              el.textContent = (current / 10).toFixed(1) + suffix;
+            } else {
+              el.textContent = current.toLocaleString('ru-RU') + suffix;
+            }
+            if (progress < 1) requestAnimationFrame(update);
+          }
+          requestAnimationFrame(update);
+        });
+      }
+    }
+    window.addEventListener('scroll', animateCounters);
+    window.addEventListener('load', animateCounters);
+
+    // === Плавающие частицы ===
+    const particlesEl = document.getElementById('particles');
+    function createParticle() {
+      if (!particlesEl) return;
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = Math.random() * 4 + 2;
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.animationDuration = (Math.random() * 10 + 8) + 's';
+      p.style.animationDelay = Math.random() * 5 + 's';
+      particlesEl.appendChild(p);
+      setTimeout(() => p.remove(), 18000);
+    }
+    setInterval(createParticle, 600);
+    for (let i = 0; i < 8; i++) createParticle();
+
+    // === Применить переводы ===
+    window.addEventListener('load', () => {
+      if (typeof applyTranslations === 'function') applyTranslations();
+    });
   </script>
 
 </body>

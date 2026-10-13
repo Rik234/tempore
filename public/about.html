@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n-title="about.title">О компании — Tempore</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="style.css">
+  <script src="/js/nav.js"></script>
+  <style>
+    /* HERO */
+    .about-hero {
+      background: linear-gradient(135deg, #3E2723 0%, #5D4037 50%, #A0704A 100%);
+      color: #FAF4E8;
+      padding: 90px 20px 100px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-hero::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(212,165,116,0.15) 0%, transparent 60%);
+      animation: rotate 40s linear infinite;
+    }
+    @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .about-hero-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
+    .about-hero h1 {
+      color: #FAF4E8;
+      font-size: 54px;
+      margin: 0 0 20px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      animation: fadeIn 1s ease-out;
+    }
+    .about-hero p {
+      font-size: 18px;
+      opacity: 0.9;
+      color: #E8DCC4;
+      margin: 0;
+      font-weight: 300;
+      max-width: 600px;
+      margin: 0 auto;
+      animation: fadeIn 1.2s ease-out 0.3s backwards;
+    }
+
+    /* ОБЩИЕ СЕКЦИИ */
+    .about-section { max-width: 1100px; margin: 0 auto; padding: 80px 20px; }
+    .about-section-title {
+      text-align: center;
+      font-size: 34px;
+      color: #3E2723;
+      margin: 0 0 15px;
+      font-weight: 600;
+    }
+    .about-section-subtitle {
+      text-align: center;
+      color: #8D7B6D;
+      font-size: 15px;
+      margin: 0 0 45px;
+    }
+
+    /* ИСТОРИЯ */
+    .history-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    @media (max-width: 768px) { .history-block { grid-template-columns: 1fr; } }
+    .history-text p {
+      color: #5D4037;
+      font-size: 15px;
+      line-height: 1.8;
+      margin: 0 0 15px;
+    }
+    .history-text strong { color: #3E2723; font-weight: 600; }
+    .history-image {
+      background: linear-gradient(135deg, #A0704A, #3E2723);
+      border-radius: 12px;
+      height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FAF4E8;
+      font-size: 100px;
+      box-shadow: 0 15px 40px rgba(62,39,35,0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    .history-image::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(212,165,116,0.3), transparent 60%);
+    }
+
+    /* ЦЕННОСТИ */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .value-card {
+      background: #FAF4E8;
+      padding: 35px 28px;
+      border-radius: 12px;
+      border: 1px solid rgba(160,112,74,0.15);
+      transition: all 0.35s;
+      text-align: center;
+    }
+    .value-card:hover {
+      transform: translateY(-6px);
+      border-color: #A0704A;
+      box-shadow: 0 15px 40px rgba(160,112,74,0.15);
+    }
+    .value-icon {
+      font-size: 42px;
+      margin-bottom: 18px;
+      display: block;
+      opacity: 0.9;
+    }
+    .value-card h3 {
+      color: #3E2723;
+      font-size: 18px;
+      margin: 0 0 10px;
+      font-weight: 600;
+    }
+    .value-card p {
+      color: #6D5B4D;
+      font-size: 14px;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    /* СТАТИСТИКА */
+    .stats-block {
+      background: #3E2723;
+      color: #FAF4E8;
+      border-radius: 12px;
+      padding: 50px 30px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 30px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .stat-item { text-align: center; }
+    .stat-item .num {
+      font-size: 44px;
+      font-weight: 700;
+      color: #D4A574;
+      margin-bottom: 5px;
+      letter-spacing: -1px;
+    }
+    .stat-item .label {
+      font-size: 12px;
+      color: #C9B8A8;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    /* КОМАНДА */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 25px;
+    }
+    .team-card {
+      background: #FAF4E8;
+      padding: 30px 20px;
+      border-radius: 12px;
+      text-align: center;
+      border: 1px solid rgba(160,112,74,0.12);
+      transition: all 0.35s;
+    }
+    .team-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 15px 40px rgba(160,112,74,0.15);
+    }
+    .team-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #A0704A, #D4A574);
+      color: #FAF4E8;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      border: 3px solid #FAF4E8;
+      box-shadow: 0 4px 15px rgba(160,112,74,0.2);
+    }
+    .team-card h3 {
+      color: #3E2723;
+      margin: 0 0 5px;
+      font-size: 17px;
+      font-weight: 600;
+    }
+    .team-role {
+      color: #A0704A;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+    .team-desc {
+      color: #6D5B4D;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* КОНТАКТЫ */
+    .contacts-block {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .contact-card {
+      background: #FAF4E8;
+      padding: 30px 25px;
+      border-radius: 12px;
+      border: 1px solid rgba(160,112,74,0.12);
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .contact-card:hover {
+      border-color: #A0704A;
+      transform: translateY(-3px);
+    }
+    .contact-icon {
+      font-size: 32px;
+      display: block;
+      margin-bottom: 12px;
+      color: #A0704A;
+    }
+    .contact-card h4 {
+      color: #3E2723;
+      margin: 0 0 8px;
+      font-size: 15px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .contact-card p {
+      color: #5D4037;
+      font-size: 15px;
+      margin: 0;
+    }
+    .contact-card a {
+      color: #A0704A;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .contact-card a:hover { text-decoration: underline; }
+
+    /* CTA */
+    .about-cta {
+      background: linear-gradient(135deg, #8B5A3C 0%, #3E2723 100%);
+      color: #FAF4E8;
+      text-align: center;
+      padding: 70px 20px;
+      border-radius: 0;
+    }
+    .about-cta h2 {
+      color: #FAF4E8;
+      font-size: 32px;
+      margin: 0 0 12px;
+      font-weight: 600;
+    }
+    .about-cta p {
+      font-size: 16px;
+      opacity: 0.9;
+      margin: 0 0 25px;
+      font-weight: 300;
+    }
+    .about-cta-btn {
+      display: inline-block;
+      padding: 15px 38px;
+      background: #FAF4E8;
+      color: #3E2723;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 600;
+      transition: all 0.25s;
+    }
+    .about-cta-btn:hover {
+      background: #FFFFFF;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    /* Плавное появление */
+    .reveal { opacity: 0; transform: translateY(20px); transition: all 0.7s ease-out; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="about-hero">
+    <div class="about-hero-content">
+      <h1 data-i18n="about.hero.title">О КОМПАНИИ TEMPORE</h1>
+      <p data-i18n="about.hero.subtitle">Курьерская доставка нового поколения — мы ценим ваше время и доставляем точно в срок</p>
+    </div>
+  </section>
+
+  <!-- ИСТОРИЯ -->
+  <section class="about-section">
+    <div class="reveal">
+      <h2 class="about-section-title" data-i18n="about.history.title">Наша история</h2>
+      <p class="about-section-subtitle" data-i18n="about.history.subtitle">Путь длиной в 5 лет</p>
+    </div>
+    <div class="history-block reveal">
+      <div class="history-text">
+        <p data-i18n="about.history.p1"><strong>Tempore</strong> основана в 2021 году командой энтузиастов, которые устали от медленных и ненадёжных служб доставки. Мы решили создать сервис, где <strong>пунктуальность — это не просто слово, а принцип работы</strong>.</p>
+        <p data-i18n="about.history.p2">Начали с одного курьера и 10 заказов в день. Сегодня — <strong>более 100 курьеров</strong>, <strong>15 000+ доставок в год</strong> и <strong>500+ компаний-партнёров</strong> по всей России.</p>
+        <p data-i18n="about.history.p3">Мы гордимся, что <strong>98% наших клиентов</strong> возвращаются к нам снова. И продолжаем расти — открываем новые города, внедряем технологии, обучаем курьеров.</p>
+      </div>
+      <div class="history-image">⏱</div>
+    </div>
+  </section>
+
+  <!-- ЦЕННОСТИ -->
+  <section class="about-section">
+    <div class="reveal">
+      <h2 class="about-section-title" data-i18n="about.values.title">Наши ценности</h2>
+      <p class="about-section-subtitle" data-i18n="about.values.subtitle">Принципы, по которым мы работаем</p>
+    </div>
+    <div class="values-grid reveal">
+      <div class="value-card">
+        <span class="value-icon">⚡</span>
+        <h3 data-i18n="about.values.speed">Скорость</h3>
+        <p data-i18n="about.values.speed_desc">Доставка от 30 минут по городу. Мы не заставляем ждать.</p>
+      </div>
+      <div class="value-card">
+        <span class="value-icon">🛡</span>
+        <h3 data-i18n="about.values.trust">Надёжность</h3>
+        <p data-i18n="about.values.trust_desc">Каждый заказ застрахован. Курьеры проходят проверку.</p>
+      </div>
+      <div class="value-card">
+        <span class="value-icon">💰</span>
+        <h3 data-i18n="about.values.price">Честные цены</h3>
+        <p data-i18n="about.values.price_desc">Прозрачное ценообразование. Никаких скрытых платежей.</p>
+      </div>
+      <div class="value-card">
+        <span class="value-icon">🤝</span>
+        <h3 data-i18n="about.values.care">Забота</h3>
+        <p data-i18n="about.values.care_desc">Вежливые курьеры и поддержка 24/7. Мы всегда рядом.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- СТАТИСТИКА -->
+  <div class="stats-block reveal">
+    <div class="stat-item">
+      <div class="num">15 000+</div>
+      <div class="label" data-i18n="about.stats.deliveries">Доставок в год</div>
+    </div>
+    <div class="stat-item">
+      <div class="num">100+</div>
+      <div class="label" data-i18n="about.stats.couriers">Курьеров</div>
+    </div>
+    <div class="stat-item">
+      <div class="num">500+</div>
+      <div class="label" data-i18n="about.stats.partners">Партнёров</div>
+    </div>
+    <div class="stat-item">
+      <div class="num">4.9★</div>
+      <div class="label" data-i18n="about.stats.rating">Средняя оценка</div>
+    </div>
+  </div>
+
+  <!-- КОМАНДА -->
+  <section class="about-section">
+    <div class="reveal">
+      <h2 class="about-section-title" data-i18n="about.team.title">Наша команда</h2>
+      <p class="about-section-subtitle" data-i18n="about.team.subtitle">Люди, которые делают Tempore</p>
+    </div>
+    <div class="team-grid reveal">
+      <div class="team-card">
+        <div class="team-avatar">А</div>
+        <h3>Алексей Морозов</h3>
+        <div class="team-role" data-i18n="about.team.ceo">Основатель и CEO</div>
+        <p class="team-desc" data-i18n="about.team.ceo_desc">10 лет в логистике. Верит, что время — самый ценный ресурс.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">М</div>
+        <h3>Мария Кузнецова</h3>
+        <div class="team-role" data-i18n="about.team.coo">Операционный директор</div>
+        <p class="team-desc" data-i18n="about.team.coo_desc">Отвечает за работу курьеров и качество сервиса.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">Д</div>
+        <h3>Дмитрий Петров</h3>
+        <div class="team-role" data-i18n="about.team.cto">Технический директор</div>
+        <p class="team-desc" data-i18n="about.team.cto_desc">Разрабатывает платформу и мобильные приложения.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">О</div>
+        <h3>Ольга Иванова</h3>
+        <div class="team-role" data-i18n="about.team.care">Директор по клиентам</div>
+        <p class="team-desc" data-i18n="about.team.care_desc">Заботится о том, чтобы каждый клиент был счастлив.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- КОНТАКТЫ -->
+  <section class="about-section">
+    <div class="reveal">
+      <h2 class="about-section-title" data-i18n="about.contacts.title">Контакты</h2>
+      <p class="about-section-subtitle" data-i18n="about.contacts.subtitle">Свяжитесь с нами удобным способом</p>
+    </div>
+    <div class="contacts-block reveal">
+      <div class="contact-card">
+        <span class="contact-icon">📞</span>
+        <h4 data-i18n="about.contacts.phone">Телефон</h4>
+        <p><a href="tel:+79000000000">+7 (900) 000-00-00</a></p>
+      </div>
+      <div class="contact-card">
+        <span class="contact-icon">✉️</span>
+        <h4 data-i18n="about.contacts.email">Email</h4>
+        <p><a href="mailto:info@tempore.ru">info@tempore.ru</a></p>
+      </div>
+      <div class="contact-card">
+        <span class="contact-icon">📍</span>
+        <h4 data-i18n="about.contacts.address">Адрес</h4>
+        <p data-i18n="about.contacts.address_val">г. Москва, ул. Курьерская, 15</p>
+      </div>
+      <div class="contact-card">
+        <span class="contact-icon">🕐</span>
+        <h4 data-i18n="about.contacts.hours">Работаем</h4>
+        <p data-i18n="about.contacts.hours_val">Круглосуточно, 7 дней в неделю</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="about-cta">
+    <h2 data-i18n="about.cta.title">Готовы попробовать?</h2>
+    <p data-i18n="about.cta.subtitle">Оформите первый заказ — это займёт минуту</p>
+    <a href="/order.html" class="about-cta-btn" data-i18n="about.cta.btn">Заказать доставку</a>
+  </section>
+
+  <script>
+    // Плавное появление секций
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

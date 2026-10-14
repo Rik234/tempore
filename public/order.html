@@ -4,401 +4,188 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n-title="order.title">Новый заказ — Tempore</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="/js/nav.js"></script>
   <style>
-    .order-page {
-      min-height: calc(100vh - 64px);
-      padding: 50px 20px;
-      position: relative;
-      overflow: hidden;
-    }
-    .order-page::before {
-      content: '';
-      position: absolute;
-      top: -20%; right: -10%;
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(212,165,116,0.1), transparent 60%);
-      border-radius: 50%;
-      animation: floatOrb 14s ease-in-out infinite;
-      pointer-events: none;
-    }
-    @keyframes floatOrb {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50%      { transform: translateY(-30px) scale(1.08); }
-    }
+    .order-wrap { max-width: 720px; margin: 40px auto; padding: 0 20px; animation: slideUp 0.7s ease-out; }
+    .order-card { background: #FAF4E8; padding: 40px; border-radius: 20px; box-shadow: 0 20px 60px rgba(62,39,35,0.12); border: 1px solid rgba(160,112,74,0.15); }
+    .order-header { text-align: center; margin-bottom: 35px; }
+    .order-header h1 { color: #3E2723; font-size: 28px; margin: 0 0 8px; }
+    .order-header p { color: #8D7B6D; font-size: 15px; }
 
-    .order-wrap {
-      max-width: 720px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-    }
-
-    .order-card {
-      background: #FAF4E8;
-      padding: 45px 40px;
-      border-radius: 12px;
-      box-shadow: 0 20px 60px rgba(62,39,35,0.1);
-      border: 1px solid rgba(160,112,74,0.12);
-      animation: cardEnter 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
-    }
-    @keyframes cardEnter {
-      from { opacity: 0; transform: translateY(25px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .order-header {
-      text-align: center;
-      margin-bottom: 35px;
-    }
-    .order-header h1 {
-      color: #3E2723;
-      font-size: 26px;
-      font-weight: 600;
-      margin: 0 0 8px;
-      letter-spacing: -0.3px;
-    }
-    .order-header p {
-      color: #8D7B6D;
-      font-size: 14px;
-      font-weight: 300;
-    }
-
-    /* Поля с иконками */
-    .input-wrapper { position: relative; margin-bottom: 16px; }
-    .input-icon {
-      position: absolute;
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 16px;
-      color: #A0704A;
-      pointer-events: none;
-      transition: all 0.3s;
-      opacity: 0.7;
-    }
+    .input-wrapper { position: relative; margin-bottom: 18px; }
+    .input-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 18px; color: #A0704A; pointer-events: none; transition: all 0.3s; }
     .input-wrapper input,
-    .input-wrapper textarea {
-      padding-left: 46px !important;
-      background: #F5EBD8 !important;
-      border: 1px solid #D9C8A8 !important;
-      transition: all 0.3s;
-    }
-    .input-wrapper textarea { min-height: 75px; padding-top: 14px; }
-    .input-wrapper.focused .input-icon {
-      color: #3E2723;
-      opacity: 1;
-      transform: translateY(-50%) scale(1.15);
-    }
-    .input-wrapper.focused input,
-    .input-wrapper.focused textarea {
-      border-color: #A0704A !important;
-      background: #FFFFFF !important;
-      box-shadow: 0 0 0 3px rgba(160,112,74,0.1);
-    }
+    .input-wrapper textarea { padding-left: 48px !important; background: #F5EBD8 !important; border: 2px solid #D9C8A8 !important; }
+    .input-wrapper textarea { min-height: 70px; padding-top: 14px; }
+    .input-wrapper.focused .input-icon { transform: translateY(-50%) scale(1.2); color: #3E2723; }
 
-    /* Быстрые подсказки */
-    .quick-hints {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin-top: -10px;
-      margin-bottom: 20px;
-      padding-left: 4px;
-    }
-    .quick-hint {
-      background: transparent;
-      color: #A0704A;
-      padding: 5px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      cursor: pointer;
-      border: 1px solid rgba(160,112,74,0.3);
-      transition: all 0.25s;
-      user-select: none;
-      font-weight: 500;
-    }
-    .quick-hint:hover {
-      background: #A0704A;
-      color: #FAF4E8;
-      border-color: #A0704A;
-    }
+    .quick-hints { display: flex; gap: 8px; flex-wrap: wrap; margin-top: -10px; margin-bottom: 18px; padding-left: 4px; }
+    .quick-hint { background: #F5EBD8; color: #A0704A; padding: 6px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; border: 1px solid rgba(160,112,74,0.25); transition: all 0.25s; user-select: none; }
+    .quick-hint:hover { background: #A0704A; color: #fff; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(160,112,74,0.3); }
 
-    /* Карточки срочности */
-    .section-label {
-      color: #5D4037;
-      font-size: 13px;
-      font-weight: 600;
-      display: block;
-      margin-bottom: 12px;
-      letter-spacing: 0.3px;
-    }
-    .urgency-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin-bottom: 25px;
-    }
-    .urgency-option {
-      padding: 14px 8px;
-      border: 1px solid #D9C8A8;
-      border-radius: 8px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s;
-      user-select: none;
-      background: #F5EBD8;
-      position: relative;
-    }
-    .urgency-option:hover {
-      border-color: #A0704A;
-      transform: translateY(-2px);
-    }
-    .urgency-option.selected {
-      border-color: #A0704A;
-      background: #FAF4E8;
-      box-shadow: 0 4px 15px rgba(160,112,74,0.15);
-    }
-    .urgency-option.selected::after {
-      content: '✓';
-      position: absolute;
-      top: 6px; right: 8px;
-      color: #A0704A;
-      font-size: 13px;
-      font-weight: bold;
-      animation: scaleIn 0.3s;
-    }
-    @keyframes scaleIn { from { opacity: 0; transform: scale(0); } to { opacity: 1; transform: scale(1); } }
+    .urgency-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-top: 10px; }
+    .urgency-option { padding: 16px 12px; border: 2px solid #E0D0B0; border-radius: 14px; text-align: center; cursor: pointer; transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275); user-select: none; background: #F5EBD8; position: relative; overflow: hidden; }
+    .urgency-option:hover { border-color: #A0704A; transform: translateY(-4px); box-shadow: 0 10px 25px rgba(160,112,74,0.2); }
+    .urgency-option.selected { border-color: #A0704A; background: linear-gradient(135deg, #EBDCC0, #E0CDA8); transform: scale(1.03); box-shadow: 0 12px 30px rgba(160,112,74,0.35); }
+    .urgency-option.selected::after { content: '✓'; position: absolute; top: 8px; right: 10px; color: #A0704A; font-size: 16px; font-weight: bold; }
     .urgency-option input { display: none; }
-    .urgency-option .icon { font-size: 22px; display: block; margin-bottom: 6px; opacity: 0.85; }
-    .urgency-option .title { font-size: 12px; color: #3E2723; font-weight: 600; display: block; margin-bottom: 3px; }
-    .urgency-option .price { font-size: 11px; color: #8D7B6D; }
+    .urgency-option .icon { font-size: 28px; display: block; margin-bottom: 6px; }
+    .urgency-option .title { font-size: 14px; color: #3E2723; font-weight: 600; display: block; margin-bottom: 3px; }
+    .urgency-option .price { font-size: 12px; color: #8D7B6D; }
     .urgency-option .price.plus { color: #B33A3A; }
     .urgency-option .price.minus { color: #2E8B57; }
 
-    /* Плашка цены */
-    .price-preview {
-      background: #F5EBD8;
-      border: 1px solid rgba(160,112,74,0.25);
-      border-radius: 10px;
-      padding: 24px;
-      margin: 25px 0;
-      transition: all 0.4s;
-      position: relative;
-      overflow: hidden;
-    }
-    .price-preview.loading { opacity: 0.5; }
-    .price-preview.pulse { animation: pricePulse 0.6s ease-out; }
-    @keyframes pricePulse {
-      0%   { transform: scale(1); }
-      40%  { transform: scale(1.015); border-color: #A0704A; }
-      100% { transform: scale(1); }
-    }
-
-    .price-total {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 17px;
-      font-weight: 600;
-      color: #3E2723;
-      margin-bottom: 15px;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .price-total .amount {
-      color: #A0704A;
-      font-size: 32px;
-      font-weight: 700;
-      letter-spacing: -1px;
-      display: inline-block;
-    }
-    .price-total .amount.updated { animation: numberPop 0.4s ease-out; }
-    @keyframes numberPop {
-      0%   { transform: scale(1); }
-      50%  { transform: scale(1.15); color: #7A5030; }
-      100% { transform: scale(1); }
-    }
-
-    .price-breakdown {
-      font-size: 13px;
-      color: #6D5B4D;
-      line-height: 1.9;
-      padding-top: 15px;
-      border-top: 1px dashed rgba(160,112,74,0.25);
-    }
-    .price-breakdown .row {
-      display: flex;
-      justify-content: space-between;
-      padding: 3px 0;
-      animation: fadeIn 0.4s ease-out;
-    }
+    .price-preview { background: linear-gradient(135deg, #F5EBD8, #EBDCC0); border: 2px dashed #A0704A; border-radius: 16px; padding: 25px; margin: 28px 0; transition: all 0.4s; }
+    .price-preview.loading { opacity: 0.6; }
+    .price-total { display: flex; justify-content: space-between; align-items: center; font-size: 20px; font-weight: 700; color: #3E2723; margin-bottom: 18px; flex-wrap: wrap; gap: 8px; }
+    .price-total .amount { color: #A0704A; font-size: 36px; font-weight: 800; display: inline-block; }
+    .price-breakdown { font-size: 13px; color: #6D5B4D; line-height: 1.9; }
+    .price-breakdown .row { display: flex; justify-content: space-between; padding: 4px 0; }
     .price-breakdown .row.plus { color: #B33A3A; }
     .price-breakdown .row.discount { color: #2E8B57; }
-    .price-hint {
-      text-align: center;
-      font-size: 11px;
-      color: #8D7B6D;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(160,112,74,0.1);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
+    .price-hint { text-align: center; font-size: 12px; color: #8D7B6D; margin-top: 12px; }
 
-    /* Кнопка */
-    .btn-order {
-      width: 100%;
-      padding: 16px;
-      background: #A0704A;
-      color: #FAF4E8;
-      border: 1px solid #A0704A;
-      border-radius: 6px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.25s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      height: 54px;
-      font-family: inherit;
-      letter-spacing: 0.5px;
-    }
-    .btn-order:hover:not(:disabled) {
-      background: #7A5030;
-      border-color: #7A5030;
-      box-shadow: 0 8px 25px rgba(160,112,74,0.3);
-    }
-    .btn-order:disabled { background: #C9B8A0; border-color: #C9B8A0; cursor: not-allowed; }
-    .btn-order .spinner {
-      width: 16px; height: 16px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      display: none;
-    }
+    .btn-order { width: 100%; padding: 18px; background: linear-gradient(135deg, #A0704A, #7A5030); color: #fff; border: none; border-radius: 12px; font-size: 17px; font-weight: 700; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; height: 58px; font-family: inherit; }
+    .btn-order:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 18px 45px rgba(160,112,74,0.55); }
+    .btn-order:disabled { background: #C9B8A0; cursor: not-allowed; }
+    .btn-order .spinner { width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
     .btn-order:disabled .spinner { display: block; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    select {
-      padding: 12px 14px;
-      background: #F5EBD8;
-      border: 1px solid #D9C8A8;
-      border-radius: 6px;
-      font-size: 14px;
-      font-family: inherit;
-      color: #3E2723;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    select:focus {
-      outline: none;
-      border-color: #A0704A;
-      background: #FFFFFF;
-      box-shadow: 0 0 0 3px rgba(160,112,74,0.1);
-    }
+    /* КАРТА */
+    .map-section { margin-top: 30px; padding-top: 25px; border-top: 1px dashed rgba(160,112,74,0.25); }
+    .map-title { color: #3E2723; font-size: 17px; margin: 0 0 15px; font-weight: 600; }
+    #map { width: 100%; height: 340px; border-radius: 12px; border: 1px solid rgba(160,112,74,0.2); box-shadow: 0 6px 20px rgba(62,39,35,0.08); z-index: 1; }
+    .map-hint { text-align: center; color: #8D7B6D; font-size: 12px; margin-top: 10px; }
+
+    /* Тёмная тема */
+    body[data-theme="dark"] .order-card { background: #1F1815 !important; border-color: rgba(212,165,116,0.2) !important; }
+    body[data-theme="dark"] .order-header h1 { color: #F0E4D2 !important; }
+    body[data-theme="dark"] .order-header p { color: #A89880 !important; }
+    body[data-theme="dark"] input, body[data-theme="dark"] textarea, body[data-theme="dark"] select { background: #14100E !important; color: #E8DCC4 !important; border-color: #3A2E24 !important; }
+    body[data-theme="dark"] label { color: #B8A590 !important; }
+    body[data-theme="dark"] .urgency-option { background: #1F1815 !important; border-color: #3A2E24 !important; }
+    body[data-theme="dark"] .urgency-option.selected { background: #2A1E18 !important; border-color: #D4A574 !important; }
+    body[data-theme="dark"] .urgency-option .title { color: #F0E4D2 !important; }
+    body[data-theme="dark"] .urgency-option .price { color: #A89880 !important; }
+    body[data-theme="dark"] .quick-hint { background: #1F1815 !important; color: #D4A574 !important; border-color: rgba(212,165,116,0.3) !important; }
+    body[data-theme="dark"] .quick-hint:hover { background: #A0704A !important; color: #F0E4D2 !important; }
+    body[data-theme="dark"] .price-preview { background: linear-gradient(135deg, #1F1815, #2A1E18) !important; border-color: #A0704A !important; }
+    body[data-theme="dark"] .price-total { color: #F0E4D2 !important; }
+    body[data-theme="dark"] .price-total .amount { color: #D4A574 !important; }
+    body[data-theme="dark"] .price-breakdown { color: #A89880 !important; }
+    body[data-theme="dark"] .price-hint { color: #6D5B4D !important; }
+    body[data-theme="dark"] .map-title { color: #F0E4D2 !important; }
+    body[data-theme="dark"] #map { border-color: rgba(212,165,116,0.25) !important; }
+    body[data-theme="dark"] .map-hint { color: #A89880 !important; }
 
     @media (max-width: 600px) {
-      .order-card { padding: 30px 22px; }
+      .order-card { padding: 25px 20px; }
       .urgency-grid { grid-template-columns: repeat(2, 1fr); }
-      .price-total .amount { font-size: 26px; }
     }
   </style>
 </head>
 <body>
 
-  <div class="order-page">
-    <div class="order-wrap">
-      <div class="order-card">
-        <div class="order-header">
-          <h1 data-i18n="order.title">Оформить заказ</h1>
-          <p data-i18n="order.subtitle">Цена рассчитывается автоматически</p>
+  <div class="order-wrap">
+    <div class="order-card">
+      <div class="order-header">
+        <h1 data-i18n="order.title">Оформить заказ</h1>
+        <p data-i18n="order.subtitle">💰 Цена рассчитывается автоматически</p>
+      </div>
+
+      <form id="orderForm">
+
+        <div class="input-wrapper">
+          <span class="input-icon">📍</span>
+          <input type="text" id="from_address" placeholder="Откуда везти *" required data-i18n-placeholder="order.from">
         </div>
 
-        <form id="orderForm">
+        <div class="input-wrapper">
+          <span class="input-icon">🎯</span>
+          <input type="text" id="to_address" placeholder="Куда везти *" required data-i18n-placeholder="order.to">
+        </div>
 
-          <div class="input-wrapper">
-            <span class="input-icon">📍</span>
-            <input type="text" id="from_address" placeholder="Откуда везти *" required data-i18n-placeholder="order.from">
-          </div>
+        <div class="input-wrapper">
+          <span class="input-icon">📦</span>
+          <textarea id="description" placeholder="Что везём? (опишите груз)" required data-i18n-placeholder="order.what"></textarea>
+        </div>
 
-          <div class="input-wrapper">
-            <span class="input-icon">🎯</span>
-            <input type="text" id="to_address" placeholder="Куда везти *" required data-i18n-placeholder="order.to">
-          </div>
+        <div class="quick-hints">
+          <span class="quick-hint" onclick="setDesc('Доставка документов')" data-i18n="order.quick_docs">📄 Документы</span>
+          <span class="quick-hint" onclick="setDesc('Доставка продуктов из магазина')" data-i18n="order.quick_food">🛒 Продукты</span>
+          <span class="quick-hint" onclick="setDesc('Доставка подарка и цветов')" data-i18n="order.quick_gift">🎁 Подарок</span>
+          <span class="quick-hint" onclick="setDesc('Доставка посылки')" data-i18n="order.quick_parcel">📦 Посылка</span>
+          <span class="quick-hint" onclick="setDesc('Корпоративная доставка для офиса')" data-i18n="order.quick_business">🏢 Бизнесу</span>
+        </div>
 
-          <div class="input-wrapper">
-            <span class="input-icon">📦</span>
-            <textarea id="description" placeholder="Что везём? (опишите груз)" required data-i18n-placeholder="order.what"></textarea>
-          </div>
+        <label style="color:#5D4037;font-size:14px;font-weight:500;display:block;margin-bottom:8px;" data-i18n="order.urgency">⏱ Насколько срочно? *</label>
+        <div class="urgency-grid">
+          <label class="urgency-option" data-urgency="asap">
+            <input type="radio" name="urgency" value="asap">
+            <span class="icon">⚡</span>
+            <span class="title" data-i18n="order.urgent_asap">Срочно</span>
+            <span class="price plus">+200 ₽</span>
+          </label>
+          <label class="urgency-option" data-urgency="2hours">
+            <input type="radio" name="urgency" value="2hours">
+            <span class="icon">⏰</span>
+            <span class="title" data-i18n="order.urgent_2h">2 часа</span>
+            <span class="price plus">+100 ₽</span>
+          </label>
+          <label class="urgency-option selected" data-urgency="today">
+            <input type="radio" name="urgency" value="today" checked>
+            <span class="icon">📅</span>
+            <span class="title" data-i18n="order.urgent_today">Сегодня</span>
+            <span class="price">0 ₽</span>
+          </label>
+          <label class="urgency-option" data-urgency="tomorrow">
+            <input type="radio" name="urgency" value="tomorrow">
+            <span class="icon">🌙</span>
+            <span class="title" data-i18n="order.urgent_tomorrow">Завтра</span>
+            <span class="price minus">−50 ₽</span>
+          </label>
+        </div>
 
-          <div class="quick-hints">
-            <span class="quick-hint" onclick="setDesc('Доставка документов')" data-i18n="order.quick_docs">Документы</span>
-            <span class="quick-hint" onclick="setDesc('Доставка продуктов из магазина')" data-i18n="order.quick_food">Продукты</span>
-            <span class="quick-hint" onclick="setDesc('Доставка подарка и цветов')" data-i18n="order.quick_gift">Подарок</span>
-            <span class="quick-hint" onclick="setDesc('Доставка посылки')" data-i18n="order.quick_parcel">Посылка</span>
-            <span class="quick-hint" onclick="setDesc('Корпоративная доставка для офиса')" data-i18n="order.quick_business">Бизнесу</span>
-          </div>
-
-          <label class="section-label" data-i18n="order.urgency">Насколько срочно? *</label>
-          <div class="urgency-grid">
-            <label class="urgency-option" data-urgency="asap">
-              <input type="radio" name="urgency" value="asap">
-              <span class="icon">⚡</span>
-              <span class="title" data-i18n="order.urgent_asap">Срочно</span>
-              <span class="price plus">+200 ₽</span>
-            </label>
-            <label class="urgency-option" data-urgency="2hours">
-              <input type="radio" name="urgency" value="2hours">
-              <span class="icon">⏰</span>
-              <span class="title" data-i18n="order.urgent_2h">2 часа</span>
-              <span class="price plus">+100 ₽</span>
-            </label>
-            <label class="urgency-option selected" data-urgency="today">
-              <input type="radio" name="urgency" value="today" checked>
-              <span class="icon">📅</span>
-              <span class="title" data-i18n="order.urgent_today">Сегодня</span>
-              <span class="price">0 ₽</span>
-            </label>
-            <label class="urgency-option" data-urgency="tomorrow">
-              <input type="radio" name="urgency" value="tomorrow">
-              <span class="icon">🌙</span>
-              <span class="title" data-i18n="order.urgent_tomorrow">Завтра</span>
-              <span class="price minus">−50 ₽</span>
-            </label>
-          </div>
-
-          <label class="section-label" data-i18n="order.payment">Способ оплаты *</label>
-          <select id="payment_method" required style="margin-bottom:25px;">
+        <div style="margin-top:25px;">
+          <label for="payment_method" style="color:#5D4037;font-size:14px;font-weight:500;display:block;margin-bottom:8px;" data-i18n="order.payment">💳 Способ оплаты *</label>
+          <select id="payment_method" required>
             <option value="карта" data-i18n="order.pay_card">💳 Банковская карта (−5%)</option>
             <option value="онлайн" data-i18n="order.pay_online">🌐 Онлайн-оплата (−5%)</option>
             <option value="наличные" data-i18n="order.pay_cash">💵 Наличные курьеру</option>
           </select>
+        </div>
 
-          <div class="price-preview" id="pricePreview">
-            <div class="price-total">
-              <span data-i18n="order.price">Стоимость доставки:</span>
-              <span class="amount" id="priceAmount">— ₽</span>
-            </div>
-            <div class="price-breakdown" id="priceBreakdown">
-              <div class="row"><span data-i18n="order.fill">Заполните адреса, чтобы увидеть цену</span></div>
-            </div>
-            <div class="price-hint">Цена обновляется автоматически</div>
+        <div class="price-preview" id="pricePreview">
+          <div class="price-total">
+            <span data-i18n="order.price">💰 Стоимость доставки:</span>
+            <span class="amount" id="priceAmount">— ₽</span>
           </div>
+          <div class="price-breakdown" id="priceBreakdown">
+            <div class="row"><span>Заполните адреса, чтобы увидеть цену</span></div>
+          </div>
+          <div class="price-hint">🔄 Цена обновляется автоматически</div>
+        </div>
 
-          <button type="submit" class="btn-order" id="submitBtn">
-            <span class="spinner"></span>
-            <span id="btnText" data-i18n="order.create">Создать заказ</span>
-          </button>
-        </form>
+        <button type="submit" class="btn-order" id="submitBtn">
+          <span class="spinner"></span>
+          <span id="btnText" data-i18n="order.create">📦 Создать заказ</span>
+        </button>
+      </form>
 
-        <div class="message" id="message"></div>
+      <div class="message" id="message"></div>
+
+      <!-- КАРТА МАРШРУТА -->
+      <div class="map-section">
+        <h3 class="map-title">🗺 Маршрут доставки</h3>
+        <div id="map"></div>
+        <p class="map-hint" id="mapHint">Введите адреса, чтобы увидеть маршрут</p>
       </div>
+
     </div>
   </div>
 
@@ -460,18 +247,7 @@
 
         if (result.success) {
           const c = result.calculation;
-          const amountEl = document.getElementById('priceAmount');
-          amountEl.textContent = c.total + ' ₽';
-
-          if (lastPrice !== c.total) {
-            preview.classList.add('pulse');
-            amountEl.classList.add('updated');
-            setTimeout(() => {
-              preview.classList.remove('pulse');
-              amountEl.classList.remove('updated');
-            }, 600);
-            lastPrice = c.total;
-          }
+          document.getElementById('priceAmount').textContent = c.total + ' ₽';
 
           const serviceNames = {
             'документы': '📄 Документы', 'продукты': '🛒 Продукты', 'подарки': '🎁 Подарки',
@@ -479,27 +255,15 @@
           };
 
           let html = '<div class="row"><span>' + (serviceNames[c.service_type] || 'Стандарт') + '</span><span>' + c.base_price + ' ₽</span></div>';
-
-          if (c.urgency_price !== 0) {
-            html += '<div class="row ' + (c.urgency_price > 0 ? 'plus' : 'discount') + '"><span>Срочность</span><span>' + (c.urgency_price > 0 ? '+' : '') + c.urgency_price + ' ₽</span></div>';
-          }
-          if (c.zone_price !== 0) {
-            html += '<div class="row plus"><span>Зона: ' + c.zone + '</span><span>+' + c.zone_price + ' ₽</span></div>';
-          }
-          if (c.time_multiplier > 1) {
-            html += '<div class="row plus"><span>' + (c.time_multiplier === 1.3 ? 'Ночной' : 'Вечерний') + ' тариф</span><span>× ' + c.time_multiplier + '</span></div>';
-          }
-          if (payment_method === 'карта' || payment_method === 'онлайн') {
-            html += '<div class="row discount"><span>Скидка за онлайн-оплату</span><span>−5%</span></div>';
-          }
+          if (c.urgency_price !== 0) html += '<div class="row ' + (c.urgency_price > 0 ? 'plus' : 'discount') + '"><span>⏱ Срочность</span><span>' + (c.urgency_price > 0 ? '+' : '') + c.urgency_price + ' ₽</span></div>';
+          if (c.zone_price !== 0) html += '<div class="row plus"><span>📍 Зона: ' + c.zone + '</span><span>+' + c.zone_price + ' ₽</span></div>';
+          if (c.time_multiplier > 1) html += '<div class="row plus"><span>🌙 Тариф</span><span>× ' + c.time_multiplier + '</span></div>';
+          if (payment_method === 'карта' || payment_method === 'онлайн') html += '<div class="row discount"><span>💳 Скидка</span><span>−5%</span></div>';
 
           document.getElementById('priceBreakdown').innerHTML = html;
         }
-      } catch (err) {
-        console.error(err);
-      } finally {
-        preview.classList.remove('loading');
-      }
+      } catch (err) { console.error(err); }
+      finally { preview.classList.remove('loading'); }
     }
 
     ['from_address', 'to_address', 'description'].forEach(id => {
@@ -515,7 +279,6 @@
       const btn = document.getElementById('submitBtn');
       const btnText = document.getElementById('btnText');
       const message = document.getElementById('message');
-      const form = document.getElementById('orderForm');
 
       const data = {
         from_address:   document.getElementById('from_address').value.trim(),
@@ -539,32 +302,128 @@
 
         if (result.success) {
           message.className = 'message success';
-          message.textContent = '✓ ' + result.message + ' Заказ #' + result.order_id + ' — ' + result.delivery_price + ' ₽';
+          message.textContent = '✅ ' + result.message + ' | Номер: #' + result.order_id + ' | Цена: ' + result.delivery_price + ' ₽';
           if (typeof launchConfetti === 'function') launchConfetti();
-
           document.getElementById('orderForm').reset();
           document.querySelectorAll('.urgency-option').forEach(o => o.classList.remove('selected'));
           document.querySelector('.urgency-option[data-urgency="today"]').classList.add('selected');
           document.getElementById('priceAmount').textContent = '— ₽';
-          document.getElementById('priceBreakdown').innerHTML = '<div class="row"><span>Заполните адреса, чтобы увидеть цену</span></div>';
-          lastPrice = 0;
-
-          setTimeout(() => {
-            window.location.href = '/orders.html';
-          }, 2200);
+          document.getElementById('priceBreakdown').innerHTML = '<div class="row"><span>Заполните адреса</span></div>';
+          if (typeof clearMap === 'function') clearMap();
         } else {
           message.className = 'message error';
-          message.textContent = result.message;
-          form.classList.add('shake');
-          setTimeout(() => form.classList.remove('shake'), 500);
+          message.textContent = '❌ ' + result.message;
         }
       } catch (err) {
         message.className = 'message error';
-        message.textContent = 'Ошибка соединения';
+        message.textContent = '❌ Ошибка соединения';
       } finally {
         btn.disabled = false;
         btnText.textContent = window.t ? t('order.create') : 'Создать заказ';
       }
+    });
+
+    // ============================================
+    // КАРТА МАРШРУТА
+    // ============================================
+    let map = null;
+    let markerFrom = null;
+    let markerTo = null;
+    let routeLine = null;
+
+    function initMap() {
+      if (map) return;
+      map = L.map('map').setView([55.751244, 37.618423], 11);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap',
+        maxZoom: 19
+      }).addTo(map);
+    }
+
+    async function geocodeAddress(address) {
+      try {
+        const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(address);
+        const response = await fetch(url);
+        const data = await response.json();
+        if (data.length > 0) {
+          return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
+        }
+        return null;
+      } catch (err) { return null; }
+    }
+
+    async function updateMap() {
+      const from = document.getElementById('from_address').value.trim();
+      const to = document.getElementById('to_address').value.trim();
+      const hint = document.getElementById('mapHint');
+
+      if (!from && !to) {
+        hint.textContent = 'Введите адреса, чтобы увидеть маршрут';
+        return;
+      }
+
+      initMap();
+      hint.textContent = '⏳ Определяем координаты...';
+
+      let fromCoords = from ? await geocodeAddress(from) : null;
+      let toCoords = to ? await geocodeAddress(to) : null;
+
+      if (markerFrom) { map.removeLayer(markerFrom); markerFrom = null; }
+      if (markerTo) { map.removeLayer(markerTo); markerTo = null; }
+      if (routeLine) { map.removeLayer(routeLine); routeLine = null; }
+
+      const iconFrom = L.divIcon({
+        className: '',
+        html: '<div style="background:#A0704A;color:#fff;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;border:3px solid #FAF4E8;box-shadow:0 4px 12px rgba(0,0,0,0.4);font-size:15px;">А</div>',
+        iconSize: [36, 36], iconAnchor: [18, 18]
+      });
+
+      const iconTo = L.divIcon({
+        className: '',
+        html: '<div style="background:#3E2723;color:#fff;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;border:3px solid #FAF4E8;box-shadow:0 4px 12px rgba(0,0,0,0.4);font-size:15px;">Б</div>',
+        iconSize: [36, 36], iconAnchor: [18, 18]
+      });
+
+      if (fromCoords) {
+        markerFrom = L.marker([fromCoords.lat, fromCoords.lon], { icon: iconFrom })
+          .addTo(map).bindPopup('📍 Откуда: ' + from);
+      }
+      if (toCoords) {
+        markerTo = L.marker([toCoords.lat, toCoords.lon], { icon: iconTo })
+          .addTo(map).bindPopup('🎯 Куда: ' + to);
+      }
+
+      if (fromCoords && toCoords) {
+        routeLine = L.polyline(
+          [[fromCoords.lat, fromCoords.lon], [toCoords.lat, toCoords.lon]],
+          { color: '#A0704A', weight: 3, opacity: 0.85, dashArray: '10, 8' }
+        ).addTo(map);
+        map.fitBounds(routeLine.getBounds(), { padding: [40, 40] });
+        hint.textContent = '✅ Маршрут построен';
+      } else if (fromCoords || toCoords) {
+        const c = fromCoords || toCoords;
+        map.setView([c.lat, c.lon], 14);
+        hint.textContent = 'Введите второй адрес для построения маршрута';
+      } else {
+        hint.textContent = '⚠ Не удалось найти адрес. Попробуйте другой';
+      }
+    }
+
+    function clearMap() {
+      const hint = document.getElementById('mapHint');
+      if (markerFrom) { map.removeLayer(markerFrom); markerFrom = null; }
+      if (markerTo) { map.removeLayer(markerTo); markerTo = null; }
+      if (routeLine) { map.removeLayer(routeLine); routeLine = null; }
+      if (map) map.setView([55.751244, 37.618423], 11);
+      hint.textContent = 'Введите адреса, чтобы увидеть маршрут';
+    }
+
+    document.getElementById('from_address').addEventListener('blur', updateMap);
+    document.getElementById('to_address').addEventListener('blur', updateMap);
+
+    // Инициализируем карту при загрузке
+    window.addEventListener('load', () => {
+      setTimeout(initMap, 300);
     });
   </script>
 

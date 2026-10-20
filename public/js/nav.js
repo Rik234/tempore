@@ -765,3 +765,48 @@ function launchConfetti() {
   }
   animate();
 }
+// ============================================
+// Подключаем PWA (Манифест + иконки + оффлайн-режим)
+// ============================================
+(function() {
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. Добавляем файл манифеста
+    if (!document.querySelector('link[rel="manifest"]')) {
+      const manifest = document.createElement('link');
+      manifest.rel = 'manifest';
+      manifest.href = '/manifest.json';
+      document.head.appendChild(manifest);
+    }
+
+    // 2. Добавляем цвет верхней панели на телефоне (коричневый)
+    if (!document.querySelector('meta[name="theme-color"]')) {
+      const themeColor = document.createElement('meta');
+      themeColor.name = 'theme-color';
+      themeColor.content = '#3E2723';
+      document.head.appendChild(themeColor);
+    }
+
+    // 3. Подключаем иконку для Apple (iPhone)
+    if (!document.querySelector('link[rel="apple-touch-icon"]')) {
+      const appleIcon = document.createElement('link');
+      appleIcon.rel = 'apple-touch-icon';
+      appleIcon.href = '/icon-192.png';
+      document.head.appendChild(appleIcon);
+    }
+
+    // 4. Включаем режим приложения на iPhone
+    if (!document.querySelector('meta[name="apple-mobile-web-app-capable"]')) {
+      const appleMeta = document.createElement('meta');
+      appleMeta.name = 'apple-mobile-web-app-capable';
+      appleMeta.content = 'yes';
+      document.head.appendChild(appleMeta);
+    }
+
+    // 5. Включаем оффлайн-режим (Service Worker)
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then(() => console.log('✅ PWA (Service Worker) включен'))
+        .catch((err) => console.log('❌ Ошибка PWA:', err));
+    }
+  });
+})();

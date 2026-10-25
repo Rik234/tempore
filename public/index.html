@@ -608,28 +608,15 @@
     </div>
   </section>
 
-  <!-- ОТЗЫВЫ -->
+    <!-- ОТЗЫВЫ -->
   <section class="reviews-section">
     <div class="reveal">
       <h2 class="section-title" data-i18n="reviews.title">Что говорят клиенты</h2>
       <p class="section-subtitle" data-i18n="reviews.subtitle">Нам доверяют тысячи людей</p>
     </div>
-    <div class="reviews reveal">
-      <div class="review">
-        <div class="review-stars">★★★★★</div>
-        <p class="review-text" data-i18n="rev.1">Заказывал доставку документов. Курьер приехал через 40 минут. Всё чётко!</p>
-        <div class="review-author"><div class="review-avatar">А</div><div><div class="review-name">Алексей М.</div><div class="review-city" data-i18n="city.moscow">Москва</div></div></div>
-      </div>
-      <div class="review">
-        <div class="review-stars">★★★★★</div>
-        <p class="review-text" data-i18n="rev.2">Очень удобный сервис. Заказала продукты — привезли через час. Спасибо!</p>
-        <div class="review-author"><div class="review-avatar">М</div><div><div class="review-name">Мария К.</div><div class="review-city" data-i18n="city.spb">Санкт-Петербург</div></div></div>
-      </div>
-      <div class="review">
-        <div class="review-stars">★★★★★</div>
-        <p class="review-text" data-i18n="rev.3">Пользуюсь для бизнеса. Всегда в срок, есть отчётность. Отличный сервис!</p>
-        <div class="review-author"><div class="review-avatar">Д</div><div><div class="review-name">Дмитрий П.</div><div class="review-city" data-i18n="city.kazan">Казань</div></div></div>
-      </div>
+    <!-- ВОТ СЮДА МЫ БУДЕМ ВСТАВЛЯТЬ ОТЗЫВЫ ИЗ БД -->
+    <div class="reviews reveal" id="reviewsContainer">
+      <!-- Здесь будет загрузка -->
     </div>
   </section>
 
@@ -971,6 +958,62 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') { closeFooterModal(); closePhoto(); }
     });
+        // ============================================
+    // ЗАГРУЗКА РЕАЛЬНЫХ ОТЗЫВОВ НА ГЛАВНУЮ
+    // ============================================
+    async function loadLatestReviews() {
+      const container = document.getElementById('reviewsContainer');
+      if (!container) return;
+
+      try {
+        const response = await fetch('/api/reviews/latest');
+        const result = await response.json();
+
+        if (result.success && result.reviews.length > 0) {
+          container.innerHTML = result.reviews.map(rv => {
+            // Генерируем звездочки (закрашенные и пустые)
+            const stars = '★'.repeat(rv.rating) + '☆'.repeat(5 - rv.rating);
+            // Берем первую букву имени для аватарки
+            const avatarLetter = rv.client_name ? rv.client_name.charAt(0).toUpperCase() : '?';
+            // Город (если есть)
+            const city = rv.client_city || 'Россия';
+
+            return `
+              <div class="review">
+                <div class="review-stars">${stars}</div>
+                <p class="review-text">«${rv.comment}»</p>
+                <div class="review-author">
+                  <div class="review-avatar">${avatarLetter}</div>
+                  <div>
+                    <div class="review-name">${rv.client_name}</div>
+                    <div class="review-city">${city}</div>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        } else {
+          // Если отзывов в базе нет (например, при первом запуске), 
+          // показываем заглушку, чтобы блок не был пустым
+          container.innerHTML = `
+            <div class="review">
+              <div class="review-stars">★★★★★</div>
+              <p class="review-text">Пока нет отзывов, но мы всегда рады новым клиентам!</p>
+              <div class="review-author">
+                <div class="review-avatar">T</div>
+                <div><div class="review-name">Команда Tempore</div><div class="review-city">Москва</div></div>
+              </div>
+            </div>
+          `;
+        }
+      } catch (err) {
+        console.error('Ошибка загрузки отзывов:', err);
+        container.innerHTML = '<p style="text-align:center; width:100%;">Не удалось загрузить отзывы</p>';
+      }
+    }
+
+    // Вызываем функцию при загрузке страницы
+    document.addEventListener('DOMContentLoaded', loadLatestReviews);
   </script>
 
 </body>

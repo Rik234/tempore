@@ -1,5 +1,5 @@
 // ============================================
-// nav.js — полный перевод + все фишки
+// nav.js — глобальные фишки + ПОЛНЫЙ перевод RU/EN
 // ============================================
 
 const TRANSLATIONS = {
@@ -18,7 +18,7 @@ const TRANSLATIONS = {
     'toast.ru': '🇷🇺 Русский', 'toast.en': '🇬🇧 English',
     // Hero
     'hero.tagline': 'Пунктуальность — высшая форма уважения',
-    'hero.order': 'Заказать доставку', 'hero.courier': 'Стать курьером',
+    'hero.order': '📦 Заказать доставку', 'hero.courier': '🚴 Стать курьером',
     'promo.text': '🔥 Скидка 20% на первую доставку!',
     // Статистика
     'stats.deliveries': 'Доставок в год', 'stats.clients': 'Довольных клиентов',
@@ -26,10 +26,10 @@ const TRANSLATIONS = {
     // Преимущества
     'features.title': 'Почему выбирают нас',
     'features.subtitle': 'Мы делаем доставку простой, быстрой и надёжной',
-    'features.fast': 'Быстро', 'features.fast_desc': 'Доставка от 30 минут по городу. Курьер приезжает в течение часа.',
-    'features.safe': 'Надёжно', 'features.safe_desc': 'Все курьеры проверены. Груз застрахован на всё время доставки.',
+    'features.fast': 'Быстро', 'features.fast_desc': 'Доставка от 30 минут по городу.',
+    'features.safe': 'Надёжно', 'features.safe_desc': 'Курьеры проверены, груз застрахован.',
     'features.cheap': 'Выгодно', 'features.cheap_desc': 'Честные цены без скрытых платежей.',
-    'features.track': 'Отслеживание', 'features.track_desc': 'Смотрите статус заказа в личном кабинете.',
+    'features.track': 'Отслеживание', 'features.track_desc': 'Статус заказа в реальном времени.',
     // Достижения
     'achievements.title': 'Наши достижения', 'achievements.subtitle': 'Цифры, которыми мы гордимся',
     'ach.1': 'лет на рынке доставки', 'ach.2': 'средняя оценка клиентов',
@@ -38,22 +38,29 @@ const TRANSLATIONS = {
     'partners.title': 'Нам доверяют',
     // Галерея
     'gallery.title': 'Примеры наших доставок', 'gallery.subtitle': 'Каждый день мы доставляем тысячи разных грузов',
-    'gallery.docs': 'Документы', 'gallery.docs_desc': 'Важные бумаги — быстро и безопасно',
-    'gallery.parcels': 'Посылки', 'gallery.parcels_desc': 'Коробки и грузы до 10 кг',
-    'gallery.products': 'Продукты', 'gallery.products_desc': 'Свежие продукты из магазина',
-    'gallery.gifts': 'Подарки', 'gallery.gifts_desc': 'Цветы и сюрпризы точно в срок',
-    'gallery.business': 'Бизнесу', 'gallery.business_desc': 'Корпоративная доставка',
-    'gallery.couriers': 'Наши курьеры', 'gallery.couriers_desc': 'Вежливые и пунктуальные',
+    'gallery.docs': '📄 Документы', 'gallery.docs_desc': 'Важные бумаги — быстро и безопасно',
+    'gallery.parcels': '📦 Посылки', 'gallery.parcels_desc': 'Коробки и грузы до 10 кг',
+    'gallery.products': '🛒 Продукты', 'gallery.products_desc': 'Свежие продукты из магазина',
+    'gallery.gifts': '🎁 Подарки', 'gallery.gifts_desc': 'Цветы и сюрпризы точно в срок',
+    'gallery.business': '🏢 Бизнесу', 'gallery.business_desc': 'Корпоративная доставка',
+    'gallery.couriers': '🚴 Наши курьеры', 'gallery.couriers_desc': 'Вежливые и пунктуальные',
     // Услуги
     'services.title': 'Наши услуги', 'services.subtitle': 'Выберите подходящий формат доставки',
     'services.docs': 'Документы', 'services.docs_desc': 'Быстрая доставка важных бумаг и договоров.',
     'services.parcels': 'Посылки', 'services.parcels_desc': 'Доставка небольших грузов до 10 кг.',
-    'services.products': 'Продукты', 'services.products_desc': 'Курьер купит и привезёт продукты из магазина.',
-    'services.gifts': 'Подарки', 'services.gifts_desc': 'Доставка подарков и цветов в нужное время.',
-    'services.business': 'Бизнесу', 'services.business_desc': 'Корпоративная доставка со специальными тарифами.',
+    'services.products': 'Продукты', 'services.products_desc': 'Курьер купит и привезёт продукты.',
+    'services.gifts': 'Подарки', 'services.gifts_desc': 'Доставка подарков и цветов.',
+    'services.business': 'Бизнесу', 'services.business_desc': 'Корпоративные тарифы.',
     'services.urgent': 'Срочно', 'services.urgent_desc': 'Экспресс-доставка за 60 минут.',
-    'price.from250': 'от 250 ₽', 'price.from350': 'от 350 ₽', 'price.from300': 'от 300 ₽',
-    'price.from400': 'от 400 ₽', 'price.from600': 'от 600 ₽', 'price.contract': 'по договору',
+
+    // НОВЫЕ ЦЕНЫ
+    'price.from250': 'от 500 ₽',
+    'price.from350': 'от 700 ₽',
+    'price.from300': 'от 600 ₽',
+    'price.from400': 'от 800 ₽',
+    'price.from600': 'от 1500 ₽',
+    'price.contract': 'по договору',
+
     // Шаги
     'steps.title': 'Как это работает', 'steps.subtitle': 'Четыре простых шага до вашей посылки',
     'step.1': 'Регистрация', 'step.1_desc': 'Создайте аккаунт за 1 минуту',
@@ -62,67 +69,13 @@ const TRANSLATIONS = {
     'step.4': 'Доставка', 'step.4_desc': 'Курьер привезёт точно в срок',
     // Отзывы
     'reviews.title': 'Что говорят клиенты', 'reviews.subtitle': 'Нам доверяют тысячи людей',
-    'rev.1': 'Заказывал доставку документов. Курьер приехал через 40 минут. Всё чётко!',
-    'rev.2': 'Очень удобный сервис. Заказала продукты — привезли через час. Спасибо!',
-    'rev.3': 'Пользуюсь для бизнеса. Всегда в срок, есть отчётность. Отличный сервис!',
+    'rev.1': 'Курьер приехал через 40 минут. Всё чётко!',
+    'rev.2': 'Заказала продукты — привезли через час. Спасибо!',
+    'rev.3': 'Пользуюсь для бизнеса. Всегда в срок!',
     'city.moscow': 'Москва', 'city.spb': 'Санкт-Петербург', 'city.kazan': 'Казань',
     // CTA
     'cta.title': 'Готовы оформить заказ?', 'cta.subtitle': 'Это займёт меньше минуты',
-    'cta.btn': 'Заказать доставку',
-        // О компании
-    'about.title': 'О компании — Tempore',
-    'about.hero.title': 'О КОМПАНИИ TEMPORE',
-    'about.hero.subtitle': 'Курьерская доставка нового поколения — мы ценим ваше время и доставляем точно в срок',
-    'about.history.title': 'Наша история',
-    'about.history.subtitle': 'Путь длиной в 5 лет',
-    'about.history.p1': 'Tempore основана в 2021 году командой энтузиастов, которые устали от медленных и ненадёжных служб доставки. Мы решили создать сервис, где пунктуальность — это не просто слово, а принцип работы.',
-    'about.history.p2': 'Начали с одного курьера и 10 заказов в день. Сегодня — более 100 курьеров, 15 000+ доставок в год и 500+ компаний-партнёров по всей России.',
-    'about.history.p3': 'Мы гордимся, что 98% наших клиентов возвращаются к нам снова. И продолжаем расти — открываем новые города, внедряем технологии, обучаем курьеров.',
-    'about.values.title': 'Наши ценности',
-    'about.values.subtitle': 'Принципы, по которым мы работаем',
-    'about.values.speed': 'Скорость',
-    'about.values.speed_desc': 'Доставка от 30 минут по городу. Мы не заставляем ждать.',
-    'about.values.trust': 'Надёжность',
-    'about.values.trust_desc': 'Каждый заказ застрахован. Курьеры проходят проверку.',
-    'about.values.price': 'Честные цены',
-    'about.values.price_desc': 'Прозрачное ценообразование. Никаких скрытых платежей.',
-    'about.values.care': 'Забота',
-    'about.values.care_desc': 'Вежливые курьеры и поддержка 24/7. Мы всегда рядом.',
-    'about.stats.deliveries': 'Доставок в год',
-    'about.stats.couriers': 'Курьеров',
-    'about.stats.partners': 'Партнёров',
-    'about.stats.rating': 'Средняя оценка',
-    'about.team.title': 'Наша команда',
-    'about.team.subtitle': 'Люди, которые делают Tempore',
-    'about.team.ceo': 'Основатель и CEO',
-    'about.team.ceo_desc': '10 лет в логистике. Верит, что время — самый ценный ресурс.',
-    'about.team.coo': 'Операционный директор',
-    'about.team.coo_desc': 'Отвечает за работу курьеров и качество сервиса.',
-    'about.team.cto': 'Технический директор',
-    'about.team.cto_desc': 'Разрабатывает платформу и мобильные приложения.',
-    'about.team.care': 'Директор по клиентам',
-    'about.team.care_desc': 'Заботится о том, чтобы каждый клиент был счастлив.',
-    'about.contacts.title': 'Контакты',
-    'about.contacts.subtitle': 'Свяжитесь с нами удобным способом',
-    'about.contacts.phone': 'Телефон',
-    'about.contacts.email': 'Email',
-    'about.contacts.address': 'Адрес',
-    'about.contacts.address_val': 'г. Москва, ул. Курьерская, 15',
-    'about.contacts.hours': 'Работаем',
-    'about.contacts.hours_val': 'Круглосуточно, 7 дней в неделю',
-    'about.cta.title': 'Готовы попробовать?',
-    'about.cta.subtitle': 'Оформите первый заказ — это займёт минуту',
-    'about.cta.btn': 'Заказать доставку',
-        'about.how.title': 'Как мы работаем',
-    'about.how.subtitle': 'Четыре шага от заявки до двери',
-    'about.how.1': 'Оформление заказа',
-    'about.how.1_desc': 'Вы регистрируетесь, указываете адреса и описываете груз. Система автоматически подбирает тип услуги и рассчитывает цену.',
-    'about.how.2': 'Назначение курьера',
-    'about.how.2_desc': 'Наш алгоритм находит ближайшего свободного курьера и назначает его на заказ. Вы видите его фото и данные.',
-    'about.how.3': 'Доставка',
-    'about.how.3_desc': 'Курьер забирает груз и везёт его по адресу. Статус меняется: принят → в пути → доставлен. Вы видите всё в реальном времени.',
-    'about.how.4': 'Обратная связь',
-    'about.how.4_desc': 'После доставки вы можете поставить оценку и написать отзыв. Так мы делаем сервис ещё лучше с каждым заказом.',
+    'cta.btn': '📦 Заказать доставку',
     // Футер
     'footer.about': 'Курьерская доставка нового поколения. Быстро, надёжно, удобно.',
     'footer.services': 'Услуги', 'footer.docs': 'Документы', 'footer.parcels': 'Посылки',
@@ -133,115 +86,98 @@ const TRANSLATIONS = {
     'footer.my_orders': 'Мои заказы', 'footer.reg': 'Регистрация', 'footer.login': 'Войти',
     'footer.rights': '© 2026 Tempore — Все права защищены.',
 
-    // ===== ФОРМЫ =====
-    'form.login.title': 'Вход в систему',
-    'form.login.subtitle': 'Введите данные вашего аккаунта',
-    'form.email': 'Email',
-    'form.password': 'Пароль',
-    'form.login_btn': 'Войти',
-    'form.or': 'ИЛИ',
-    'form.register': 'Регистрация',
-    'form.as_courier': 'Курьером',
-    'form.reg.title': 'Регистрация',
-    'form.reg.subtitle': 'Создайте аккаунт за 1 минуту',
-    'form.fullname': 'ФИО *',
-    'form.phone': 'Телефон *',
-    'form.city': 'Город',
-    'form.address': 'Адрес',
-    'form.reg_btn': 'Зарегистрироваться',
-    'form.have_account': 'Уже есть аккаунт?',
+    // О компании
+    'about.title': 'О компании — Tempore',
+    'about.hero.title': 'О КОМПАНИИ TEMPORE',
+    'about.hero.subtitle': 'Курьерская доставка нового поколения — мы ценим ваше время и доставляем точно в срок',
+    'about.history.title': 'Наша история',
+    'about.history.subtitle': 'Путь длиной в 5 лет',
+    'about.history.p1': 'Tempore основана в 2021 году командой энтузиастов, которые устали от медленных и ненадёжных служб доставки.',
+    'about.history.p2': 'Начали с одного курьера и 10 заказов в день. Сегодня — более 100 курьеров, 15 000+ доставок в год.',
+    'about.history.p3': 'Мы гордимся, что 98% наших клиентов возвращаются к нам снова.',
+    'about.values.title': 'Наши ценности',
+    'about.values.subtitle': 'Принципы, по которым мы работаем',
+    'about.values.speed': 'Скорость', 'about.values.speed_desc': 'Доставка от 30 минут по городу.',
+    'about.values.trust': 'Надёжность', 'about.values.trust_desc': 'Каждый заказ застрахован.',
+    'about.values.price': 'Честные цены', 'about.values.price_desc': 'Прозрачное ценообразование.',
+    'about.values.care': 'Забота', 'about.values.care_desc': 'Вежливые курьеры и поддержка 24/7.',
+    'about.stats.deliveries': 'Доставок в год', 'about.stats.couriers': 'Курьеров',
+    'about.stats.partners': 'Партнёров', 'about.stats.rating': 'Средняя оценка',
+    'about.how.title': 'Как мы работаем', 'about.how.subtitle': 'Четыре шага от заявки до двери',
+    'about.how.1': 'Оформление заказа', 'about.how.1_desc': 'Вы регистрируетесь, указываете адреса и описываете груз.',
+    'about.how.2': 'Назначение курьера', 'about.how.2_desc': 'Алгоритм находит ближайшего свободного курьера.',
+    'about.how.3': 'Доставка', 'about.how.3_desc': 'Курьер забирает груз и везёт его по адресу.',
+    'about.how.4': 'Обратная связь', 'about.how.4_desc': 'После доставки вы можете поставить оценку.',
+    'about.team.title': 'Наша команда',
+    'about.team.subtitle': 'Люди, которые делают Tempore',
+    'about.team.ceo': 'Основатель и CEO', 'about.team.ceo_desc': '10 лет в логистике.',
+    'about.team.coo': 'Операционный директор', 'about.team.coo_desc': 'Отвечает за курьеров.',
+    'about.team.cto': 'Технический директор', 'about.team.cto_desc': 'Разрабатывает платформу.',
+    'about.team.care': 'Директор по клиентам', 'about.team.care_desc': 'Заботится о клиентах.',
+    'about.contacts.title': 'Контакты', 'about.contacts.subtitle': 'Свяжитесь с нами',
+    'about.contacts.phone': 'Телефон', 'about.contacts.email': 'Email',
+    'about.contacts.address': 'Адрес', 'about.contacts.address_val': 'г. Москва, ул. Курьерская, 15',
+    'about.contacts.hours': 'Работаем', 'about.contacts.hours_val': 'Круглосуточно',
+    'about.cta.title': 'Готовы попробовать?', 'about.cta.subtitle': 'Оформите первый заказ',
+    'about.cta.btn': 'Заказать доставку',
 
-    // ===== ЗАКАЗ =====
-    'order.title': 'Оформить заказ',
-    'order.subtitle': 'Цена рассчитывается автоматически',
-    'order.from': 'Откуда везти *',
-    'order.to': 'Куда везти *',
-    'order.what': 'Что везём? (опишите груз)',
-    'order.urgency': 'Насколько срочно? *',
-    'order.payment': 'Способ оплаты *',
-    'order.price': 'Стоимость доставки:',
-    'order.create': 'Создать заказ',
-    'order.quick_docs': 'Документы',
-    'order.quick_food': 'Продукты',
-    'order.quick_gift': 'Подарок',
-    'order.quick_parcel': 'Посылка',
-    'order.quick_business': 'Бизнесу',
-    'order.urgent_asap': 'Срочно',
-    'order.urgent_2h': '2 часа',
-    'order.urgent_today': 'Сегодня',
-    'order.urgent_tomorrow': 'Завтра',
-    'order.pay_card': 'Банковская карта (−5%)',
-    'order.pay_online': 'Онлайн-оплата (−5%)',
-    'order.pay_cash': 'Наличные курьеру',
-    'order.fill': 'Заполните адреса, чтобы увидеть цену',
+    // Формы
+    'form.login.title': 'Вход в систему', 'form.login.subtitle': 'Введите данные аккаунта',
+    'form.email': 'Email', 'form.password': 'Пароль', 'form.login_btn': '🔓 Войти',
+    'form.or': 'ИЛИ', 'form.register': '📝 Регистрация', 'form.as_courier': '🚴 Курьером',
+    'form.reg.title': 'Регистрация', 'form.reg.subtitle': 'Создайте аккаунт за 1 минуту',
+    'form.fullname': 'ФИО *', 'form.phone': 'Телефон *', 'form.city': 'Город', 'form.address': 'Адрес',
+    'form.reg_btn': '📝 Зарегистрироваться', 'form.have_account': 'Уже есть аккаунт?',
 
-    // ===== СПИСОК ЗАКАЗОВ =====
-    'orders.title': 'Мои заказы',
-    'orders.new': '+ Новый заказ',
-    'orders.empty': 'У вас пока нет заказов',
-    'orders.empty_desc': 'Оформите первый заказ — это займёт минуту',
+    // Заказ
+    'order.title': 'Оформить заказ', 'order.subtitle': '💰 Цена рассчитывается автоматически',
+    'order.from': 'Откуда везти *', 'order.to': 'Куда везти *',
+    'order.what': 'Что везём? (опишите груз)', 'order.urgency': '⏱ Насколько срочно? *',
+    'order.payment': '💳 Способ оплаты *', 'order.price': '💰 Стоимость доставки:',
+    'order.create': '📦 Создать заказ',
+    'order.quick_docs': '📄 Документы', 'order.quick_food': '🛒 Продукты',
+    'order.quick_gift': '🎁 Подарок', 'order.quick_parcel': '📦 Посылка', 'order.quick_business': '🏢 Бизнесу',
+    'order.urgent_asap': 'Срочно', 'order.urgent_2h': '2 часа',
+    'order.urgent_today': 'Сегодня', 'order.urgent_tomorrow': 'Завтра',
+    'order.pay_card': '💳 Банковская карта (−5%)', 'order.pay_online': '🌐 Онлайн-оплата (−5%)', 'order.pay_cash': '💵 Наличные курьеру',
+
+    // Список заказов
+    'orders.title': '📋 Мои заказы', 'orders.new': '+ Новый заказ',
+    'orders.empty': 'У вас пока нет заказов', 'orders.empty_desc': 'Оформите первый заказ',
     'orders.loading': 'Загрузка...',
 
-    // ===== ПРОФИЛЬ =====
-    'profile.title': 'Личный кабинет',
-    'profile.personal': 'Личные данные',
-    'profile.edit': 'Редактировать',
-    'profile.save': 'Сохранить',
-    'profile.cancel': 'Отмена',
-    'profile.total_orders': 'Всего заказов',
-    'profile.active': 'Активных',
-    'profile.spent': 'Потрачено',
-    'profile.fullname': 'ФИО',
-    'profile.email': 'Email',
-    'profile.phone': 'Телефон',
-    'profile.city': 'Город',
-    'profile.address': 'Адрес',
-    'profile.reg_date': 'Дата регистрации',
-    'profile.new_order': 'Новый заказ',
-    'profile.my_orders': 'Мои заказы',
-    'profile.logout': 'Выйти',
+    // Профиль
+    'profile.title': 'Личный кабинет', 'profile.personal': '👤 Личные данные',
+    'profile.edit': '✏️ Редактировать', 'profile.save': '💾 Сохранить', 'profile.cancel': 'Отмена',
+    'profile.total_orders': 'Всего заказов', 'profile.active': 'Активных', 'profile.spent': 'Потрачено',
+    'profile.fullname': '👤 ФИО', 'profile.email': '✉️ Email', 'profile.phone': '📞 Телефон',
+    'profile.city': '🏙️ Город', 'profile.address': '🏠 Адрес', 'profile.reg_date': '📅 Дата регистрации',
+    'profile.new_order': '📦 Новый заказ', 'profile.my_orders': '📋 Мои заказы', 'profile.logout': '🚪 Выйти',
 
-    // ===== КУРЬЕР =====
-    'courier.become': 'Стать курьером',
-    'courier.subtitle': 'Присоединяйтесь к команде — это займёт минуту',
-    'courier.transport': 'Вид транспорта *',
-    'courier.register_btn': 'Зарегистрироваться',
-    'courier.iam_client': 'Я клиент',
-    'courier.photo_hint': 'Нажмите, чтобы загрузить фото',
-    'courier.my_orders': 'Мои заказы',
-    'courier.reviews': 'Отзывы и рейтинг',
-    'courier.profile': 'Профиль курьера',
-    'courier.rating_avg': 'Средняя оценка от клиентов',
-    'courier.no_reviews': 'Пока нет отзывов',
-    'courier.total': 'Всего заказов',
-    'courier.active_orders': 'Активных',
-    'courier.completed': 'Завершено',
-    'courier.earned': 'Заработано',
-    'courier.status': 'Статус работы',
-    'courier.registered': 'Дата регистрации',
-    'courier.experience': 'Стаж работы',
-    'courier.badge_free': 'Свободен',
-    'courier.badge_busy': 'Занят',
-    'courier.badge_inactive': 'Неактивен',
-    'courier.take_order': 'Выехал на заказ',
-    'courier.delivered': 'Доставлено',
+    // Курьер
+    'courier.become': '🚴 Стать курьером', 'courier.subtitle': 'Присоединяйтесь к команде',
+    'courier.transport': '🚗 Вид транспорта *', 'courier.register_btn': '🚴 Зарегистрироваться',
+    'courier.iam_client': '👤 Я клиент', 'courier.photo_hint': 'Нажмите, чтобы загрузить фото',
+    'courier.my_orders': '📦 Мои заказы', 'courier.reviews': '⭐ Отзывы и рейтинг',
+    'courier.profile': '👤 Профиль курьера', 'courier.rating_avg': 'Средняя оценка от клиентов',
+    'courier.no_reviews': 'Пока нет отзывов', 'courier.total': 'Всего заказов',
+    'courier.active_orders': 'Активных', 'courier.completed': 'Завершено', 'courier.earned': 'Заработано',
+    'courier.status': '📊 Статус работы', 'courier.registered': '📅 Дата регистрации',
+    'courier.experience': '⏱️ Стаж работы',
+    'courier.badge_free': 'Свободен', 'courier.badge_busy': 'Занят', 'courier.badge_inactive': 'Неактивен',
+    'courier.take_order': '🚗 Выехал на заказ', 'courier.delivered': '✅ Доставлено',
     'courier.no_orders': 'Нет назначенных заказов',
     'courier.photo_upload': 'Нажмите на круг, чтобы загрузить фото',
-    'courier.transport_foot': 'Пеший',
-    'courier.transport_bike': 'Вело',
-    'courier.transport_car': 'Авто',
-    'courier.transport_moto': 'Мото',
+    'courier.transport_foot': 'Пеший', 'courier.transport_bike': 'Вело',
+    'courier.transport_car': 'Авто', 'courier.transport_moto': 'Мото',
 
     // Статусы
     'status.новый': 'новый', 'status.принят': 'принят', 'status.в-пути': 'в пути',
     'status.доставлен': 'доставлен', 'status.отменён': 'отменён',
 
     // Общие
-    'common.cancel_order': 'Отменить заказ',
-    'common.leave_review': 'Оставить отзыв',
-    'common.review_left': 'Отзыв оставлен',
-    'common.loading': 'Загрузка...',
-    'common.error': 'Ошибка'
+    'common.cancel_order': '✕ Отменить заказ', 'common.leave_review': '⭐ Оставить отзыв',
+    'common.review_left': '✅ Отзыв оставлен', 'common.loading': 'Загрузка...', 'common.error': 'Ошибка'
   },
 
   en: {
@@ -259,7 +195,7 @@ const TRANSLATIONS = {
     'toast.ru': '🇷🇺 Русский', 'toast.en': '🇬🇧 English',
     // Hero
     'hero.tagline': 'Punctuality is the highest form of respect',
-    'hero.order': 'Order delivery', 'hero.courier': 'Become a courier',
+    'hero.order': '📦 Order delivery', 'hero.courier': '🚴 Become a courier',
     'promo.text': '🔥 20% off on your first delivery!',
     // Stats
     'stats.deliveries': 'Deliveries per year', 'stats.clients': 'Satisfied clients',
@@ -271,21 +207,21 @@ const TRANSLATIONS = {
     'features.safe': 'Reliable', 'features.safe_desc': 'Couriers verified, cargo insured.',
     'features.cheap': 'Affordable', 'features.cheap_desc': 'Fair prices without hidden fees.',
     'features.track': 'Tracking', 'features.track_desc': 'Track your order in real time.',
-    // Achievements
+    // Достижения
     'achievements.title': 'Our achievements', 'achievements.subtitle': 'Numbers we are proud of',
     'ach.1': 'years on delivery market', 'ach.2': 'average client rating',
     'ach.3': 'completed deliveries', 'ach.4': 'partner companies',
-    // Partners
+    // Партнёры
     'partners.title': 'Trusted by',
-    // Gallery
+    // Галерея
     'gallery.title': 'Examples of our deliveries', 'gallery.subtitle': 'We deliver thousands of different packages',
-    'gallery.docs': 'Documents', 'gallery.docs_desc': 'Important papers — fast and safe',
-    'gallery.parcels': 'Parcels', 'gallery.parcels_desc': 'Boxes and cargo up to 10 kg',
-    'gallery.products': 'Groceries', 'gallery.products_desc': 'Fresh groceries from the store',
-    'gallery.gifts': 'Gifts', 'gallery.gifts_desc': 'Flowers and surprises on time',
-    'gallery.business': 'Business', 'gallery.business_desc': 'Corporate delivery',
-    'gallery.couriers': 'Our couriers', 'gallery.couriers_desc': 'Polite and punctual',
-    // Services
+    'gallery.docs': '📄 Documents', 'gallery.docs_desc': 'Important papers — fast and safe',
+    'gallery.parcels': '📦 Parcels', 'gallery.parcels_desc': 'Boxes and cargo up to 10 kg',
+    'gallery.products': '🛒 Groceries', 'gallery.products_desc': 'Fresh groceries from the store',
+    'gallery.gifts': '🎁 Gifts', 'gallery.gifts_desc': 'Flowers and surprises on time',
+    'gallery.business': '🏢 Business', 'gallery.business_desc': 'Corporate delivery',
+    'gallery.couriers': '🚴 Our couriers', 'gallery.couriers_desc': 'Polite and punctual',
+    // Услуги
     'services.title': 'Our services', 'services.subtitle': 'Choose the right delivery format',
     'services.docs': 'Documents', 'services.docs_desc': 'Fast delivery of important papers.',
     'services.parcels': 'Parcels', 'services.parcels_desc': 'Delivery of small cargo up to 10 kg.',
@@ -293,15 +229,22 @@ const TRANSLATIONS = {
     'services.gifts': 'Gifts', 'services.gifts_desc': 'Delivery of gifts and flowers.',
     'services.business': 'Business', 'services.business_desc': 'Corporate tariffs.',
     'services.urgent': 'Urgent', 'services.urgent_desc': 'Express delivery in 60 minutes.',
-    'price.from250': 'from 250 ₽', 'price.from350': 'from 350 ₽', 'price.from300': 'from 300 ₽',
-    'price.from400': 'from 400 ₽', 'price.from600': 'from 600 ₽', 'price.contract': 'by contract',
-    // Steps
+
+    // НОВЫЕ ЦЕНЫ
+    'price.from250': 'from 500 ₽',
+    'price.from350': 'from 700 ₽',
+    'price.from300': 'from 600 ₽',
+    'price.from400': 'from 800 ₽',
+    'price.from600': 'from 1500 ₽',
+    'price.contract': 'by contract',
+
+    // Шаги
     'steps.title': 'How it works', 'steps.subtitle': 'Four simple steps to your package',
     'step.1': 'Sign up', 'step.1_desc': 'Create an account in 1 minute',
     'step.2': 'Order', 'step.2_desc': 'Specify addresses and describe cargo',
     'step.3': 'Payment', 'step.3_desc': 'Choose a convenient payment method',
     'step.4': 'Delivery', 'step.4_desc': 'Courier will deliver on time',
-    // Reviews
+    // Отзывы
     'reviews.title': 'What clients say', 'reviews.subtitle': 'Thousands trust us',
     'rev.1': 'Courier arrived in 40 minutes. Everything is perfect!',
     'rev.2': 'Ordered groceries — delivered in an hour. Thanks!',
@@ -309,61 +252,8 @@ const TRANSLATIONS = {
     'city.moscow': 'Moscow', 'city.spb': 'Saint Petersburg', 'city.kazan': 'Kazan',
     // CTA
     'cta.title': 'Ready to place an order?', 'cta.subtitle': 'It takes less than a minute',
-    'cta.btn': 'Order delivery',
-        'about.title': 'About — Tempore',
-    'about.hero.title': 'ABOUT TEMPORE',
-    'about.hero.subtitle': 'Next-generation courier delivery — we value your time and deliver on schedule',
-    'about.history.title': 'Our history',
-    'about.history.subtitle': '5 years of journey',
-    'about.history.p1': 'Tempore was founded in 2021 by a team of enthusiasts tired of slow and unreliable delivery services.',
-    'about.history.p2': 'We started with one courier and 10 orders a day. Today — over 100 couriers, 15,000+ deliveries a year and 500+ partner companies.',
-    'about.history.p3': 'We are proud that 98% of our clients come back to us. And we keep growing.',
-    'about.values.title': 'Our values',
-    'about.values.subtitle': 'Principles we work by',
-    'about.values.speed': 'Speed',
-    'about.values.speed_desc': 'Delivery from 30 minutes around the city. We do not keep you waiting.',
-    'about.values.trust': 'Reliability',
-    'about.values.trust_desc': 'Every order is insured. Couriers are verified.',
-    'about.values.price': 'Fair prices',
-    'about.values.price_desc': 'Transparent pricing. No hidden fees.',
-    'about.values.care': 'Care',
-    'about.values.care_desc': 'Polite couriers and 24/7 support. We are always here.',
-    'about.stats.deliveries': 'Deliveries per year',
-    'about.stats.couriers': 'Couriers',
-    'about.stats.partners': 'Partners',
-    'about.stats.rating': 'Average rating',
-    'about.team.title': 'Our team',
-    'about.team.subtitle': 'People who make Tempore',
-    'about.team.ceo': 'Founder & CEO',
-    'about.team.ceo_desc': '10 years in logistics. Believes time is the most valuable resource.',
-    'about.team.coo': 'COO',
-    'about.team.coo_desc': 'Responsible for couriers and service quality.',
-    'about.team.cto': 'CTO',
-    'about.team.cto_desc': 'Develops the platform and mobile apps.',
-    'about.team.care': 'Customer Care Director',
-    'about.team.care_desc': 'Makes sure every client is happy.',
-    'about.contacts.title': 'Contacts',
-    'about.contacts.subtitle': 'Reach us in a convenient way',
-    'about.contacts.phone': 'Phone',
-    'about.contacts.email': 'Email',
-    'about.contacts.address': 'Address',
-    'about.contacts.address_val': 'Moscow, Courier St., 15',
-    'about.contacts.hours': 'Working hours',
-    'about.contacts.hours_val': '24/7, 7 days a week',
-    'about.cta.title': 'Ready to try?',
-    'about.cta.subtitle': 'Place your first order — it takes a minute',
-    'about.cta.btn': 'Order delivery',
-        'about.how.title': 'How we work',
-    'about.how.subtitle': 'Four steps from order to door',
-    'about.how.1': 'Order placement',
-    'about.how.1_desc': 'You register, specify addresses and describe the cargo. The system automatically picks the service type and calculates the price.',
-    'about.how.2': 'Courier assignment',
-    'about.how.2_desc': 'Our algorithm finds the nearest available courier and assigns them to the order. You see their photo and data.',
-    'about.how.3': 'Delivery',
-    'about.how.3_desc': 'The courier picks up the cargo and delivers it to the address. Status changes: accepted → in transit → delivered.',
-    'about.how.4': 'Feedback',
-    'about.how.4_desc': 'After delivery you can rate and leave a review. This way we make the service better with each order.',
-    // Footer
+    'cta.btn': '📦 Order delivery',
+    // Футер
     'footer.about': 'Next-generation courier delivery.',
     'footer.services': 'Services', 'footer.docs': 'Documents', 'footer.parcels': 'Parcels',
     'footer.products': 'Groceries', 'footer.gifts': 'Gifts',
@@ -373,65 +263,98 @@ const TRANSLATIONS = {
     'footer.my_orders': 'My orders', 'footer.reg': 'Sign up', 'footer.login': 'Login',
     'footer.rights': '© 2026 Tempore — All rights reserved.',
 
-    // Forms
+    // О компании
+    'about.title': 'About — Tempore',
+    'about.hero.title': 'ABOUT TEMPORE',
+    'about.hero.subtitle': 'Next-generation courier delivery — we value your time',
+    'about.history.title': 'Our history',
+    'about.history.subtitle': '5 years of journey',
+    'about.history.p1': 'Tempore was founded in 2021 by a team of enthusiasts tired of slow delivery services.',
+    'about.history.p2': 'Started with one courier and 10 orders a day. Today — over 100 couriers, 15,000+ deliveries a year.',
+    'about.history.p3': 'We are proud that 98% of our clients come back to us.',
+    'about.values.title': 'Our values',
+    'about.values.subtitle': 'Principles we work by',
+    'about.values.speed': 'Speed', 'about.values.speed_desc': 'Delivery from 30 minutes around the city.',
+    'about.values.trust': 'Reliability', 'about.values.trust_desc': 'Every order is insured.',
+    'about.values.price': 'Fair prices', 'about.values.price_desc': 'Transparent pricing.',
+    'about.values.care': 'Care', 'about.values.care_desc': 'Polite couriers and 24/7 support.',
+    'about.stats.deliveries': 'Deliveries per year', 'about.stats.couriers': 'Couriers',
+    'about.stats.partners': 'Partners', 'about.stats.rating': 'Average rating',
+    'about.how.title': 'How we work', 'about.how.subtitle': 'Four steps from order to door',
+    'about.how.1': 'Order placement', 'about.how.1_desc': 'You register, specify addresses and describe the cargo.',
+    'about.how.2': 'Courier assignment', 'about.how.2_desc': 'Algorithm finds the nearest available courier.',
+    'about.how.3': 'Delivery', 'about.how.3_desc': 'The courier picks up the cargo and delivers it.',
+    'about.how.4': 'Feedback', 'about.how.4_desc': 'After delivery you can rate and leave a review.',
+    'about.team.title': 'Our team',
+    'about.team.subtitle': 'People who make Tempore',
+    'about.team.ceo': 'Founder & CEO', 'about.team.ceo_desc': '10 years in logistics.',
+    'about.team.coo': 'COO', 'about.team.coo_desc': 'Responsible for couriers.',
+    'about.team.cto': 'CTO', 'about.team.cto_desc': 'Develops the platform.',
+    'about.team.care': 'Customer Care Director', 'about.team.care_desc': 'Makes sure every client is happy.',
+    'about.contacts.title': 'Contacts', 'about.contacts.subtitle': 'Reach us in a convenient way',
+    'about.contacts.phone': 'Phone', 'about.contacts.email': 'Email',
+    'about.contacts.address': 'Address', 'about.contacts.address_val': 'Moscow, Courier St., 15',
+    'about.contacts.hours': 'Working hours', 'about.contacts.hours_val': '24/7',
+    'about.cta.title': 'Ready to try?', 'about.cta.subtitle': 'Place your first order',
+    'about.cta.btn': 'Order delivery',
+
+    // Формы
     'form.login.title': 'Sign in', 'form.login.subtitle': 'Enter your account details',
-    'form.email': 'Email', 'form.password': 'Password', 'form.login_btn': 'Sign in',
-    'form.or': 'OR', 'form.register': 'Sign up', 'form.as_courier': 'As courier',
+    'form.email': 'Email', 'form.password': 'Password', 'form.login_btn': '🔓 Sign in',
+    'form.or': 'OR', 'form.register': '📝 Sign up', 'form.as_courier': '🚴 As courier',
     'form.reg.title': 'Sign up', 'form.reg.subtitle': 'Create an account in 1 minute',
     'form.fullname': 'Full name *', 'form.phone': 'Phone *', 'form.city': 'City', 'form.address': 'Address',
-    'form.reg_btn': 'Sign up', 'form.have_account': 'Already have an account?',
+    'form.reg_btn': '📝 Sign up', 'form.have_account': 'Already have an account?',
 
-    // Order
-    'order.title': 'Place an order', 'order.subtitle': 'The price is calculated automatically',
+    // Заказ
+    'order.title': 'Place an order', 'order.subtitle': '💰 The price is calculated automatically',
     'order.from': 'From *', 'order.to': 'To *',
-    'order.what': 'What to deliver? (describe the cargo)', 'order.urgency': 'How urgent? *',
-    'order.payment': 'Payment method *', 'order.price': 'Delivery cost:',
-    'order.create': 'Place order',
-    'order.quick_docs': 'Documents', 'order.quick_food': 'Groceries',
-    'order.quick_gift': 'Gift', 'order.quick_parcel': 'Parcel', 'order.quick_business': 'Business',
+    'order.what': 'What to deliver? (describe the cargo)', 'order.urgency': '⏱ How urgent? *',
+    'order.payment': '💳 Payment method *', 'order.price': '💰 Delivery cost:',
+    'order.create': '📦 Place order',
+    'order.quick_docs': '📄 Documents', 'order.quick_food': '🛒 Groceries',
+    'order.quick_gift': '🎁 Gift', 'order.quick_parcel': '📦 Parcel', 'order.quick_business': '🏢 Business',
     'order.urgent_asap': 'Urgent', 'order.urgent_2h': '2 hours',
     'order.urgent_today': 'Today', 'order.urgent_tomorrow': 'Tomorrow',
-    'order.pay_card': 'Bank card (−5%)', 'order.pay_online': 'Online payment (−5%)',
-    'order.pay_cash': 'Cash to courier',
-    'order.fill': 'Fill in addresses to see price',
+    'order.pay_card': '💳 Bank card (−5%)', 'order.pay_online': '🌐 Online payment (−5%)', 'order.pay_cash': '💵 Cash to courier',
 
-    // Orders
-    'orders.title': 'My orders', 'orders.new': '+ New order',
+    // Список заказов
+    'orders.title': '📋 My orders', 'orders.new': '+ New order',
     'orders.empty': 'You have no orders yet', 'orders.empty_desc': 'Place your first order',
     'orders.loading': 'Loading...',
 
-    // Profile
-    'profile.title': 'My account', 'profile.personal': 'Personal data',
-    'profile.edit': 'Edit', 'profile.save': 'Save', 'profile.cancel': 'Cancel',
+    // Профиль
+    'profile.title': 'My account', 'profile.personal': '👤 Personal data',
+    'profile.edit': '✏️ Edit', 'profile.save': '💾 Save', 'profile.cancel': 'Cancel',
     'profile.total_orders': 'Total orders', 'profile.active': 'Active', 'profile.spent': 'Spent',
-    'profile.fullname': 'Full name', 'profile.email': 'Email', 'profile.phone': 'Phone',
-    'profile.city': 'City', 'profile.address': 'Address', 'profile.reg_date': 'Registration date',
-    'profile.new_order': 'New order', 'profile.my_orders': 'My orders', 'profile.logout': 'Logout',
+    'profile.fullname': '👤 Full name', 'profile.email': '✉️ Email', 'profile.phone': '📞 Phone',
+    'profile.city': '🏙️ City', 'profile.address': '🏠 Address', 'profile.reg_date': '📅 Registration date',
+    'profile.new_order': '📦 New order', 'profile.my_orders': '📋 My orders', 'profile.logout': '🚪 Logout',
 
-    // Courier
-    'courier.become': 'Become a courier', 'courier.subtitle': 'Join the team',
-    'courier.transport': 'Transport type *', 'courier.register_btn': 'Sign up',
-    'courier.iam_client': 'I am a client', 'courier.photo_hint': 'Click to upload a photo',
-    'courier.my_orders': 'My orders', 'courier.reviews': 'Reviews & rating',
-    'courier.profile': 'Courier profile', 'courier.rating_avg': 'Average client rating',
+    // Курьер
+    'courier.become': '🚴 Become a courier', 'courier.subtitle': 'Join the team',
+    'courier.transport': '🚗 Transport type *', 'courier.register_btn': '🚴 Sign up',
+    'courier.iam_client': '👤 I am a client', 'courier.photo_hint': 'Click to upload a photo',
+    'courier.my_orders': '📦 My orders', 'courier.reviews': '⭐ Reviews & rating',
+    'courier.profile': '👤 Courier profile', 'courier.rating_avg': 'Average client rating',
     'courier.no_reviews': 'No reviews yet', 'courier.total': 'Total orders',
     'courier.active_orders': 'Active', 'courier.completed': 'Completed', 'courier.earned': 'Earned',
-    'courier.status': 'Work status', 'courier.registered': 'Registration date',
-    'courier.experience': 'Experience',
+    'courier.status': '📊 Work status', 'courier.registered': '📅 Registration date',
+    'courier.experience': '⏱️ Experience',
     'courier.badge_free': 'Available', 'courier.badge_busy': 'Busy', 'courier.badge_inactive': 'Inactive',
-    'courier.take_order': 'On the way', 'courier.delivered': 'Delivered',
+    'courier.take_order': '🚗 On the way', 'courier.delivered': '✅ Delivered',
     'courier.no_orders': 'No assigned orders',
     'courier.photo_upload': 'Click the circle to upload a photo',
     'courier.transport_foot': 'On foot', 'courier.transport_bike': 'Bike',
     'courier.transport_car': 'Car', 'courier.transport_moto': 'Moto',
 
-    // Statuses
+    // Статусы
     'status.новый': 'new', 'status.принят': 'accepted', 'status.в-пути': 'in transit',
     'status.доставлен': 'delivered', 'status.отменён': 'cancelled',
 
-    // Common
-    'common.cancel_order': 'Cancel order', 'common.leave_review': 'Leave a review',
-    'common.review_left': 'Review left', 'common.loading': 'Loading...', 'common.error': 'Error'
+    // Общие
+    'common.cancel_order': '✕ Cancel order', 'common.leave_review': '⭐ Leave a review',
+    'common.review_left': '✅ Review left', 'common.loading': 'Loading...', 'common.error': 'Error'
   }
 };
 
@@ -453,8 +376,6 @@ function applyTranslations() {
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     el.placeholder = t(el.dataset.i18nPlaceholder);
   });
-  const titleKey = document.querySelector('title')?.dataset.i18nTitle;
-  if (titleKey) document.title = t(titleKey);
 }
 
 window.t = t;
@@ -517,7 +438,7 @@ window.applyTranslations = applyTranslations;
 
   const progressHtml = '<div id="scrollProgress"></div>';
   const toTopHtml = '<button id="toTop" onclick="window.scrollTo({top:0, behavior:\'smooth\'})">↑</button>';
-  const cursorHtml = '<div class="custom-cursor" id="customCursor"></div><div class="custom-cursor-dot" id="customCursorDot"></div>';
+  const cursorHtml = '<div class="custom-cursor-dot" id="customCursorDot"></div>';
   const confettiCanvas = '<canvas id="confettiCanvas" style="position:fixed;inset:0;pointer-events:none;z-index:9996;display:none;"></canvas>';
 
   document.addEventListener('DOMContentLoaded', function() {
@@ -614,38 +535,22 @@ window.applyTranslations = applyTranslations;
   window.updateDate = updateDate;
 
   function initCustomCursor() {
-    const cursor = document.getElementById('customCursor');
     const dot = document.getElementById('customCursorDot');
-    if (!cursor || !dot) return;
-    if (window.innerWidth < 768) { cursor.style.display = 'none'; dot.style.display = 'none'; return; }
-
-    let mouseX = 0, mouseY = 0, curX = 0, curY = 0;
+    if (!dot) return;
+    if (window.innerWidth < 768) { dot.style.display = 'none'; return; }
 
     document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      dot.style.left = mouseX + 'px';
-      dot.style.top = mouseY + 'px';
+      dot.style.left = e.clientX + 'px';
+      dot.style.top = e.clientY + 'px';
     });
-
-    function animate() {
-      curX += (mouseX - curX) * 0.15;
-      curY += (mouseY - curY) * 0.15;
-      cursor.style.left = curX + 'px';
-      cursor.style.top = curY + 'px';
-      requestAnimationFrame(animate);
-    }
-    animate();
 
     document.addEventListener('mouseover', (e) => {
       if (e.target.closest('a, button, input, select, textarea, .gallery-item, .service, .feature, .review, .order-card, .urgency-option, .transport-option, .achievement, .zone-item')) {
-        cursor.classList.add('cursor-hover');
         dot.classList.add('dot-hover');
       }
     });
     document.addEventListener('mouseout', (e) => {
       if (e.target.closest('a, button, input, select, textarea, .gallery-item, .service, .feature, .review, .order-card, .urgency-option, .transport-option, .achievement, .zone-item')) {
-        cursor.classList.remove('cursor-hover');
         dot.classList.remove('dot-hover');
       }
     });
@@ -765,48 +670,3 @@ function launchConfetti() {
   }
   animate();
 }
-// ============================================
-// Подключаем PWA (Манифест + иконки + оффлайн-режим)
-// ============================================
-(function() {
-  document.addEventListener('DOMContentLoaded', () => {
-    // 1. Добавляем файл манифеста
-    if (!document.querySelector('link[rel="manifest"]')) {
-      const manifest = document.createElement('link');
-      manifest.rel = 'manifest';
-      manifest.href = '/manifest.json';
-      document.head.appendChild(manifest);
-    }
-
-    // 2. Добавляем цвет верхней панели на телефоне (коричневый)
-    if (!document.querySelector('meta[name="theme-color"]')) {
-      const themeColor = document.createElement('meta');
-      themeColor.name = 'theme-color';
-      themeColor.content = '#3E2723';
-      document.head.appendChild(themeColor);
-    }
-
-    // 3. Подключаем иконку для Apple (iPhone)
-    if (!document.querySelector('link[rel="apple-touch-icon"]')) {
-      const appleIcon = document.createElement('link');
-      appleIcon.rel = 'apple-touch-icon';
-      appleIcon.href = '/icon-192.png';
-      document.head.appendChild(appleIcon);
-    }
-
-    // 4. Включаем режим приложения на iPhone
-    if (!document.querySelector('meta[name="apple-mobile-web-app-capable"]')) {
-      const appleMeta = document.createElement('meta');
-      appleMeta.name = 'apple-mobile-web-app-capable';
-      appleMeta.content = 'yes';
-      document.head.appendChild(appleMeta);
-    }
-
-    // 5. Включаем оффлайн-режим (Service Worker)
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('✅ PWA (Service Worker) включен'))
-        .catch((err) => console.log('❌ Ошибка PWA:', err));
-    }
-  });
-})();

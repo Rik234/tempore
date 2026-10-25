@@ -6,7 +6,7 @@ const authRoutes = require('./routes/auth');
 const orderRoutes = require('./routes/orders');
 const courierActionsRoutes = require('./routes/courier-actions');
 const reviewRoutes = require('./routes/reviews');
-
+const chatRoutes = require('./routes/chat');
 const app = express();
 const PORT = 3000;
 
@@ -17,6 +17,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/courier', courierActionsRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/chat', chatRoutes);
 
 app.get('/api/test', (req, res) => {
   res.json({ message: 'Сервер работает!' });

@@ -118,7 +118,32 @@ router.get('/courier/:courierId', async (req, res) => {
     res.status(500).json({ success: false, message: 'Ошибка сервера' });
   }
 });
+// ============================================
+// ПОСЛЕДНИЕ 3 ОТЗЫВА ДЛЯ ГЛАВНОЙ: GET /api/reviews/latest
+// ============================================
+router.get('/latest', async (req, res) => {
+  try {
+    const [reviews] = await db.pool.query(
+      `SELECT 
+        r.review_id,
+        r.rating,
+        r.comment,
+        r.created_at,
+        c.full_name AS client_name,
+        c.city AS client_city
+       FROM reviews r
+       JOIN clients c ON c.client_id = r.client_id
+       WHERE r.comment IS NOT NULL AND r.comment != '' 
+       ORDER BY r.created_at DESC 
+       LIMIT 3`
+    );
 
+    res.json({ success: true, reviews: reviews });
+  } catch (error) {
+    console.error('Ошибка при получении последних отзывов:', error);
+    res.status(500).json({ success: false, message: 'Ошибка сервера' });
+  }
+});
 // ============================================
 // ТЕСТ
 // ============================================

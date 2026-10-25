@@ -8,14 +8,14 @@ const db = require('../db');
 const authMiddleware = require('../middlewares/auth');
 
 // ============================================
-// ТАРИФЫ
+// ТАРИФЫ (повышены)
 // ============================================
 const SERVICE_PRICES = {
-  'документы': 250, 'посылки': 350, 'продукты': 300,
-  'подарки': 400, 'бизнесу': 500, 'срочно': 600, 'стандарт': 300
+  'документы': 500, 'посылки': 700, 'продукты': 600,
+  'подарки': 800, 'бизнесу': 1200, 'срочно': 1500, 'стандарт': 600
 };
-const URGENCY_PRICES = { 'asap': 200, '2hours': 100, 'today': 0, 'tomorrow': -50 };
-const ZONE_PRICES = { 'центр': 0, 'стандарт': 100, 'окраина': 200, 'за город': 400 };
+const URGENCY_PRICES = { 'asap': 500, '2hours': 250, 'today': 0, 'tomorrow': -150 };
+const ZONE_PRICES = { 'центр': 0, 'стандарт': 300, 'окраина': 300, 'за город': 700 };
 
 const SERVICE_KEYWORDS = {
   'документы': ['документ', 'бумаг', 'договор', 'паспорт', 'справк', 'визитк'],
@@ -54,7 +54,7 @@ function getTimeMultiplier() {
   return 1.0;
 }
 
-function calculatePrice({ from_address, to_address, description, urgency, payment_method }) {
+function calculatePrice({ from_address, to_address, description, urgency, payment_method, promo_code }) {
   const service_type = detectServiceType(description);
   const zone = detectZone(from_address, to_address);
 
@@ -69,22 +69,41 @@ function calculatePrice({ from_address, to_address, description, urgency, paymen
   if (payment_method === 'карта' || payment_method === 'онлайн') total = total * 0.95;
 
   total = Math.round(total / 10) * 10;
-  if (total < 250) total = 250;
+  if (total < 600) total = 600;
+
+  // Промокоды
+  let discount = 0;
+  let promoName = null;
+
+  if (promo_code) {
+    const code = promo_code.toUpperCase().trim();
+    if (code === 'TEMPORE10') {
+      discount = Math.round(total * 0.10);
+      promoName = 'TEMPORE10 (−10%)';
+    } else if (code === 'WELCOME') {
+      discount = 200;
+      promoName = 'WELCOME (−200 ₽)';
+    } else if (code === 'FREEDELIVERY') {
+      discount = total;
+      promoName = 'FREEDELIVERY (бесплатно)';
+    }
+    total = Math.max(0, total - discount);
+  }
 
   return {
     service_type, zone, urgency,
     base_price: basePrice, urgency_price: urgencyPrice, zone_price: zonePrice,
-    time_multiplier: timeMultiplier, total
+    time_multiplier: timeMultiplier, total,
+    discount: discount,
+    promo: promoName
   };
 }
 
-// ============================================
 // РАСЧЁТ ЦЕНЫ: POST /api/orders/calculate
-// ============================================
 router.post('/calculate', async (req, res) => {
   try {
-    const { from_address, to_address, description, urgency, payment_method } = req.body;
-    const result = calculatePrice({ from_address, to_address, description, urgency, payment_method });
+    const { from_address, to_address, description, urgency, payment_method, promo_code } = req.body;
+    const result = calculatePrice({ from_address, to_address, description, urgency, payment_method, promo_code });
     res.json({ success: true, calculation: result });
   } catch (error) {
     console.error('Ошибка при расчёте цены:', error);
@@ -92,22 +111,15 @@ router.post('/calculate', async (req, res) => {
   }
 });
 
-// ============================================
-// ТРЕКЕР ЗАКАЗА (публичный): GET /api/orders/track/:orderId
-// ============================================
+// ТРЕКЕР: GET /api/orders/track/:orderId
 router.get('/track/:orderId', async (req, res) => {
   try {
     const order_id = parseInt(req.params.orderId);
-
-    if (isNaN(order_id)) {
-      return res.status(400).json({ success: false, message: 'Неверный номер заказа' });
-    }
+    if (isNaN(order_id)) return res.status(400).json({ success: false, message: 'Неверный номер заказа' });
 
     const [orders] = await db.pool.query(
-      `SELECT 
-        o.order_id, o.from_address, o.to_address, o.description,
-        o.delivery_price, o.status, o.order_date,
-        o.service_type, o.zone,
+      `SELECT o.order_id, o.from_address, o.to_address, o.description,
+        o.delivery_price, o.status, o.order_date, o.service_type, o.zone,
         c.full_name AS courier_name
        FROM orders o
        LEFT JOIN deliveries d ON d.order_id = o.order_id
@@ -116,25 +128,19 @@ router.get('/track/:orderId', async (req, res) => {
       [order_id]
     );
 
-    if (orders.length === 0) {
-      return res.status(404).json({ success: false, message: 'Заказ #' + order_id + ' не найден' });
-    }
-
+    if (orders.length === 0) return res.status(404).json({ success: false, message: 'Заказ #' + order_id + ' не найден' });
     res.json({ success: true, order: orders[0] });
-
   } catch (error) {
     console.error('Ошибка трекера:', error);
-    res.status(500).json({ success: false, message: 'Ошибка сервера: ' + error.message });
+    res.status(500).json({ success: false, message: 'Ошибка сервера' });
   }
 });
 
-// ============================================
 // СОЗДАТЬ ЗАКАЗ: POST /api/orders
-// ============================================
 router.post('/', authMiddleware, async (req, res) => {
   const connection = await db.pool.getConnection();
   try {
-    const { from_address, to_address, description, urgency, payment_method } = req.body;
+    const { from_address, to_address, description, urgency, payment_method, promo_code } = req.body;
     const client_id = req.client.client_id;
 
     if (!from_address || !to_address) {
@@ -142,14 +148,13 @@ router.post('/', authMiddleware, async (req, res) => {
       return res.status(400).json({ success: false, message: 'Укажите адреса' });
     }
 
-    const calc = calculatePrice({ from_address, to_address, description, urgency, payment_method });
+    const calc = calculatePrice({ from_address, to_address, description, urgency, payment_method, promo_code });
     const delivery_price = calc.total;
 
     await connection.beginTransaction();
 
     const [orderResult] = await connection.query(
-      `INSERT INTO orders 
-        (client_id, from_address, to_address, description, delivery_price, 
+      `INSERT INTO orders (client_id, from_address, to_address, description, delivery_price, 
          service_type, zone, urgency, status) 
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'принят')`,
       [client_id, from_address, to_address, description || null, delivery_price,
@@ -170,19 +175,10 @@ router.post('/', authMiddleware, async (req, res) => {
     let assignedCourier = null;
     if (freeCouriers.length > 0) {
       assignedCourier = freeCouriers[0];
-      await connection.query(
-        `INSERT INTO deliveries (order_id, courier_id) VALUES (?, ?)`,
-        [order_id, assignedCourier.courier_id]
-      );
-      await connection.query(
-        `UPDATE couriers SET work_status = 'занят' WHERE courier_id = ?`,
-        [assignedCourier.courier_id]
-      );
+      await connection.query(`INSERT INTO deliveries (order_id, courier_id) VALUES (?, ?)`, [order_id, assignedCourier.courier_id]);
+      await connection.query(`UPDATE couriers SET work_status = 'занят' WHERE courier_id = ?`, [assignedCourier.courier_id]);
     } else {
-      await connection.query(
-        `INSERT INTO deliveries (order_id, courier_id) VALUES (?, NULL)`,
-        [order_id]
-      );
+      await connection.query(`INSERT INTO deliveries (order_id, courier_id) VALUES (?, NULL)`, [order_id]);
     }
 
     await connection.commit();
@@ -190,15 +186,9 @@ router.post('/', authMiddleware, async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: assignedCourier 
-        ? 'Заказ создан! Назначен курьер: ' + assignedCourier.full_name
-        : 'Заказ создан! Свободных курьеров нет',
-      order_id: order_id,
-      delivery_price: delivery_price,
-      calculation: calc,
-      courier: assignedCourier
+      message: assignedCourier ? 'Заказ создан! Назначен курьер: ' + assignedCourier.full_name : 'Заказ создан! Свободных курьеров нет',
+      order_id, delivery_price, calculation: calc, courier: assignedCourier
     });
-
   } catch (error) {
     await connection.rollback();
     connection.release();
@@ -207,21 +197,14 @@ router.post('/', authMiddleware, async (req, res) => {
   }
 });
 
-// ============================================
 // МОИ ЗАКАЗЫ (клиент)
-// ============================================
 router.get('/my', authMiddleware, async (req, res) => {
   try {
-    if (req.client.role !== 'client') {
-      return res.status(403).json({ success: false, message: 'Доступ только для клиентов' });
-    }
+    if (req.client.role !== 'client') return res.status(403).json({ success: false, message: 'Доступ только для клиентов' });
     const client_id = req.client.client_id;
-
     const [orders] = await db.pool.query(
-      `SELECT 
-        o.order_id, o.from_address, o.to_address, o.description,
-        o.delivery_price, o.status, o.order_date,
-        o.service_type, o.zone, o.urgency,
+      `SELECT o.order_id, o.from_address, o.to_address, o.description,
+        o.delivery_price, o.status, o.order_date, o.service_type, o.zone, o.urgency,
         p.method AS payment_method, p.status AS payment_status,
         c.full_name AS courier_name, c.photo AS courier_photo,
         c.transport AS courier_transport, c.phone AS courier_phone
@@ -229,11 +212,9 @@ router.get('/my', authMiddleware, async (req, res) => {
        LEFT JOIN payments p ON p.order_id = o.order_id
        LEFT JOIN deliveries d ON d.order_id = o.order_id
        LEFT JOIN couriers c ON c.courier_id = d.courier_id
-       WHERE o.client_id = ?
-       ORDER BY o.order_date DESC`,
+       WHERE o.client_id = ? ORDER BY o.order_date DESC`,
       [client_id]
     );
-
     res.json({ success: true, orders });
   } catch (error) {
     console.error('Ошибка при получении заказов клиента:', error);
@@ -241,21 +222,14 @@ router.get('/my', authMiddleware, async (req, res) => {
   }
 });
 
-// ============================================
 // МОИ ЗАКАЗЫ (курьер)
-// ============================================
 router.get('/courier', authMiddleware, async (req, res) => {
   try {
-    if (req.client.role !== 'courier') {
-      return res.status(403).json({ success: false, message: 'Доступ только для курьеров' });
-    }
+    if (req.client.role !== 'courier') return res.status(403).json({ success: false, message: 'Доступ только для курьеров' });
     const courier_id = req.client.courier_id;
-
     const [orders] = await db.pool.query(
-      `SELECT 
-        o.order_id, o.from_address, o.to_address, o.description,
-        o.delivery_price, o.status, o.order_date,
-        o.service_type, o.zone, o.urgency,
+      `SELECT o.order_id, o.from_address, o.to_address, o.description,
+        o.delivery_price, o.status, o.order_date, o.service_type, o.zone, o.urgency,
         p.method AS payment_method, p.status AS payment_status,
         cl.full_name AS client_name, cl.phone AS client_phone, cl.city AS client_city
        FROM deliveries d
@@ -263,16 +237,9 @@ router.get('/courier', authMiddleware, async (req, res) => {
        JOIN clients cl ON cl.client_id = o.client_id
        LEFT JOIN payments p ON p.order_id = o.order_id
        WHERE d.courier_id = ? AND o.status IN ('принят', 'в пути', 'доставлен')
-       ORDER BY 
-         CASE o.status 
-           WHEN 'в пути' THEN 1
-           WHEN 'принят' THEN 2
-           WHEN 'доставлен' THEN 3
-         END,
-         o.order_date DESC`,
+       ORDER BY CASE o.status WHEN 'в пути' THEN 1 WHEN 'принят' THEN 2 WHEN 'доставлен' THEN 3 END, o.order_date DESC`,
       [courier_id]
     );
-
     res.json({ success: true, orders });
   } catch (error) {
     console.error('Ошибка при получении заказов курьера:', error);
@@ -280,22 +247,13 @@ router.get('/courier', authMiddleware, async (req, res) => {
   }
 });
 
-// ============================================
 // ОТМЕНИТЬ ЗАКАЗ
-// ============================================
 router.put('/:id/cancel', authMiddleware, async (req, res) => {
   try {
-    if (req.client.role !== 'client') {
-      return res.status(403).json({ success: false, message: 'Доступ только для клиентов' });
-    }
+    if (req.client.role !== 'client') return res.status(403).json({ success: false, message: 'Доступ только для клиентов' });
     const order_id = req.params.id;
     const client_id = req.client.client_id;
-
-    const [rows] = await db.pool.query(
-      'SELECT status FROM orders WHERE order_id = ? AND client_id = ?',
-      [order_id, client_id]
-    );
-
+    const [rows] = await db.pool.query('SELECT status FROM orders WHERE order_id = ? AND client_id = ?', [order_id, client_id]);
     if (rows.length === 0) return res.status(404).json({ success: false, message: 'Заказ не найден' });
 
     const currentStatus = rows[0].status;
@@ -310,11 +268,7 @@ router.put('/:id/cancel', authMiddleware, async (req, res) => {
       await db.pool.query("UPDATE couriers SET work_status = 'свободен' WHERE courier_id = ?", [delivery[0].courier_id]);
     }
 
-    await db.pool.query(
-      "UPDATE payments SET status = CASE WHEN status = 'оплачено' THEN 'возврат' ELSE 'ожидает' END WHERE order_id = ?",
-      [order_id]
-    );
-
+    await db.pool.query("UPDATE payments SET status = CASE WHEN status = 'оплачено' THEN 'возврат' ELSE 'ожидает' END WHERE order_id = ?", [order_id]);
     res.json({ success: true, message: 'Заказ отменён' });
   } catch (error) {
     console.error('Ошибка при отмене заказа:', error);
@@ -322,20 +276,11 @@ router.put('/:id/cancel', authMiddleware, async (req, res) => {
   }
 });
 
-// ============================================
 // ТЕСТ
-// ============================================
 router.get('/test', (req, res) => {
   res.json({
     message: 'Модуль orders работает!',
-    endpoints: [
-      'POST /api/orders',
-      'POST /api/orders/calculate',
-      'GET  /api/orders/track/:orderId',
-      'GET  /api/orders/my',
-      'GET  /api/orders/courier',
-      'PUT  /api/orders/:id/cancel'
-    ]
+    endpoints: ['POST /api/orders', 'POST /api/orders/calculate', 'GET /api/orders/track/:orderId', 'GET /api/orders/my', 'GET /api/orders/courier', 'PUT /api/orders/:id/cancel']
   });
 });
 

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n-title="orders.title">Мои заказы — Tempore</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="stylesheet" href="style.css">
   <script src="/js/nav.js"></script>
   <style>
@@ -271,6 +271,14 @@
       color: #4A6B1F;
     }
 
+    /* Кнопка чата */
+    .btn-chat {
+      background: #4A6B9C; color: #FAF4E8; border: 1px solid #4A6B9C;
+      padding: 9px 20px; border-radius: 6px; font-size: 12px; cursor: pointer;
+      font-weight: 600; transition: all 0.25s; font-family: inherit; margin-right: auto;
+    }
+    .btn-chat:hover { background: #2A4570; border-color: #2A4570; }
+
     /* Пустое состояние */
     .empty-orders {
       text-align: center;
@@ -409,6 +417,25 @@
       .modal { padding: 30px 22px; }
       .stars-input { font-size: 36px; gap: 6px; }
     }
+    
+    /* Стили для модалки чата */
+    .chat-modal { padding: 0; max-width: 400px; display: flex; flex-direction: column; height: 500px; }
+    .chat-header { background: #3E2723; color: #FAF4E8; padding: 16px 20px; display: flex; align-items: center; gap: 12px; border-radius: 12px 12px 0 0; }
+    .chat-header .avatar { width: 36px; height: 36px; border-radius: 50%; background: #A0704A; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .chat-header .info { flex: 1; }
+    .chat-header .info strong { display: block; font-size: 14px; }
+    .chat-header .info span { font-size: 11px; color: #A89880; }
+    .chat-close { background: transparent; border: none; color: #A89880; font-size: 20px; cursor: pointer; }
+    .chat-messages { flex: 1; padding: 20px; overflow-y: auto; background: #F5EBD8; display: flex; flex-direction: column; gap: 12px; }
+    .chat-msg { max-width: 80%; padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.5; }
+    .chat-msg.me { background: #A0704A; color: #FAF4E8; align-self: flex-end; border-bottom-right-radius: 4px; }
+    .chat-msg.other { background: #FAF4E8; color: #3E2723; align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid rgba(160,112,74,0.15); }
+    .chat-msg-time { font-size: 9px; opacity: 0.6; margin-top: 4px; display: block; text-align: right; }
+    .chat-input-wrap { display: flex; padding: 12px 15px; background: #FAF4E8; border-top: 1px solid rgba(160,112,74,0.15); gap: 8px; border-radius: 0 0 12px 12px; }
+    .chat-input { flex: 1; padding: 10px 14px; background: #F5EBD8; border: 1px solid #D9C8A8; border-radius: 20px; font-size: 13px; font-family: inherit; color: #3E2723; }
+    .chat-input:focus { outline: none; border-color: #A0704A; background: #fff; }
+    .chat-send { width: 40px; height: 40px; border-radius: 50%; background: #A0704A; color: #FAF4E8; border: none; cursor: pointer; font-size: 16px; }
+    .chat-send:hover { background: #7A5030; }
   </style>
 </head>
 <body>
@@ -424,6 +451,7 @@
     </div>
   </div>
 
+  <!-- МОДАЛКА ОТЗЫВА -->
   <div class="modal-overlay" id="reviewModal" onclick="if(event.target===this) closeReviewModal()">
     <div class="modal">
       <h3 data-i18n="common.leave_review">Оставить отзыв</h3>
@@ -447,6 +475,27 @@
     </div>
   </div>
 
+  <!-- МОДАЛКА ЧАТА -->
+  <div class="modal-overlay" id="chatModal" onclick="if(event.target===this) closeChatModal()">
+    <div class="modal chat-modal">
+      <div class="chat-header">
+        <div class="avatar">💬</div>
+        <div class="info">
+          <strong id="chatWithName">Курьер</strong>
+          <span>Онлайн</span>
+        </div>
+        <button class="chat-close" onclick="closeChatModal()">✕</button>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="loading" style="padding:20px; font-size:12px;">Загрузка сообщений...</div>
+      </div>
+      <div class="chat-input-wrap">
+        <input type="text" class="chat-input" id="chatInput" placeholder="Написать сообщение..." onkeypress="if(event.key==='Enter') sendChatMessage()">
+        <button class="chat-send" onclick="sendChatMessage()">➤</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const token = localStorage.getItem('token');
     const role = localStorage.getItem('role');
@@ -459,6 +508,8 @@
 
     let currentOrderId = null;
     let currentRating = 0;
+    let currentChatOrderId = null;
+    let chatInterval = null;
 
     async function loadOrders() {
       const list = document.getElementById('ordersList');
@@ -479,6 +530,9 @@
           const hasReview = reviewChecks[i];
 
           let actionsHtml = '';
+          if (o.courier_name) {
+            actionsHtml += '<button class="btn-chat" onclick="openChat(' + o.order_id + ', \'' + o.courier_name + '\')">💬 Чат с курьером</button>';
+          }
           if (o.status === 'новый' || o.status === 'принят') {
             actionsHtml += '<button class="btn-cancel-order" onclick="cancelOrder(' + o.order_id + ')">✕ Отменить</button>';
           }
@@ -511,6 +565,7 @@
           '</div>';
         }).join('');
       } catch (err) {
+        console.error('Ошибка loadOrders:', err);
         list.innerHTML = '<div class="empty-orders"><span class="icon">⚠</span><p>Ошибка загрузки</p></div>';
       }
     }
@@ -537,6 +592,65 @@
       } catch (err) { alert('Ошибка соединения'); }
     }
 
+    // --- ЧАТ ---
+    function openChat(orderId, courierName) {
+      currentChatOrderId = orderId;
+      document.getElementById('chatWithName').textContent = courierName;
+      document.getElementById('chatModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+      loadChatMessages();
+      if (chatInterval) clearInterval(chatInterval);
+      chatInterval = setInterval(loadChatMessages, 3000);
+    }
+
+    function closeChatModal() {
+      document.getElementById('chatModal').classList.remove('active');
+      document.body.style.overflow = '';
+      if (chatInterval) clearInterval(chatInterval);
+    }
+
+    async function loadChatMessages() {
+      if (!currentChatOrderId) return;
+      const container = document.getElementById('chatMessages');
+      try {
+        const r = await fetch('/api/chat/' + currentChatOrderId, {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const result = await r.json();
+        if (result.success) {
+          if (result.messages.length === 0) {
+            container.innerHTML = '<div style="text-align:center; color:#8D7B6D; font-size:12px; margin-top:20px;">Нет сообщений. Напишите первым!</div>';
+            return;
+          }
+          container.innerHTML = result.messages.map(m => {
+            const isMe = m.sender_role === 'client';
+            const time = new Date(m.created_at).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+            return '<div class="chat-msg ' + (isMe ? 'me' : 'other') + '">' + m.text + '<span class="chat-msg-time">' + time + '</span></div>';
+          }).join('');
+          container.scrollTop = container.scrollHeight;
+        }
+      } catch (e) { console.error('Ошибка загрузки чата', e); }
+    }
+
+    async function sendChatMessage() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text || !currentChatOrderId) return;
+      input.value = '';
+      const container = document.getElementById('chatMessages');
+      const time = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+      container.innerHTML += '<div class="chat-msg me">' + text + '<span class="chat-msg-time">' + time + '</span></div>';
+      container.scrollTop = container.scrollHeight;
+      try {
+        await fetch('/api/chat/' + currentChatOrderId, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify({ text: text })
+        });
+      } catch (e) { console.error('Ошибка отправки', e); }
+    }
+
+    // --- ОТЗЫВЫ ---
     function openReviewModal(orderId) {
       currentOrderId = orderId;
       currentRating = 0;
@@ -547,6 +661,7 @@
       document.getElementById('reviewModal').classList.add('active');
       document.body.style.overflow = 'hidden';
     }
+
     function closeReviewModal() {
       document.getElementById('reviewModal').classList.remove('active');
       document.body.style.overflow = '';
@@ -610,7 +725,10 @@
       }
     }
 
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeReviewModal(); });
+    document.addEventListener('keydown', (e) => { 
+      if (e.key === 'Escape') { closeReviewModal(); closeChatModal(); }
+    });
+
     loadOrders();
   </script>
 

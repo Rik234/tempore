@@ -59,7 +59,6 @@
     /* КАРТА */
     .map-section { margin-top: 30px; padding-top: 25px; border-top: 1px dashed rgba(160,112,74,0.25); }
     .map-title { color: #3E2723; font-size: 17px; margin: 0 0 15px; font-weight: 600; }
-        /* Стили атрибута Leaflet */
     .leaflet-control-attribution {
       background: rgba(250,244,232,0.9) !important;
       color: #5D4037 !important;
@@ -67,25 +66,11 @@
       padding: 2px 8px !important;
       border-radius: 4px 0 0 0 !important;
     }
-    .leaflet-control-attribution a {
-      color: #A0704A !important;
-      text-decoration: none !important;
-    }
-    .leaflet-control-attribution a:hover {
-      text-decoration: underline !important;
-    }
-    /* Скрываем иконку флага (она через background у .leaflet-attribution-flag) */
-    .leaflet-attribution-flag {
-      display: none !important;
-    }
-    /* Тёмная тема */
-    body[data-theme="dark"] .leaflet-control-attribution {
-      background: rgba(31,24,21,0.9) !important;
-      color: #A89880 !important;
-    }
-    body[data-theme="dark"] .leaflet-control-attribution a {
-      color: #D4A574 !important;
-    }
+    .leaflet-control-attribution a { color: #A0704A !important; text-decoration: none !important; }
+    .leaflet-control-attribution a:hover { text-decoration: underline !important; }
+    .leaflet-attribution-flag { display: none !important; }
+    body[data-theme="dark"] .leaflet-control-attribution { background: rgba(31,24,21,0.9) !important; color: #A89880 !important; }
+    body[data-theme="dark"] .leaflet-control-attribution a { color: #D4A574 !important; }
 
     #map { width: 100%; height: 340px; border-radius: 12px; border: 1px solid rgba(160,112,74,0.2); box-shadow: 0 6px 20px rgba(62,39,35,0.08); z-index: 1; }
     .map-hint { text-align: center; color: #8D7B6D; font-size: 12px; margin-top: 10px; }
@@ -157,13 +142,13 @@
             <input type="radio" name="urgency" value="asap">
             <span class="icon">⚡</span>
             <span class="title" data-i18n="order.urgent_asap">Срочно</span>
-            <span class="price plus">+200 ₽</span>
+            <span class="price plus">+500 ₽</span>
           </label>
           <label class="urgency-option" data-urgency="2hours">
             <input type="radio" name="urgency" value="2hours">
             <span class="icon">⏰</span>
             <span class="title" data-i18n="order.urgent_2h">2 часа</span>
-            <span class="price plus">+100 ₽</span>
+            <span class="price plus">+250 ₽</span>
           </label>
           <label class="urgency-option selected" data-urgency="today">
             <input type="radio" name="urgency" value="today" checked>
@@ -175,7 +160,7 @@
             <input type="radio" name="urgency" value="tomorrow">
             <span class="icon">🌙</span>
             <span class="title" data-i18n="order.urgent_tomorrow">Завтра</span>
-            <span class="price minus">−50 ₽</span>
+            <span class="price minus">−150 ₽</span>
           </label>
         </div>
 
@@ -186,6 +171,12 @@
             <option value="онлайн" data-i18n="order.pay_online">🌐 Онлайн-оплата (−5%)</option>
             <option value="наличные" data-i18n="order.pay_cash">💵 Наличные курьеру</option>
           </select>
+        </div>
+
+        <!-- ПОЛЕ ПРОМОКОДА -->
+        <div style="margin-top:20px;">
+          <label for="promo_code" style="color:#5D4037;font-size:14px;font-weight:500;display:block;margin-bottom:8px;">🎟 Промокод (если есть)</label>
+          <input type="text" id="promo_code" placeholder="Например, WELCOME" style="width:100%; padding:12px 14px; border: 2px solid #D9C8A8; border-radius: 8px; background: #F5EBD8; font-size: 14px; text-transform: uppercase; box-sizing: border-box;">
         </div>
 
         <div class="price-preview" id="pricePreview">
@@ -254,6 +245,7 @@
       const description = document.getElementById('description').value.trim();
       const payment_method = document.getElementById('payment_method').value;
       const urgency = document.querySelector('input[name="urgency"]:checked').value;
+      const promo_code = document.getElementById('promo_code').value.trim();
 
       const preview = document.getElementById('pricePreview');
 
@@ -269,7 +261,7 @@
         const r = await fetch('/api/orders/calculate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ from_address, to_address, description, urgency, payment_method })
+          body: JSON.stringify({ from_address, to_address, description, urgency, payment_method, promo_code })
         });
         const result = await r.json();
 
@@ -287,6 +279,9 @@
           if (c.zone_price !== 0) html += '<div class="row plus"><span>📍 Зона: ' + c.zone + '</span><span>+' + c.zone_price + ' ₽</span></div>';
           if (c.time_multiplier > 1) html += '<div class="row plus"><span>🌙 Тариф</span><span>× ' + c.time_multiplier + '</span></div>';
           if (payment_method === 'карта' || payment_method === 'онлайн') html += '<div class="row discount"><span>💳 Скидка</span><span>−5%</span></div>';
+          
+          // ВЫВОД ПРОМОКОДА
+          if (c.promo) html += '<div class="row discount"><span>🎟 ' + c.promo + '</span><span>Скидка</span></div>';
 
           document.getElementById('priceBreakdown').innerHTML = html;
         }
@@ -294,7 +289,7 @@
       finally { preview.classList.remove('loading'); }
     }
 
-    ['from_address', 'to_address', 'description'].forEach(id => {
+    ['from_address', 'to_address', 'description', 'promo_code'].forEach(id => {
       document.getElementById(id).addEventListener('input', () => {
         clearTimeout(priceTimeout);
         priceTimeout = setTimeout(updatePrice, 400);
@@ -313,7 +308,8 @@
         to_address:     document.getElementById('to_address').value.trim(),
         description:    document.getElementById('description').value.trim(),
         payment_method: document.getElementById('payment_method').value,
-        urgency:        document.querySelector('input[name="urgency"]:checked').value
+        urgency:        document.querySelector('input[name="urgency"]:checked').value,
+        promo_code:     document.getElementById('promo_code').value.trim()
       };
 
       btn.disabled = true;
@@ -380,7 +376,7 @@
       } catch (err) { return null; }
     }
 
-        async function updateMap() {
+    async function updateMap() {
       const from = document.getElementById('from_address').value.trim();
       const to = document.getElementById('to_address').value.trim();
       const hint = document.getElementById('mapHint');
@@ -421,12 +417,10 @@
           .addTo(map).bindPopup('🎯 Куда: ' + to);
       }
 
-      // Если есть обе точки — строим маршрут по дорогам через OSRM
       if (fromCoords && toCoords) {
         hint.textContent = '⏳ Строим маршрут по дорогам...';
 
         try {
-          // OSRM принимает: lon,lat;lon,lat
           const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${fromCoords.lon},${fromCoords.lat};${toCoords.lon},${toCoords.lat}?overview=full&geometries=geojson`;
 
           const response = await fetch(osrmUrl);
@@ -434,12 +428,8 @@
 
           if (data.code === 'Ok' && data.routes && data.routes.length > 0) {
             const route = data.routes[0];
-
-            // route.geometry.coordinates — массив [lon, lat] точек маршрута
-            // Leaflet ждёт [lat, lon]
             const coords = route.geometry.coordinates.map(c => [c[1], c[0]]);
 
-            // Рисуем маршрут по дорогам
             routeLine = L.polyline(coords, {
               color: '#A0704A',
               weight: 5,
@@ -448,7 +438,6 @@
               lineCap: 'round'
             }).addTo(map);
 
-            // Показать метры/км и минуты
             const distanceKm = (route.distance / 1000).toFixed(1);
             const durationMin = Math.round(route.duration / 60);
 
@@ -456,7 +445,6 @@
 
             hint.innerHTML = `✅ Маршрут: <b>${distanceKm} км</b> · примерно <b>${durationMin} мин</b> в пути`;
           } else {
-            // OSRM не смог — рисуем прямую как запасной вариант
             routeLine = L.polyline(
               [[fromCoords.lat, fromCoords.lon], [toCoords.lat, toCoords.lon]],
               { color: '#A0704A', weight: 3, opacity: 0.6, dashArray: '10, 8' }
@@ -466,7 +454,6 @@
           }
         } catch (err) {
           console.error('Ошибка OSRM:', err);
-          // Ошибка сети — прямая линия
           routeLine = L.polyline(
             [[fromCoords.lat, fromCoords.lon], [toCoords.lat, toCoords.lon]],
             { color: '#A0704A', weight: 3, opacity: 0.6, dashArray: '10, 8' }
@@ -494,7 +481,6 @@
     document.getElementById('from_address').addEventListener('blur', updateMap);
     document.getElementById('to_address').addEventListener('blur', updateMap);
 
-    // Инициализируем карту при загрузке
     window.addEventListener('load', () => {
       setTimeout(initMap, 300);
     });

@@ -63,5 +63,27 @@ router.get('/chat/:orderId', authMiddleware, isAdmin, async (req, res) => {
     res.json({ success: true, messages });
   } catch (error) { res.status(500).json({ success: false, message: 'Ошибка сервера' }); }
 });
+// 6. ВЫВОД ЛЮБОЙ ТАБЛИЦЫ
+router.get('/table/:tableName', authMiddleware, isAdmin, async (req, res) => {
+  try {
+    const { tableName } = req.params;
+    
+    // Белый список разрешенных таблиц (чтобы не взломали через SQL-инъекцию)
+    const allowedTables = ['clients', 'couriers', 'orders', 'deliveries', 'payments', 'reviews', 'messages'];
+    
+    if (!allowedTables.includes(tableName)) {
+      return res.status(400).json({ success: false, message: 'Таблица не разрешена' });
+    }
 
+    const [rows] = await db.pool.query(`SELECT * FROM ${tableName} LIMIT 100`);
+    
+    // Получаем названия колонок
+    const columns = rows.length > 0 ? Object.keys(rows[0]) : [];
+
+    res.json({ success: true, columns, rows });
+  } catch (error) {
+    console.error('Ошибка при получении таблицы:', error);
+    res.status(500).json({ success: false, message: 'Ошибка сервера' });
+  }
+});
 module.exports = router;

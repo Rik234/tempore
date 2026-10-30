@@ -48,27 +48,6 @@
     .feature h3 { color: #3E2723; margin: 0 0 10px; font-size: 17px; font-weight: 600; }
     .feature p { color: #6D5B4D; margin: 0; font-size: 14px; line-height: 1.7; }
 
-    /* ========== КАРТА ЗОН ========== */
-    .zones-section { background: #F5EBD8; padding: 80px 20px; }
-    .zones-container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
-    @media (max-width: 900px) { .zones-container { grid-template-columns: 1fr; } }
-    .zones-map { background: #FAF4E8; border-radius: 12px; padding: 30px; border: 1px solid rgba(160,112,74,0.15); aspect-ratio: 1; overflow: hidden; }
-    .zones-svg { width: 100%; height: 100%; }
-    .zone-circle { transition: all 0.3s; cursor: pointer; }
-    .zone-circle:hover { filter: brightness(1.1); }
-    .zone-label { font-family: 'Segoe UI', sans-serif; font-weight: 600; pointer-events: none; }
-    .zone-dot { animation: zonePulse 2s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
-    @keyframes zonePulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.3); } }
-    .zones-info h3 { color: #3E2723; font-size: 24px; margin: 0 0 15px; font-weight: 600; letter-spacing: -0.3px; }
-    .zones-info > p { color: #6D5B4D; font-size: 15px; margin: 0 0 25px; line-height: 1.7; }
-    .zone-list { display: flex; flex-direction: column; gap: 12px; }
-    .zone-item { display: flex; align-items: center; gap: 15px; padding: 15px 20px; background: #FAF4E8; border-radius: 8px; border: 1px solid rgba(160,112,74,0.12); transition: all 0.25s; cursor: pointer; }
-    .zone-item:hover { border-color: #A0704A; transform: translateX(5px); }
-    .zone-color { width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.4); }
-    .zone-info { flex: 1; }
-    .zone-info strong { display: block; color: #3E2723; font-size: 14px; margin-bottom: 2px; font-weight: 600; }
-    .zone-info span { color: #8D7B6D; font-size: 13px; }
-    .zone-price { color: #A0704A; font-weight: 700; font-size: 14px; letter-spacing: 0.3px; }
 
     /* ========== ПОИСК КУРЬЕРА ========== */
     .find-courier-section { background: #3E2723; color: #FAF4E8; padding: 80px 20px; }
@@ -453,51 +432,7 @@
     </div>
   </section>
 
-  <!-- КАРТА ЗОН -->
-  <section class="zones-section">
-    <div class="reveal">
-      <h2 class="section-title">Зоны обслуживания</h2>
-      <p class="section-subtitle">Мы работаем в городе и области</p>
-    </div>
-    <div class="zones-container">
-      <div class="zones-map reveal">
-        <svg class="zones-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="200" cy="200" r="190" fill="#E8DCC4" opacity="0.4" class="zone-circle" onclick="highlightZone('outside')"/>
-          <circle cx="200" cy="200" r="130" fill="#D9C8A8" opacity="0.5" class="zone-circle" onclick="highlightZone('outskirt')"/>
-          <circle cx="200" cy="200" r="75" fill="#C9B090" opacity="0.6" class="zone-circle" onclick="highlightZone('center')"/>
-          <text x="200" y="55" text-anchor="middle" class="zone-label" font-size="11" fill="#6D5B4D">ЗА ГОРОДОМ</text>
-          <text x="200" y="110" text-anchor="middle" class="zone-label" font-size="11" fill="#6D5B4D">ОКРАИНЫ</text>
-          <text x="200" y="185" text-anchor="middle" class="zone-label" font-size="11" fill="#3E2723">ЦЕНТР</text>
-          <circle cx="180" cy="190" r="5" fill="#A0704A" class="zone-dot"/>
-          <circle cx="220" cy="210" r="5" fill="#A0704A" class="zone-dot" style="animation-delay:0.3s"/>
-          <circle cx="200" cy="175" r="5" fill="#A0704A" class="zone-dot" style="animation-delay:0.6s"/>
-          <circle cx="170" cy="225" r="5" fill="#A0704A" class="zone-dot" style="animation-delay:0.9s"/>
-          <circle cx="230" cy="185" r="5" fill="#A0704A" class="zone-dot" style="animation-delay:1.2s"/>
-        </svg>
-      </div>
-      <div class="zones-info reveal">
-        <h3>Где мы доставляем</h3>
-        <p>Наши курьеры работают во всех районах города и области. Стоимость зависит от зоны доставки.</p>
-        <div class="zone-list">
-          <div class="zone-item" onclick="highlightZone('center')">
-            <div class="zone-color" style="background:#C9B090"></div>
-            <div class="zone-info"><strong>Центр города</strong><span>Доставка 30–45 минут</span></div>
-            <div class="zone-price">+0 ₽</div>
-          </div>
-          <div class="zone-item" onclick="highlightZone('outskirt')">
-            <div class="zone-color" style="background:#D9C8A8"></div>
-            <div class="zone-info"><strong>Окраины и спальные районы</strong><span>Доставка 45–90 минут</span></div>
-            <div class="zone-price">+200 ₽</div>
-          </div>
-          <div class="zone-item" onclick="highlightZone('outside')">
-            <div class="zone-color" style="background:#E8DCC4"></div>
-            <div class="zone-info"><strong>За городом / область</strong><span>Доставка от 2 часов</span></div>
-            <div class="zone-price">+400 ₽</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  
 
   <!-- ПРЕИМУЩЕСТВА -->
   <section class="section">

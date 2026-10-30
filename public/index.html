@@ -685,23 +685,65 @@
     }
 
     // ПОИСК КУРЬЕРА
+        // ПОИСК КУРЬЕРА
     function findCourier() {
       const address = document.getElementById('findAddress').value.trim();
-      if (!address) { alert('Введите адрес'); return; }
+      
+      // Проверка на пустоту
+      if (!address) { 
+        alert('Введите адрес'); 
+        return; 
+      }
+
+      // Проверка на "бред" (Марс, Луна и т.д.)
+      const badWords = ['марс', 'луна', '123', 'тест', 'адрес', 'qwerty'];
+      const cleanAddress = address.toLowerCase();
+      
+      if (address.length < 3 || badWords.some(word => cleanAddress.includes(word))) {
+        const result = document.getElementById('findResult');
+        result.classList.add('show');
+        result.style.display = 'block';
+        result.innerHTML = '<div class="tracker-error" style="margin-top: 20px;">⚠️ Адрес «' + address + '» не найден. Пожалуйста, введите реальный адрес города.</div>';
+        
+        // Сбрасываем кнопку
+        const btn = document.getElementById('findBtn');
+        btn.disabled = false;
+        btn.textContent = 'Найти курьера';
+        return;
+      }
 
       const btn = document.getElementById('findBtn');
       const result = document.getElementById('findResult');
-      const radar = result.querySelector('.radar');
+      
+      // Очищаем старый результат
+      result.innerHTML = `
+        <div class="radar">
+          <div class="radar-circle"></div>
+          <div class="radar-circle"></div>
+          <div class="radar-circle"></div>
+          <div class="radar-sweep"></div>
+          <div class="radar-center"></div>
+        </div>
+        <div class="find-info">
+          <div class="count" id="courierCount">—</div>
+          <div class="label">курьеров рядом с вами</div>
+          <div class="detail">
+            <div class="detail-item"><strong id="waitTime">—</strong><span>Время ожидания</span></div>
+            <div class="detail-item"><strong id="nearDist">—</strong><span>Ближайший</span></div>
+            <div class="detail-item"><strong>4.9★</strong><span>Рейтинг</span></div>
+          </div>
+          <a href="/order.html" class="order-link">Оформить заказ →</a>
+        </div>
+      `;
+      
+      result.classList.remove('show');
+      result.style.display = 'block';
 
       btn.disabled = true;
       btn.textContent = 'Поиск...';
-      result.classList.remove('show');
-      result.style.display = 'block';
-      radar.style.display = 'block';
-
-      document.querySelectorAll('.radar-dot').forEach(d => d.remove());
 
       setTimeout(() => {
+        // Генерируем данные
         const count = Math.floor(Math.random() * 5) + 3;
         const wait = Math.floor(Math.random() * 20) + 15;
         const dist = (Math.random() * 1.5 + 0.3).toFixed(1);
@@ -710,6 +752,8 @@
         document.getElementById('waitTime').textContent = wait + ' мин';
         document.getElementById('nearDist').textContent = dist + ' км';
 
+        // Рисуем точки на радаре
+        const radar = result.querySelector('.radar');
         for (let i = 0; i < count; i++) {
           const dot = document.createElement('div');
           dot.className = 'radar-dot';

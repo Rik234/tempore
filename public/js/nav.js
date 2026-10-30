@@ -4,39 +4,30 @@
 
 const TRANSLATIONS = {
   ru: {
-    // NAV
     'nav.home': 'Главная', 'nav.cabinet': 'Мой кабинет',
     'nav.orders': 'Мои заказы', 'nav.new_order': 'Новый заказ',
     'nav.profile': '👤 Профиль', 'nav.logout': 'Выйти',
     'nav.login': 'Войти', 'nav.register': 'Регистрация',
     'nav.courier': '🚴 Стать курьером',
-    // Приветствия
     'greeting.night': 'Доброй ночи', 'greeting.morning': 'Доброе утро',
     'greeting.day': 'Добрый день', 'greeting.evening': 'Добрый вечер',
-    // Тосты
     'toast.light': '☀️ Светлая', 'toast.dark': '🌙 Тёмная', 'toast.sepia': '📜 Сепия',
     'toast.ru': '🇷🇺 Русский', 'toast.en': '🇬🇧 English',
-    // Hero
     'hero.tagline': 'Пунктуальность — высшая форма уважения',
     'hero.order': '📦 Заказать доставку', 'hero.courier': '🚴 Стать курьером',
     'promo.text': '🔥 Скидка 20% на первую доставку!',
-    // Статистика
     'stats.deliveries': 'Доставок в год', 'stats.clients': 'Довольных клиентов',
     'stats.time': 'Среднее время', 'stats.always': 'Работаем всегда',
-    // Преимущества
     'features.title': 'Почему выбирают нас',
     'features.subtitle': 'Мы делаем доставку простой, быстрой и надёжной',
     'features.fast': 'Быстро', 'features.fast_desc': 'Доставка от 30 минут по городу.',
     'features.safe': 'Надёжно', 'features.safe_desc': 'Курьеры проверены, груз застрахован.',
     'features.cheap': 'Выгодно', 'features.cheap_desc': 'Честные цены без скрытых платежей.',
     'features.track': 'Отслеживание', 'features.track_desc': 'Статус заказа в реальном времени.',
-    // Достижения
     'achievements.title': 'Наши достижения', 'achievements.subtitle': 'Цифры, которыми мы гордимся',
     'ach.1': 'лет на рынке доставки', 'ach.2': 'средняя оценка клиентов',
     'ach.3': 'выполненных доставок', 'ach.4': 'компаний-партнёров',
-    // Партнёры
     'partners.title': 'Нам доверяют',
-    // Галерея
     'gallery.title': 'Примеры наших доставок', 'gallery.subtitle': 'Каждый день мы доставляем тысячи разных грузов',
     'gallery.docs': '📄 Документы', 'gallery.docs_desc': 'Важные бумаги — быстро и безопасно',
     'gallery.parcels': '📦 Посылки', 'gallery.parcels_desc': 'Коробки и грузы до 10 кг',
@@ -44,7 +35,6 @@ const TRANSLATIONS = {
     'gallery.gifts': '🎁 Подарки', 'gallery.gifts_desc': 'Цветы и сюрпризы точно в срок',
     'gallery.business': '🏢 Бизнесу', 'gallery.business_desc': 'Корпоративная доставка',
     'gallery.couriers': '🚴 Наши курьеры', 'gallery.couriers_desc': 'Вежливые и пунктуальные',
-    // Услуги
     'services.title': 'Наши услуги', 'services.subtitle': 'Выберите подходящий формат доставки',
     'services.docs': 'Документы', 'services.docs_desc': 'Быстрая доставка важных бумаг и договоров.',
     'services.parcels': 'Посылки', 'services.parcels_desc': 'Доставка небольших грузов до 10 кг.',
@@ -52,31 +42,20 @@ const TRANSLATIONS = {
     'services.gifts': 'Подарки', 'services.gifts_desc': 'Доставка подарков и цветов.',
     'services.business': 'Бизнесу', 'services.business_desc': 'Корпоративные тарифы.',
     'services.urgent': 'Срочно', 'services.urgent_desc': 'Экспресс-доставка за 60 минут.',
-
-    // НОВЫЕ ЦЕНЫ
-    'price.from250': 'от 500 ₽',
-    'price.from350': 'от 700 ₽',
-    'price.from300': 'от 600 ₽',
-    'price.from400': 'от 800 ₽',
-    'price.from600': 'от 1500 ₽',
-    'price.contract': 'по договору',
-
-    // Шаги
+    'price.from250': 'от 500 ₽', 'price.from350': 'от 700 ₽', 'price.from300': 'от 600 ₽',
+    'price.from400': 'от 800 ₽', 'price.from600': 'от 1500 ₽', 'price.contract': 'по договору',
     'steps.title': 'Как это работает', 'steps.subtitle': 'Четыре простых шага до вашей посылки',
     'step.1': 'Регистрация', 'step.1_desc': 'Создайте аккаунт за 1 минуту',
     'step.2': 'Оформление', 'step.2_desc': 'Укажите адреса и опишите груз',
     'step.3': 'Оплата', 'step.3_desc': 'Выберите удобный способ оплаты',
     'step.4': 'Доставка', 'step.4_desc': 'Курьер привезёт точно в срок',
-    // Отзывы
     'reviews.title': 'Что говорят клиенты', 'reviews.subtitle': 'Нам доверяют тысячи людей',
     'rev.1': 'Курьер приехал через 40 минут. Всё чётко!',
     'rev.2': 'Заказала продукты — привезли через час. Спасибо!',
     'rev.3': 'Пользуюсь для бизнеса. Всегда в срок!',
     'city.moscow': 'Москва', 'city.spb': 'Санкт-Петербург', 'city.kazan': 'Казань',
-    // CTA
     'cta.title': 'Готовы оформить заказ?', 'cta.subtitle': 'Это займёт меньше минуты',
     'cta.btn': '📦 Заказать доставку',
-    // Футер
     'footer.about': 'Курьерская доставка нового поколения. Быстро, надёжно, удобно.',
     'footer.services': 'Услуги', 'footer.docs': 'Документы', 'footer.parcels': 'Посылки',
     'footer.products': 'Продукты', 'footer.gifts': 'Подарки',
@@ -85,8 +64,6 @@ const TRANSLATIONS = {
     'footer.clients': 'Клиентам', 'footer.order': 'Заказать доставку',
     'footer.my_orders': 'Мои заказы', 'footer.reg': 'Регистрация', 'footer.login': 'Войти',
     'footer.rights': '© 2026 Tempore — Все права защищены.',
-
-    // О компании
     'about.title': 'О компании — Tempore',
     'about.hero.title': 'О КОМПАНИИ TEMPORE',
     'about.hero.subtitle': 'Курьерская доставка нового поколения — мы ценим ваше время и доставляем точно в срок',
@@ -120,16 +97,12 @@ const TRANSLATIONS = {
     'about.contacts.hours': 'Работаем', 'about.contacts.hours_val': 'Круглосуточно',
     'about.cta.title': 'Готовы попробовать?', 'about.cta.subtitle': 'Оформите первый заказ',
     'about.cta.btn': 'Заказать доставку',
-
-    // Формы
     'form.login.title': 'Вход в систему', 'form.login.subtitle': 'Введите данные аккаунта',
     'form.email': 'Email', 'form.password': 'Пароль', 'form.login_btn': '🔓 Войти',
     'form.or': 'ИЛИ', 'form.register': '📝 Регистрация', 'form.as_courier': '🚴 Курьером',
     'form.reg.title': 'Регистрация', 'form.reg.subtitle': 'Создайте аккаунт за 1 минуту',
     'form.fullname': 'ФИО *', 'form.phone': 'Телефон *', 'form.city': 'Город', 'form.address': 'Адрес',
     'form.reg_btn': '📝 Зарегистрироваться', 'form.have_account': 'Уже есть аккаунт?',
-
-    // Заказ
     'order.title': 'Оформить заказ', 'order.subtitle': '💰 Цена рассчитывается автоматически',
     'order.from': 'Откуда везти *', 'order.to': 'Куда везти *',
     'order.what': 'Что везём? (опишите груз)', 'order.urgency': '⏱ Насколько срочно? *',
@@ -140,21 +113,15 @@ const TRANSLATIONS = {
     'order.urgent_asap': 'Срочно', 'order.urgent_2h': '2 часа',
     'order.urgent_today': 'Сегодня', 'order.urgent_tomorrow': 'Завтра',
     'order.pay_card': '💳 Банковская карта (−5%)', 'order.pay_online': '🌐 Онлайн-оплата (−5%)', 'order.pay_cash': '💵 Наличные курьеру',
-
-    // Список заказов
     'orders.title': '📋 Мои заказы', 'orders.new': '+ Новый заказ',
     'orders.empty': 'У вас пока нет заказов', 'orders.empty_desc': 'Оформите первый заказ',
     'orders.loading': 'Загрузка...',
-
-    // Профиль
     'profile.title': 'Личный кабинет', 'profile.personal': '👤 Личные данные',
     'profile.edit': '✏️ Редактировать', 'profile.save': '💾 Сохранить', 'profile.cancel': 'Отмена',
     'profile.total_orders': 'Всего заказов', 'profile.active': 'Активных', 'profile.spent': 'Потрачено',
     'profile.fullname': '👤 ФИО', 'profile.email': '✉️ Email', 'profile.phone': '📞 Телефон',
     'profile.city': '🏙️ Город', 'profile.address': '🏠 Адрес', 'profile.reg_date': '📅 Дата регистрации',
     'profile.new_order': '📦 Новый заказ', 'profile.my_orders': '📋 Мои заказы', 'profile.logout': '🚪 Выйти',
-
-    // Курьер
     'courier.become': '🚴 Стать курьером', 'courier.subtitle': 'Присоединяйтесь к команде',
     'courier.transport': '🚗 Вид транспорта *', 'courier.register_btn': '🚴 Зарегистрироваться',
     'courier.iam_client': '👤 Я клиент', 'courier.photo_hint': 'Нажмите, чтобы загрузить фото',
@@ -170,50 +137,37 @@ const TRANSLATIONS = {
     'courier.photo_upload': 'Нажмите на круг, чтобы загрузить фото',
     'courier.transport_foot': 'Пеший', 'courier.transport_bike': 'Вело',
     'courier.transport_car': 'Авто', 'courier.transport_moto': 'Мото',
-
-    // Статусы
     'status.новый': 'новый', 'status.принят': 'принят', 'status.в-пути': 'в пути',
     'status.доставлен': 'доставлен', 'status.отменён': 'отменён',
-
-    // Общие
     'common.cancel_order': '✕ Отменить заказ', 'common.leave_review': '⭐ Оставить отзыв',
     'common.review_left': '✅ Отзыв оставлен', 'common.loading': 'Загрузка...', 'common.error': 'Ошибка'
   },
 
   en: {
-    // NAV
     'nav.home': 'Home', 'nav.cabinet': 'My cabinet',
     'nav.orders': 'My orders', 'nav.new_order': 'New order',
     'nav.profile': '👤 Profile', 'nav.logout': 'Logout',
     'nav.login': 'Login', 'nav.register': 'Sign up',
     'nav.courier': '🚴 Become a courier',
-    // Greetings
     'greeting.night': 'Good night', 'greeting.morning': 'Good morning',
     'greeting.day': 'Good afternoon', 'greeting.evening': 'Good evening',
-    // Toasts
     'toast.light': '☀️ Light', 'toast.dark': '🌙 Dark', 'toast.sepia': '📜 Sepia',
     'toast.ru': '🇷🇺 Русский', 'toast.en': '🇬🇧 English',
-    // Hero
     'hero.tagline': 'Punctuality is the highest form of respect',
     'hero.order': '📦 Order delivery', 'hero.courier': '🚴 Become a courier',
     'promo.text': '🔥 20% off on your first delivery!',
-    // Stats
     'stats.deliveries': 'Deliveries per year', 'stats.clients': 'Satisfied clients',
     'stats.time': 'Average time', 'stats.always': 'We work always',
-    // Features
     'features.title': 'Why choose us',
     'features.subtitle': 'We make delivery simple, fast and reliable',
     'features.fast': 'Fast', 'features.fast_desc': 'Delivery from 30 minutes around the city.',
     'features.safe': 'Reliable', 'features.safe_desc': 'Couriers verified, cargo insured.',
     'features.cheap': 'Affordable', 'features.cheap_desc': 'Fair prices without hidden fees.',
     'features.track': 'Tracking', 'features.track_desc': 'Track your order in real time.',
-    // Достижения
     'achievements.title': 'Our achievements', 'achievements.subtitle': 'Numbers we are proud of',
     'ach.1': 'years on delivery market', 'ach.2': 'average client rating',
     'ach.3': 'completed deliveries', 'ach.4': 'partner companies',
-    // Партнёры
     'partners.title': 'Trusted by',
-    // Галерея
     'gallery.title': 'Examples of our deliveries', 'gallery.subtitle': 'We deliver thousands of different packages',
     'gallery.docs': '📄 Documents', 'gallery.docs_desc': 'Important papers — fast and safe',
     'gallery.parcels': '📦 Parcels', 'gallery.parcels_desc': 'Boxes and cargo up to 10 kg',
@@ -221,7 +175,6 @@ const TRANSLATIONS = {
     'gallery.gifts': '🎁 Gifts', 'gallery.gifts_desc': 'Flowers and surprises on time',
     'gallery.business': '🏢 Business', 'gallery.business_desc': 'Corporate delivery',
     'gallery.couriers': '🚴 Our couriers', 'gallery.couriers_desc': 'Polite and punctual',
-    // Услуги
     'services.title': 'Our services', 'services.subtitle': 'Choose the right delivery format',
     'services.docs': 'Documents', 'services.docs_desc': 'Fast delivery of important papers.',
     'services.parcels': 'Parcels', 'services.parcels_desc': 'Delivery of small cargo up to 10 kg.',
@@ -229,31 +182,20 @@ const TRANSLATIONS = {
     'services.gifts': 'Gifts', 'services.gifts_desc': 'Delivery of gifts and flowers.',
     'services.business': 'Business', 'services.business_desc': 'Corporate tariffs.',
     'services.urgent': 'Urgent', 'services.urgent_desc': 'Express delivery in 60 minutes.',
-
-    // НОВЫЕ ЦЕНЫ
-    'price.from250': 'from 500 ₽',
-    'price.from350': 'from 700 ₽',
-    'price.from300': 'from 600 ₽',
-    'price.from400': 'from 800 ₽',
-    'price.from600': 'from 1500 ₽',
-    'price.contract': 'by contract',
-
-    // Шаги
+    'price.from250': 'from 500 ₽', 'price.from350': 'from 700 ₽', 'price.from300': 'from 600 ₽',
+    'price.from400': 'from 800 ₽', 'price.from600': 'from 1500 ₽', 'price.contract': 'by contract',
     'steps.title': 'How it works', 'steps.subtitle': 'Four simple steps to your package',
     'step.1': 'Sign up', 'step.1_desc': 'Create an account in 1 minute',
     'step.2': 'Order', 'step.2_desc': 'Specify addresses and describe cargo',
     'step.3': 'Payment', 'step.3_desc': 'Choose a convenient payment method',
     'step.4': 'Delivery', 'step.4_desc': 'Courier will deliver on time',
-    // Отзывы
     'reviews.title': 'What clients say', 'reviews.subtitle': 'Thousands trust us',
     'rev.1': 'Courier arrived in 40 minutes. Everything is perfect!',
     'rev.2': 'Ordered groceries — delivered in an hour. Thanks!',
     'rev.3': 'Using it for business. Always on time!',
     'city.moscow': 'Moscow', 'city.spb': 'Saint Petersburg', 'city.kazan': 'Kazan',
-    // CTA
     'cta.title': 'Ready to place an order?', 'cta.subtitle': 'It takes less than a minute',
     'cta.btn': '📦 Order delivery',
-    // Футер
     'footer.about': 'Next-generation courier delivery.',
     'footer.services': 'Services', 'footer.docs': 'Documents', 'footer.parcels': 'Parcels',
     'footer.products': 'Groceries', 'footer.gifts': 'Gifts',
@@ -262,8 +204,6 @@ const TRANSLATIONS = {
     'footer.clients': 'Clients', 'footer.order': 'Order delivery',
     'footer.my_orders': 'My orders', 'footer.reg': 'Sign up', 'footer.login': 'Login',
     'footer.rights': '© 2026 Tempore — All rights reserved.',
-
-    // О компании
     'about.title': 'About — Tempore',
     'about.hero.title': 'ABOUT TEMPORE',
     'about.hero.subtitle': 'Next-generation courier delivery — we value your time',
@@ -297,16 +237,12 @@ const TRANSLATIONS = {
     'about.contacts.hours': 'Working hours', 'about.contacts.hours_val': '24/7',
     'about.cta.title': 'Ready to try?', 'about.cta.subtitle': 'Place your first order',
     'about.cta.btn': 'Order delivery',
-
-    // Формы
     'form.login.title': 'Sign in', 'form.login.subtitle': 'Enter your account details',
     'form.email': 'Email', 'form.password': 'Password', 'form.login_btn': '🔓 Sign in',
     'form.or': 'OR', 'form.register': '📝 Sign up', 'form.as_courier': '🚴 As courier',
     'form.reg.title': 'Sign up', 'form.reg.subtitle': 'Create an account in 1 minute',
     'form.fullname': 'Full name *', 'form.phone': 'Phone *', 'form.city': 'City', 'form.address': 'Address',
     'form.reg_btn': '📝 Sign up', 'form.have_account': 'Already have an account?',
-
-    // Заказ
     'order.title': 'Place an order', 'order.subtitle': '💰 The price is calculated automatically',
     'order.from': 'From *', 'order.to': 'To *',
     'order.what': 'What to deliver? (describe the cargo)', 'order.urgency': '⏱ How urgent? *',
@@ -317,21 +253,15 @@ const TRANSLATIONS = {
     'order.urgent_asap': 'Urgent', 'order.urgent_2h': '2 hours',
     'order.urgent_today': 'Today', 'order.urgent_tomorrow': 'Tomorrow',
     'order.pay_card': '💳 Bank card (−5%)', 'order.pay_online': '🌐 Online payment (−5%)', 'order.pay_cash': '💵 Cash to courier',
-
-    // Список заказов
     'orders.title': '📋 My orders', 'orders.new': '+ New order',
     'orders.empty': 'You have no orders yet', 'orders.empty_desc': 'Place your first order',
     'orders.loading': 'Loading...',
-
-    // Профиль
     'profile.title': 'My account', 'profile.personal': '👤 Personal data',
     'profile.edit': '✏️ Edit', 'profile.save': '💾 Save', 'profile.cancel': 'Cancel',
     'profile.total_orders': 'Total orders', 'profile.active': 'Active', 'profile.spent': 'Spent',
     'profile.fullname': '👤 Full name', 'profile.email': '✉️ Email', 'profile.phone': '📞 Phone',
     'profile.city': '🏙️ City', 'profile.address': '🏠 Address', 'profile.reg_date': '📅 Registration date',
     'profile.new_order': '📦 New order', 'profile.my_orders': '📋 My orders', 'profile.logout': '🚪 Logout',
-
-    // Курьер
     'courier.become': '🚴 Become a courier', 'courier.subtitle': 'Join the team',
     'courier.transport': '🚗 Transport type *', 'courier.register_btn': '🚴 Sign up',
     'courier.iam_client': '👤 I am a client', 'courier.photo_hint': 'Click to upload a photo',
@@ -347,12 +277,8 @@ const TRANSLATIONS = {
     'courier.photo_upload': 'Click the circle to upload a photo',
     'courier.transport_foot': 'On foot', 'courier.transport_bike': 'Bike',
     'courier.transport_car': 'Car', 'courier.transport_moto': 'Moto',
-
-    // Статусы
     'status.новый': 'new', 'status.принят': 'accepted', 'status.в-пути': 'in transit',
     'status.доставлен': 'delivered', 'status.отменён': 'cancelled',
-
-    // Общие
     'common.cancel_order': '✕ Cancel order', 'common.leave_review': '⭐ Leave a review',
     'common.review_left': '✅ Review left', 'common.loading': 'Loading...', 'common.error': 'Error'
   }
@@ -380,7 +306,6 @@ function applyTranslations() {
 
 window.t = t;
 window.applyTranslations = applyTranslations;
-
 (function() {
   const token = localStorage.getItem('token');
   const role = localStorage.getItem('role');
@@ -399,6 +324,11 @@ window.applyTranslations = applyTranslations;
       menuHtml += '<a href="/orders.html" data-page="orders" data-i18n="nav.orders">Мои заказы</a>';
       menuHtml += '<a href="/order.html" data-page="order" data-i18n="nav.new_order">Новый заказ</a>';
       menuHtml += '<a href="/profile.html" data-page="profile" data-i18n="nav.profile">👤 Профиль</a>';
+      
+      // ССЫЛКА НА АДМИНКУ ТОЛЬКО ДЛЯ АДМИНА
+      if (user && user.email === 'admin@tempore.ru') {
+        menuHtml += '<a href="/admin.html" data-page="admin" style="color: #D4A574; font-weight: 600;">👑 Админка</a>';
+      }
     }
     rightHtml =
       '<div class="navbar-user">' +

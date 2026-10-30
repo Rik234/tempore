@@ -9,6 +9,9 @@ const reviewRoutes = require('./routes/reviews');
 const chatRoutes = require('./routes/chat');
 const app = express();
 const PORT = 3000;
+const adminRoutes = require('./routes/admin');
+// ...
+app.use('/api/admin', adminRoutes);
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));

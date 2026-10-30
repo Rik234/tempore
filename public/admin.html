@@ -23,6 +23,11 @@
     .hidden { display: none; }
     body[data-theme="dark"] .stat-box, body[data-theme="dark"] .content-table { background: #1F1815; color: #E8DCC4; }
     body[data-theme="dark"] .content-table th { background: #14100E; color: #F0E4D2; }
+    
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; }
+    .modal-box { background: #FAF4E8; width: 90%; max-width: 500px; border-radius: 10px; padding: 20px; color: #3E2723; }
+    .modal-box h3 { margin-top: 0; }
+    .btn-close { width: 100%; padding: 10px; background: #3E2723; color: #fff; border: none; border-radius: 6px; cursor: pointer; margin-top: 15px; }
   </style>
 </head>
 <body>
@@ -30,7 +35,7 @@
   <div class="admin-wrap">
     <h1 class="admin-title">👑 Админ-панель Tempore</h1>
     
-    <div class="stats-grid" id="statsGrid">
+    <div class="stats-grid">
       <div class="stat-box"><div class="num" id="statClients">...</div><div class="lbl">Клиентов</div></div>
       <div class="stat-box"><div class="num" id="statCouriers">...</div><div class="lbl">Курьеров</div></div>
       <div class="stat-box"><div class="num" id="statOrders">...</div><div class="lbl">Заказов</div></div>
@@ -44,16 +49,34 @@
 
     <div id="tab-orders">
       <table class="content-table">
-        <thead><tr><th>ID</th><th>Клиент</th><th>Курьер</th><th>Маршрут</th><th>Цена</th><th>Статус</th></tr></thead>
-        <tbody id="ordersBody"><tr><td colspan="6">Загрузка...</td></tr></tbody>
+        <thead><tr><th>ID</th><th>Клиент</th><th>Курьер</th><th>Маршрут</th><th>Цена</th><th>Статус</th><th>Действие</th></tr></thead>
+        <tbody id="ordersBody"><tr><td colspan="7">Загрузка...</td></tr></tbody>
       </table>
     </div>
 
     <div id="tab-couriers" class="hidden">
       <table class="content-table">
-        <thead><tr><th>ID</th><th>ФИО</th><th>Транспорт</th><th>Статус</th></tr></thead>
-        <tbody id="couriersBody"><tr><td colspan="4">Загрузка...</td></tr></tbody>
+        <thead><tr><th>ID</th><th>ФИО</th><th>Транспорт</th><th>Статус</th><th>Действие</th></tr></thead>
+        <tbody id="couriersBody"><tr><td colspan="5">Загрузка...</td></tr></tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- МОДАЛКА ЧАТА -->
+  <div class="modal-overlay" id="chatModal">
+    <div class="modal-box">
+      <h3>История чата по заказу</h3>
+      <div id="chatHistory" style="max-height:400px; overflow-y:auto; background:#F5EBD8; padding:15px; border-radius:8px;"></div>
+      <button class="btn-close" onclick="document.getElementById('chatModal').style.display='none'">Закрыть</button>
+    </div>
+  </div>
+
+  <!-- МОДАЛКА ИНФО -->
+  <div class="modal-overlay" id="infoModal">
+    <div class="modal-box">
+      <h3>Информация</h3>
+      <div id="infoContent"></div>
+      <button class="btn-close" onclick="document.getElementById('infoModal').style.display='none'">Закрыть</button>
     </div>
   </div>
 
@@ -90,6 +113,10 @@
             <td>${o.from_address} → ${o.to_address}</td>
             <td>${o.delivery_price} ₽</td>
             <td>${o.status}</td>
+            <td>
+              <button onclick="openChat(${o.order_id})" style="padding:5px 10px; cursor:pointer; background:#4A6B9C; color:#fff; border:none; border-radius:4px; margin-right:5px;">💬 Чат</button>
+              <button onclick="openClientInfo(${o.order_id})" style="padding:5px 10px; cursor:pointer; background:#A0704A; color:#fff; border:none; border-radius:4px;">ℹ️ Инфо</button>
+            </td>
           </tr>
         `).join('');
       }
@@ -106,6 +133,7 @@
             <td>${c.full_name}</td>
             <td>${c.transport}</td>
             <td>${c.work_status}</td>
+            <td><button onclick="openCourierInfo(${c.courier_id})" style="padding:5px 10px; cursor:pointer; background:#A0704A; color:#fff; border:none; border-radius:4px;">ℹ️ Инфо</button></td>
           </tr>
         `).join('');
       }
@@ -117,6 +145,36 @@
       document.getElementById('tab-orders').classList.add('hidden');
       document.getElementById('tab-couriers').classList.add('hidden');
       document.getElementById('tab-' + tab).classList.remove('hidden');
+    }
+
+    async function openChat(orderId) {
+      document.getElementById('chatModal').style.display = 'flex';
+      const container = document.getElementById('chatHistory');
+      container.innerHTML = 'Загрузка...';
+      const r = await fetch('/api/admin/chat/' + orderId, { headers: { 'Authorization': 'Bearer ' + token } });
+      const data = await r.json();
+      if (data.success && data.messages.length > 0) {
+        container.innerHTML = data.messages.map(m => `
+          <div style="margin-bottom:10px; text-align:${m.sender_role === 'client' ? 'left' : 'right'};">
+            <div style="display:inline-block; padding:8px 12px; border-radius:10px; background:${m.sender_role === 'client' ? '#FAF4E8' : '#A0704A'}; color:${m.sender_role === 'client' ? '#3E2723' : '#fff'};">
+              <b>${m.sender_role === 'client' ? 'Клиент' : 'Курьер'}:</b> ${m.text}
+            </div>
+          </div>
+        `).join('');
+      } else {
+        container.innerHTML = 'Сообщений нет.';
+      }
+    }
+
+    async function openClientInfo(orderId) {
+      // Для простоты берем инфу по заказу, чтобы найти клиента (или можно доработать)
+      document.getElementById('infoModal').style.display = 'flex';
+      document.getElementById('infoContent').innerHTML = 'Загрузка... (инфо клиента доступно в доработке)';
+    }
+
+    async function openCourierInfo(courierId) {
+      document.getElementById('infoModal').style.display = 'flex';
+      document.getElementById('infoContent').innerHTML = 'Загрузка... (инфо курьера доступно в доработке)';
     }
 
     loadStats();

@@ -27,7 +27,7 @@ router.get('/stats', authMiddleware, isAdmin, async (req, res) => {
 router.get('/orders', authMiddleware, isAdmin, async (req, res) => {
   try {
     const [orders] = await db.pool.query(`
-      SELECT o.order_id, o.from_address, o.to_address, o.delivery_price, o.status, o.order_date,
+      SELECT o.order_id, o.client_id, o.from_address, o.to_address, o.delivery_price, o.status, o.order_date,
              c.full_name AS client_name, cr.full_name AS courier_name
       FROM orders o
       JOIN clients c ON c.client_id = o.client_id

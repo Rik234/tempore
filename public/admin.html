@@ -56,8 +56,8 @@
 
     <div id="tab-couriers" class="hidden">
       <table class="content-table">
-        <thead><tr><th>ID</th><th>ФИО</th><th>Транспорт</th><th>Статус</th><th>Действие</th></tr></thead>
-        <tbody id="couriersBody"><tr><td colspan="5">Загрузка...</td></tr></tbody>
+        <thead><tr><th>ID</th><th>ФИО</th><th>Транспорт</th><th>Статус</th></tr></thead>
+        <tbody id="couriersBody"><tr><td colspan="4">Загрузка...</td></tr></tbody>
       </table>
     </div>
   </div>
@@ -74,7 +74,7 @@
   <!-- МОДАЛКА ИНФО -->
   <div class="modal-overlay" id="infoModal">
     <div class="modal-box">
-      <h3>Информация</h3>
+      <h3>Информация о клиенте</h3>
       <div id="infoContent"></div>
       <button class="btn-close" onclick="document.getElementById('infoModal').style.display='none'">Закрыть</button>
     </div>
@@ -115,7 +115,7 @@
             <td>${o.status}</td>
             <td>
               <button onclick="openChat(${o.order_id})" style="padding:5px 10px; cursor:pointer; background:#4A6B9C; color:#fff; border:none; border-radius:4px; margin-right:5px;">💬 Чат</button>
-              <button onclick="openClientInfo(${o.order_id})" style="padding:5px 10px; cursor:pointer; background:#A0704A; color:#fff; border:none; border-radius:4px;">ℹ️ Инфо</button>
+              <button onclick="openInfo(${o.client_id})" style="padding:5px 10px; cursor:pointer; background:#A0704A; color:#fff; border:none; border-radius:4px;">ℹ️ Инфо</button>
             </td>
           </tr>
         `).join('');
@@ -133,7 +133,6 @@
             <td>${c.full_name}</td>
             <td>${c.transport}</td>
             <td>${c.work_status}</td>
-            <td><button onclick="openCourierInfo(${c.courier_id})" style="padding:5px 10px; cursor:pointer; background:#A0704A; color:#fff; border:none; border-radius:4px;">ℹ️ Инфо</button></td>
           </tr>
         `).join('');
       }
@@ -166,15 +165,23 @@
       }
     }
 
-    async function openClientInfo(orderId) {
-      // Для простоты берем инфу по заказу, чтобы найти клиента (или можно доработать)
+    async function openInfo(clientId) {
       document.getElementById('infoModal').style.display = 'flex';
-      document.getElementById('infoContent').innerHTML = 'Загрузка... (инфо клиента доступно в доработке)';
-    }
-
-    async function openCourierInfo(courierId) {
-      document.getElementById('infoModal').style.display = 'flex';
-      document.getElementById('infoContent').innerHTML = 'Загрузка... (инфо курьера доступно в доработке)';
+      document.getElementById('infoContent').innerHTML = 'Загрузка...';
+      const r = await fetch('/api/admin/clients/' + clientId, { headers: { 'Authorization': 'Bearer ' + token } });
+      const data = await r.json();
+      if (data.success) {
+        const c = data.client;
+        document.getElementById('infoContent').innerHTML = `
+          <p><b>ФИО:</b> ${c.full_name}</p>
+          <p><b>Телефон:</b> ${c.phone}</p>
+          <p><b>Email:</b> ${c.email}</p>
+          <p><b>Город:</b> ${c.city || '—'}</p>
+          <p><b>Адрес:</b> ${c.address || '—'}</p>
+        `;
+      } else {
+        document.getElementById('infoContent').innerHTML = 'Ошибка загрузки';
+      }
     }
 
     loadStats();
